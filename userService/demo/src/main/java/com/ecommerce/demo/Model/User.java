@@ -1,5 +1,9 @@
 package com.ecommerce.demo.Model;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
@@ -18,15 +22,28 @@ public class User {
 
     @Size(min = 6, message = "Password must be at least 6 characters long")
     protected String password;
-    
+
     @Enumerated(EnumType.STRING)
     protected UserStatus status;
-    
-    public User(String name, String email, String password, UserStatus status) {
+
+    @CreationTimestamp
+    protected LocalDateTime createdAt;
+
+    public User(Long id, String name, String email, String password, UserStatus status, LocalDateTime createdAt) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.status = status;
+        this.createdAt = createdAt;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -61,6 +78,12 @@ public class User {
         this.status = status;
     }
 
-    
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 
 }
