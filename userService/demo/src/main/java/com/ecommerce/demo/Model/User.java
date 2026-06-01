@@ -2,9 +2,11 @@ package com.ecommerce.demo.Model;
 
 public class User {
 
+    protected Long id;
     protected String name;
     protected String email;
     protected String password;
+    
     protected UserStatus status;
     
     public User(String name, String email, String password, UserStatus status) {
