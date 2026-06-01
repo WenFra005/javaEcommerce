@@ -16,7 +16,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequestMapping("/users")
 public class userController {
 
-    private final UserService userService = new UserService();
+    private final UserService userService;
+
+    public userController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping
     public User postUser(@RequestBody User user) {
