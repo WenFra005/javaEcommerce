@@ -14,36 +14,36 @@ import jakarta.validation.constraints.Size;
 public class User {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Long id;
+    protected Long userId;
     protected String name;
 
     @Email
-    protected String email;
+    protected String userEmail;
 
     @Size(min = 6, message = "Password must be at least 6 characters long")
-    protected String password;
+    protected String userPassword;
 
     @Enumerated(EnumType.STRING)
-    protected UserStatus status;
+    protected UserStatus userStatus;
 
     @CreationTimestamp
-    protected LocalDateTime createdAt;
+    protected LocalDateTime userCreatedAt;
 
-    public User(Long id, String name, String email, String password, UserStatus status, LocalDateTime createdAt) {
-        this.id = id;
+    public User(Long userId, String name, String userEmail, String userPassword, UserStatus userStatus, LocalDateTime userCreatedAt) {
+        this.userId = userId;
         this.name = name;
-        this.email = email;
-        this.password = password;
-        this.status = status;
-        this.createdAt = createdAt;
+        this.userEmail = userEmail  ;
+        this.userPassword = userPassword;
+        this.userStatus = userStatus;
+        this.userCreatedAt = userCreatedAt;
     }
 
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -54,36 +54,36 @@ public class User {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
-    public String getPassword() {
-        return password;
+    public String getUserPassword() {
+        return userPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
-    public UserStatus getStatus() {
-        return status;
+    public UserStatus getUserStatus() {
+        return userStatus;
     }
 
-    public void setStatus(UserStatus status) {
-        this.status = status;
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public LocalDateTime getUserCreatedAt() {
+        return userCreatedAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setUserCreatedAt(LocalDateTime userCreatedAt) {
+        this.userCreatedAt = userCreatedAt;
     }
 
 }
