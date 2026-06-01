@@ -33,6 +33,9 @@ public class User {
     @CreationTimestamp
     protected LocalDateTime userCreatedAt;
 
+    public User() {
+    }
+
     public User(Long userId, String name, String userEmail, String userPassword, UserStatus userStatus, LocalDateTime userCreatedAt) {
         this.userId = userId;
         this.name = name;
