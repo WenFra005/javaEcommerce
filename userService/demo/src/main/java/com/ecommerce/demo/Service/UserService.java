@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 
 import com.ecommerce.demo.Model.User;
 import com.ecommerce.demo.Repository.UserRepository;
+import com.ecommerce.demo.dto.CreateUserRequest;
+import com.ecommerce.demo.dto.UserResponse;
 
 @Service
 public class UserService {
@@ -12,23 +14,37 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public UserResponse createUser(CreateUserRequest request) {
+        User user = new User();
+        user.setName(request.getName());
+        user.setUserEmail(request.getUserEmail());
+        user.setUserPassword(request.getUserPassword());
+
+        User savedUser = userRepository.save(user);
+        return toUserResponse(savedUser);
     }
 
-    public User findUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
-    }
-
-    public User updateUser(Long id, User updatedUser) {
-        User user = userRepository.findById(id).orElse(null);
-        if (user != null) {
-            user.setName(updatedUser.getName());
-            user.setUserEmail(updatedUser.getUserEmail());
-            user.setUserPassword(updatedUser.getUserPassword());
-            return userRepository.save(user);
+    public UserResponse findUserById(Long id) {
+        User user = userRepository.findById(id).orElse(null); 
+        if (user == null) {
+            return null;
         }
-        return null;
+
+        return toUserResponse(user);
+    }
+
+    public UserResponse updateUser(Long id, CreateUserRequest updatedUser) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            return null;
+        }
+        user.setName(updatedUser.getName());
+        user.setUserEmail(updatedUser.getUserEmail());
+        user.setUserPassword(updatedUser.getUserPassword());
+
+        User savedUser = userRepository.save(user);
+        return toUserResponse(savedUser);
+
     }
 
     public void deleteUser(Long id) {
@@ -37,10 +53,21 @@ public class UserService {
 
     public void updateStatus(Long id, String status) {
         User user = userRepository.findById(id).orElse(null);
-        if (user != null) {
-            user.setUserStatus(null);
-            userRepository.save(user);
+        if (user == null) {
+            return;
         }
+        user.setUserStatus(null);
+        userRepository.save(user);
+    }
+
+    private UserResponse toUserResponse(User user) {
+        return new UserResponse(
+            user.getUserId(),
+            user.getName(),
+            user.getUserEmail(),
+            user.getUserStatus() != null ? user.getUserStatus().name() : null,
+            user.getUserCreatedAt()
+        );
     }
 
 
