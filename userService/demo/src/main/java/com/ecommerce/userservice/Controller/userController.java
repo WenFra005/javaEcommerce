@@ -1,11 +1,11 @@
-package com.ecommerce.demo.Controller;
+package com.ecommerce.userservice.Controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ecommerce.demo.Service.UserService;
-import com.ecommerce.demo.dto.CreateUserRequest;
-import com.ecommerce.demo.dto.UserResponse;
+import com.ecommerce.userservice.Service.UserService;
+import com.ecommerce.userservice.dto.CreateUserRequest;
+import com.ecommerce.userservice.dto.UserResponse;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

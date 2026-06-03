@@ -1,10 +1,10 @@
-package com.ecommerce.demo.Model;
+package com.ecommerce.userservice.Model;
 
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.ecommerce.demo.Enums.UserStatus;
+import com.ecommerce.userservice.Enums.UserStatus;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

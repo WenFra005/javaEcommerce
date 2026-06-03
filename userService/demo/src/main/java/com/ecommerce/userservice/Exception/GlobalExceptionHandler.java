@@ -1,4 +1,4 @@
-package com.ecommerce.demo.Exception;
+package com.ecommerce.userservice.Exception;
 
 import java.time.LocalDateTime;
 
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-import com.ecommerce.demo.dto.ErrorResponse;
+import com.ecommerce.userservice.dto.ErrorResponse;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

@@ -1,4 +1,4 @@
-package com.ecommerce.demo.Exception;
+package com.ecommerce.userservice.Exception;
 
 public class UserNotFoundException extends RuntimeException{
 

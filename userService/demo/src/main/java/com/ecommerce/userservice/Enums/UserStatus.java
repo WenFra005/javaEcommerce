@@ -1,4 +1,4 @@
-package com.ecommerce.demo.Enums;
+package com.ecommerce.userservice.Enums;
 
 public enum UserStatus {
     ATIVO,

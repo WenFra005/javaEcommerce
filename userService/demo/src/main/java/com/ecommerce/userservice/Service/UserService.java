@@ -1,12 +1,12 @@
-package com.ecommerce.demo.Service;
+package com.ecommerce.userservice.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ecommerce.demo.Model.User;
-import com.ecommerce.demo.Repository.UserRepository;
-import com.ecommerce.demo.dto.CreateUserRequest;
-import com.ecommerce.demo.dto.UserResponse;
+import com.ecommerce.userservice.Model.User;
+import com.ecommerce.userservice.Repository.UserRepository;
+import com.ecommerce.userservice.dto.CreateUserRequest;
+import com.ecommerce.userservice.dto.UserResponse;
 
 @Service
 public class UserService {
