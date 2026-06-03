@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-
-
 @RestController
 @RequestMapping("/users")
 public class userController {
@@ -24,15 +22,14 @@ public class userController {
 
     @PostMapping
     public User postUser(@RequestBody User user) {
-        //TODO: process POST request
+        // TODO: process POST request
 
-        
         return userService.createUser(user);
     }
-    
+
     @GetMapping("/{id}")
     public User getMethodName(@PathVariable Long id) {
         return userService.findUserById(id);
     }
-    
+
 }
