@@ -7,8 +7,12 @@ import com.ecommerce.demo.Model.User;
 import com.ecommerce.demo.Service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @RequestMapping("/users")
@@ -28,8 +32,27 @@ public class userController {
     }
 
     @GetMapping("/{id}")
-    public User getMethodName(@PathVariable Long id) {
+    public User getUser(@PathVariable Long id) {
         return userService.findUserById(id);
     }
 
+    @PutMapping("/{id}")
+    public User putUser(@PathVariable Long id, @RequestBody User entity) {
+        //TODO: process PUT request
+        
+        return entity;
+    }
+
+    @DeleteMapping("/{id}") 
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        User user = userService.findUserById(id);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        userService.deleteUser(id);
+
+        return ResponseEntity.noContent().build();
+        
+    }
 }
