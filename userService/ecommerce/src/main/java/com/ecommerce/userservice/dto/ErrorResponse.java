@@ -2,11 +2,15 @@ package com.ecommerce.userservice.dto;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class ErrorResponse {
 
     private int code;
     private String message;
     private String error;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
     private LocalDateTime timestamp;
     private String path;
     
