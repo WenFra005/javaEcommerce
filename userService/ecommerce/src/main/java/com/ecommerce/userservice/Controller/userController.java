@@ -26,14 +26,6 @@ public class userController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public ResponseEntity<UserResponse> postUser(@RequestBody CreateUserRequest request) {
-        // TODO: process POST request
-        UserResponse userResponse = userService.createUser(request);
-
-        return ResponseEntity.status(201).body(userResponse);
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUser(@PathVariable Long id) {
         UserResponse userResponse = userService.findUserById(id);
@@ -41,7 +33,16 @@ public class userController {
         return ResponseEntity.ok(userResponse);
     }
 
-    @PutMapping("/{id}")
+    @PostMapping("/create")
+    public ResponseEntity<UserResponse> postUser(@RequestBody CreateUserRequest request) {
+        // TODO: process POST request
+        UserResponse userResponse = userService.createUser(request);
+
+        return ResponseEntity.status(201).body(userResponse);
+    }
+
+
+    @PutMapping("/update/{id}")
     public ResponseEntity<UserResponse> putUser(@RequestBody CreateUserRequest entity, @PathVariable Long id) {
         //TODO: process PUT request
         UserResponse userResponse = userService.updateUser(id, entity);
@@ -51,7 +52,7 @@ public class userController {
         return ResponseEntity.ok(userResponse);
     }
 
-    @DeleteMapping("/{id}") 
+    @DeleteMapping("/delete/{id}") 
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         UserResponse user = userService.findUserById(id);
         if (user == null) {
