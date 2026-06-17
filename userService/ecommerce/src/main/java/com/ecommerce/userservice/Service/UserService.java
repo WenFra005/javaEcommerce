@@ -1,8 +1,8 @@
 package com.ecommerce.userservice.Service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ecommerce.userservice.Exception.UserNotFoundException;
 import com.ecommerce.userservice.Model.User;
 import com.ecommerce.userservice.Repository.UserRepository;
 import com.ecommerce.userservice.dto.CreateUserRequest;
@@ -11,8 +11,11 @@ import com.ecommerce.userservice.dto.UserResponse;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public UserResponse createUser(CreateUserRequest request) {
         User user = new User();
@@ -25,19 +28,16 @@ public class UserService {
     }
 
     public UserResponse findUserById(Long id) {
-        User user = userRepository.findById(id).orElse(null); 
-        if (user == null) {
-            return null;
-        }
-
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado para o ID: " + id));
+        
         return toUserResponse(user);
+       
     }
 
     public UserResponse updateUser(Long id, CreateUserRequest updatedUser) {
-        User user = userRepository.findById(id).orElse(null);
-        if (user == null) {
-            return null;
-        }
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado para atualização: " + id));
         user.setName(updatedUser.getName());
         user.setUserEmail(updatedUser.getUserEmail());
         user.setUserPassword(updatedUser.getUserPassword());
@@ -47,18 +47,22 @@ public class UserService {
 
     }
 
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
-    }
-
     public void updateStatus(Long id, String status) {
-        User user = userRepository.findById(id).orElse(null);
-        if (user == null) {
-            return;
-        }
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado para atualização de status: " + id));
         user.setUserStatus(null);
         userRepository.save(user);
     }
+
+
+    public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new UserNotFoundException("Usuário não encontrado para exclusão: " + id);
+        }
+
+        userRepository.deleteById(id);
+    }
+
 
     private UserResponse toUserResponse(User user) {
         return new UserResponse(
