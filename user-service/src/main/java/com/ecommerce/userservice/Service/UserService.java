@@ -1,7 +1,9 @@
 package com.ecommerce.userservice.Service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.ecommerce.userservice.Enums.UserStatus;
 import com.ecommerce.userservice.Exception.UserNotFoundException;
 import com.ecommerce.userservice.Model.User;
 import com.ecommerce.userservice.Repository.UserRepository;
@@ -11,17 +13,20 @@ import com.ecommerce.userservice.dto.UserResponse;
 @Service
 public class UserService {
 
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserResponse createUser(CreateUserRequest request) {
         User user = new User();
         user.setName(request.getName());
         user.setUserEmail(request.getUserEmail());
-        user.setUserPassword(request.getUserPassword());
+        user.setUserPassword(passwordEncoder.encode(request.getUserPassword()));
+        user.setUserStatus(UserStatus.ATIVO);
 
         User savedUser = userRepository.save(user);
         return toUserResponse(savedUser);
@@ -40,7 +45,7 @@ public class UserService {
             .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado para atualização: " + id));
         user.setName(updatedUser.getName());
         user.setUserEmail(updatedUser.getUserEmail());
-        user.setUserPassword(updatedUser.getUserPassword());
+        user.setUserPassword(passwordEncoder.encode(updatedUser.getUserPassword()));
 
         User savedUser = userRepository.save(user);
         return toUserResponse(savedUser);
