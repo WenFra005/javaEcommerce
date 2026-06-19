@@ -1,5 +1,6 @@
 package com.ecommerce.userservice.Service;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -40,9 +41,13 @@ public class UserService {
        
     }
 
-    public UserResponse updateUser(Long id, CreateUserRequest updatedUser) {
+    public UserResponse updateUser(Long id, CreateUserRequest updatedUser, String authenticatedUserEmail) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado para atualização: " + id));
+
+        if (!user.getUserEmail().equals(authenticatedUserEmail)) {
+            throw new AccessDeniedException("Usuário não autorizado para atualizar este usuário");
+        }
         user.setName(updatedUser.getName());
         user.setUserEmail(updatedUser.getUserEmail());
         user.setUserPassword(passwordEncoder.encode(updatedUser.getUserPassword()));
@@ -52,19 +57,27 @@ public class UserService {
 
     }
 
-    public void updateStatus(Long id, String status) {
+    public UserResponse updateStatus(Long id, CreateUserRequest request, String authenticatedUserEmail) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado para atualização de status: " + id));
+        
+        if (!user.getUserEmail().equals(authenticatedUserEmail)) {
+            throw new AccessDeniedException("Usuário não autorizado para atualizar o status deste usuário");
+        }
+
         user.setUserStatus(null);
         userRepository.save(user);
+        return toUserResponse(user);
     }
 
 
-    public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new UserNotFoundException("Usuário não encontrado para exclusão: " + id);
-        }
+    public void deleteUser(Long id, String authenticatedUserEmail) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new UserNotFoundException("Usuário não econtrado"));
 
+        if (!user.getUserEmail().equals(authenticatedUserEmail)) {
+            throw new AccessDeniedException("Você não tem permissão para deletar este usuário");
+        }
         userRepository.deleteById(id);
     }
 
