@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import com.ecommerce.userservice.Enums.UserStatus;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -19,19 +20,26 @@ import jakarta.validation.constraints.Size;
 public class User {
 
     @Id
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long userId;
+
+    @Column(name = "user_name")
     protected String name;
 
     @Email
+    @Column(name = "user_email", unique = true)
     protected String userEmail;
 
+    @Column(name = "user_password")
     @Size(min = 6, message = "Password must be at least 6 characters long")
     protected String userPassword;
 
+    @Column(name = "user_status")
     @Enumerated(EnumType.STRING)
     protected UserStatus userStatus;
 
+    @Column(name = "user_created_at", updatable = false)
     @CreationTimestamp
     protected LocalDateTime userCreatedAt;
 
