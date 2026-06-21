@@ -3,10 +3,11 @@ package com.ecommerce.userservice.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ecommerce.userservice.Model.User;
 import com.ecommerce.userservice.Security.CustomUserDetails;
+import com.ecommerce.userservice.Security.JwtUtil;
 import com.ecommerce.userservice.Service.UserService;
 import com.ecommerce.userservice.dto.CreateUserRequest;
+import com.ecommerce.userservice.dto.UpdateResponse;
 import com.ecommerce.userservice.dto.UserResponse;
 
 import jakarta.validation.Valid;
@@ -28,8 +29,11 @@ public class userController {
 
     private final UserService userService;
 
-    public userController(UserService userService) {
+    private final JwtUtil jwtUtil;
+
+    public userController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
     @GetMapping("/{id}")
@@ -49,12 +53,15 @@ public class userController {
 
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<UserResponse> putUser(@Valid @RequestBody CreateUserRequest request, @PathVariable Long id, Authentication authentication) {
+    public ResponseEntity<UpdateResponse> putUser(@Valid @RequestBody CreateUserRequest request, @PathVariable Long id, Authentication authentication) {
 
         String authenticatedUserEmail = ((CustomUserDetails) authentication.getPrincipal()).getUsername();
-        UserResponse userResponse = userService.updateUser(id, request, authenticatedUserEmail);
+        UserResponse updatedUser = userService.updateUser(id, request, authenticatedUserEmail);
 
-        return ResponseEntity.ok(userResponse);
+        String newToken = jwtUtil.generateToken(updatedUser.getUserEmail(), id);
+        UpdateResponse updateResponse = new UpdateResponse(updatedUser, newToken);
+
+        return ResponseEntity.ok(updateResponse);
     }
 
     @DeleteMapping("/delete/{id}") 
@@ -62,7 +69,6 @@ public class userController {
         String authenticatedUserEmail = ((CustomUserDetails) authentication.getPrincipal()).getUsername();
         userService.deleteUser(id, authenticatedUserEmail);
 
-        return ResponseEntity.noContent().build();
-        
+        return ResponseEntity.noContent().build();  
     }
 }
