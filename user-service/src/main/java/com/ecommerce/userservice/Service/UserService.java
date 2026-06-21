@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.userservice.Enums.UserStatus;
+import com.ecommerce.userservice.Exception.EmailAlreadyExistsException;
 import com.ecommerce.userservice.Exception.UserNotFoundException;
 import com.ecommerce.userservice.Model.User;
 import com.ecommerce.userservice.Repository.UserRepository;
@@ -23,6 +24,11 @@ public class UserService {
     }
 
     public UserResponse createUser(CreateUserRequest request) {
+        if (userRepository.findByUserEmail(request.getUserEmail()).isPresent()) {
+            // TODO: throw custom exception for email already in use
+            throw new EmailAlreadyExistsException("Email already exists: " + request.getUserEmail());
+        }
+
         User user = new User();
         user.setName(request.getName());
         user.setUserEmail(request.getUserEmail());
@@ -78,7 +84,7 @@ public class UserService {
         if (!user.getUserEmail().equals(authenticatedUserEmail)) {
             throw new AccessDeniedException("Você não tem permissão para deletar este usuário");
         }
-        userRepository.deleteById(id);
+        userRepository.delete(user);
     }
 
 
