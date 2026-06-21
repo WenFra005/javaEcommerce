@@ -51,16 +51,26 @@ public class UserService {
        
     }
 
-    public UserResponse updateUser(Long id, CreateUserRequest updatedUser, String authenticatedUserEmail) {
+    public UserResponse updateUser(Long id, CreateUserRequest request, String authenticatedUserEmail) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado para atualização: " + id));
 
         if (!user.getUserEmail().equals(authenticatedUserEmail)) {
             throw new AccessDeniedException("Usuário não autorizado para atualizar este usuário");
         }
-        user.setName(updatedUser.getName());
-        user.setUserEmail(updatedUser.getUserEmail());
-        user.setUserPassword(passwordEncoder.encode(updatedUser.getUserPassword()));
+
+        if (request.getUserEmail() != null && !request.getUserEmail().equals(user.getUserEmail())) {
+            userRepository.findByUserEmail(request.getUserEmail())
+                .ifPresent(existingUser -> {
+                    if (!existingUser.getUserId().equals(id)) {
+                        throw new EmailAlreadyExistsException("Email already exists: " + request.getUserEmail());
+                    }
+                });
+        }
+
+        user.setName(request.getName());
+        user.setUserEmail(request.getUserEmail());
+        user.setUserPassword(passwordEncoder.encode(request.getUserPassword()));
 
         User savedUser = userRepository.save(user);
         return toUserResponse(savedUser);
