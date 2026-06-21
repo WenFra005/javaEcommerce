@@ -25,7 +25,6 @@ public class UserService {
 
     public UserResponse createUser(CreateUserRequest request) {
         if (userRepository.findByUserEmail(request.getUserEmail()).isPresent()) {
-            // TODO: throw custom exception for email already in use
             throw new EmailAlreadyExistsException("Email already exists: " + request.getUserEmail());
         }
 
@@ -43,7 +42,7 @@ public class UserService {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado para o ID: " + id));
         
-        if (user.getUserEmail().equals(authenticatedUserEmail)) {
+        if (!user.getUserEmail().equals(authenticatedUserEmail)) {
             throw new AccessDeniedException("Usuário não autorizado para acessar este usuário");
         }
 
