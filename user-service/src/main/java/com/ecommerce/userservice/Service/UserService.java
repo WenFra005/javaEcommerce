@@ -39,10 +39,14 @@ public class UserService {
         return toUserResponse(savedUser);
     }
 
-    public UserResponse findUserById(Long id) {
+    public UserResponse findUserById(Long id, String authenticatedUserEmail) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado para o ID: " + id));
         
+        if (user.getUserEmail().equals(authenticatedUserEmail)) {
+            throw new AccessDeniedException("Usuário não autorizado para acessar este usuário");
+        }
+
         return toUserResponse(user);
        
     }
