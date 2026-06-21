@@ -18,6 +18,8 @@ import tools.jackson.databind.ObjectMapper;
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint{
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
         AuthenticationException authException) throws IOException, ServletException {
@@ -31,7 +33,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint{
                 LocalDateTime.now(),
                 request.getRequestURI()
             );
-            response.getWriter().write(new ObjectMapper().writeValueAsString(errorResponse));
+            response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
     
     }
 
