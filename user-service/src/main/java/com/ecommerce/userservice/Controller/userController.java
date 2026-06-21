@@ -3,6 +3,7 @@ package com.ecommerce.userservice.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ecommerce.userservice.Model.User;
 import com.ecommerce.userservice.Security.CustomUserDetails;
 import com.ecommerce.userservice.Service.UserService;
 import com.ecommerce.userservice.dto.CreateUserRequest;
@@ -32,8 +33,11 @@ public class userController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUser(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.findUserById(id));
+    public ResponseEntity<UserResponse> getUser(@PathVariable Long id, Authentication authentication) {
+        String authenticatedUserEmail = ((CustomUserDetails) authentication.getPrincipal()).getUsername();
+        UserResponse userResponse = userService.findUserById(id, authenticatedUserEmail);
+
+        return ResponseEntity.ok(userResponse);
     }
 
     @PostMapping("/create")
