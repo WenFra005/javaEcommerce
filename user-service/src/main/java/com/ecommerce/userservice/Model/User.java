@@ -13,13 +13,18 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Email;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity(name = "users")
+@ToString(exclude = {"naturalPerson", "legalEntity"})
+@EqualsAndHashCode(of = "userEmail")
 public class User {
 
     @Id
@@ -53,10 +58,10 @@ public class User {
     @CreationTimestamp
     private LocalDateTime userCreatedAt;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = true)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = true, fetch = FetchType.LAZY)
     private NaturalPerson naturalPerson;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = true)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = true, fetch = FetchType.LAZY)
     private LegalEntity legalEntity;
 
     public User() {
@@ -147,6 +152,9 @@ public class User {
 
     public void setNaturalPerson(NaturalPerson naturalPerson) {
         this.naturalPerson = naturalPerson;
+        if (naturalPerson != null && naturalPerson.getUser() != this) {
+            naturalPerson.setUser(this);
+        }
     }
 
     public LegalEntity getLegalEntity() {
@@ -155,6 +163,10 @@ public class User {
 
     public void setLegalEntity(LegalEntity legalEntity) {
         this.legalEntity = legalEntity;
+        if (legalEntity != null && legalEntity.getUser() != this) {
+            legalEntity.setUser(this);
+        }
     }
 
+    
 }
