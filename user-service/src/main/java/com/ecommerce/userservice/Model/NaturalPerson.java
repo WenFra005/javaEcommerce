@@ -10,8 +10,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity(name = "natural_persons")
+@ToString(exclude = "user")
+@EqualsAndHashCode(of = "naturalPersonId")
 public class NaturalPerson {
 
     @Id
