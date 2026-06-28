@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.br.CPF;
 import com.ecommerce.userservice.Enums.UserRole;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class CreateNaturalPersonRequest extends CreateUserRequest {
 
@@ -14,7 +15,7 @@ public class CreateNaturalPersonRequest extends CreateUserRequest {
     @NotBlank(message = "CPF is required")
     private String cpf;
 
-    @NotBlank(message = "Birth date is required")
+    @NotNull(message = "Birth date is required")
     private LocalDate birthDate;
 
     public CreateNaturalPersonRequest() {
