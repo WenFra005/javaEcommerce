@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @JsonTypeInfo(
@@ -13,8 +14,8 @@ import jakarta.validation.constraints.Size;
     property = "type"
 )
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = CreateNaturalPersonRequest.class, name = "NATURAL_PERSON"),
-    @JsonSubTypes.Type(value = CreateLegalEntityRequest.class, name = "LEGAL_ENTITY")
+    @JsonSubTypes.Type(value = CreateNaturalPersonRequest.class, name = "PF"),
+    @JsonSubTypes.Type(value = CreateLegalEntityRequest.class, name = "PJ")
 })
 public abstract class CreateUserRequest {
 
@@ -29,7 +30,7 @@ public abstract class CreateUserRequest {
     @Size(min = 8, message = "Password must be at least 8 characters")
     private String userPassword;
 
-    @NotBlank(message = "User role is required")
+    @NotNull(message = "User role is required")
     private UserRole userRole;
 
     public CreateUserRequest() {
