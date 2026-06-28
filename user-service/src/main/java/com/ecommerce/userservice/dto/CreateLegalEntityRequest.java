@@ -1,14 +1,11 @@
 package com.ecommerce.userservice.dto;
 
-import org.hibernate.validator.constraints.br.CNPJ;
-
 import com.ecommerce.userservice.Enums.UserRole;
 
 import jakarta.validation.constraints.NotBlank;
 
 public class CreateLegalEntityRequest extends CreateUserRequest {
 
-    @CNPJ
     @NotBlank(message = "CNPJ is required")
     private String cnpj;
 
