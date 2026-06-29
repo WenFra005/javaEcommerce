@@ -3,12 +3,14 @@ package com.ecommerce.userservice.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ecommerce.userservice.Enums.UserRole;
 import com.ecommerce.userservice.Security.CustomUserDetails;
 import com.ecommerce.userservice.Security.JwtUtil;
 import com.ecommerce.userservice.Service.UserService;
 import com.ecommerce.userservice.dto.CreateUserRequest;
-import com.ecommerce.userservice.dto.UpdateResponse;
+import com.ecommerce.userservice.dto.UpdateRequest;
 import com.ecommerce.userservice.dto.UserResponse;
+import com.ecommerce.userservice.dto.UpdateResponse;
 
 import jakarta.validation.Valid;
 
@@ -28,7 +30,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class userController {
 
     private final UserService userService;
-
     private final JwtUtil jwtUtil;
 
     public userController(UserService userService, JwtUtil jwtUtil) {
@@ -38,36 +39,34 @@ public class userController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUser(@PathVariable Long id, Authentication authentication) {
-        String authenticatedUserEmail = ((CustomUserDetails) authentication.getPrincipal()).getUsername();
-        UserResponse userResponse = userService.findUserById(id, authenticatedUserEmail);
+        String email = authentication.getName();
+        UserRole role = ((CustomUserDetails) authentication.getPrincipal()).getUser().getUserRole();
+        UserResponse response = userService.findUserById(id, email, role);
 
-        return ResponseEntity.ok(userResponse);
-    }
-
-    @PostMapping("/create")
-    public ResponseEntity<UserResponse> postUser(@Valid @RequestBody CreateUserRequest request) {
-        UserResponse userResponse = userService.createUser(request);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
+        return ResponseEntity.ok(response);
     }
 
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<UpdateResponse> putUser(@Valid @RequestBody CreateUserRequest request, @PathVariable Long id, Authentication authentication) {
+    public ResponseEntity<UpdateResponse> putUser(@Valid @RequestBody UpdateRequest request, @PathVariable Long id, Authentication authentication) {
 
-        String authenticatedUserEmail = ((CustomUserDetails) authentication.getPrincipal()).getUsername();
-        UserResponse updatedUser = userService.updateUser(id, request, authenticatedUserEmail);
+        String email = authentication.getName();
+        UserRole role = ((CustomUserDetails) authentication.getPrincipal()).getUser().getUserRole();
+        UserResponse updated = userService.updateUser(id, request, email, role);
 
-        String newToken = jwtUtil.generateToken(updatedUser.getUserEmail(), id);
-        UpdateResponse updateResponse = new UpdateResponse(updatedUser, newToken);
+        String newToken = null;
+        if (request.getUserEmail() != null && !request.getUserEmail().isBlank()) {
+            newToken = jwtUtil.generateToken(updated.getUserName(), updated.getUserId());
+        }
 
-        return ResponseEntity.ok(updateResponse);
+        return ResponseEntity.ok(new UpdateResponse(updated, newToken));
     }
 
     @DeleteMapping("/delete/{id}") 
     public ResponseEntity<Void> deleteUser(@PathVariable Long id, Authentication authentication) {
-        String authenticatedUserEmail = ((CustomUserDetails) authentication.getPrincipal()).getUsername();
-        userService.deleteUser(id, authenticatedUserEmail);
+        String email = authentication.getName();
+        UserRole role = ((CustomUserDetails) authentication.getPrincipal()).getUser().getUserRole();
+        userService.deleteUser(id, email, role);
 
         return ResponseEntity.noContent().build();  
     }
