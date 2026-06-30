@@ -20,6 +20,8 @@ import com.ecommerce.userservice.Repository.UserRepository;
 import com.ecommerce.userservice.dto.CreateLegalEntityRequest;
 import com.ecommerce.userservice.dto.CreateNaturalPersonRequest;
 import com.ecommerce.userservice.dto.CreateUserRequest;
+import com.ecommerce.userservice.dto.LegalEntityResponse;
+import com.ecommerce.userservice.dto.NaturalPersonResponse;
 import com.ecommerce.userservice.dto.UpdateRequest;
 import com.ecommerce.userservice.dto.UserResponse;
 
@@ -163,6 +165,16 @@ public class UserService {
         return legalEntity;
     }
 
+    private void fillCommonFields(UserResponse response, User user) {
+        response.setUserId(user.getUserId());
+        response.setUserName(user.getName());
+        response.setUserEmail(user.getUserEmail());
+        response.setUserStatus(user.getUserStatus());
+        response.setUserRole(user.getUserRole());
+        response.setUserType(user.getUserType());
+        response.setUserCreatedAt(user.getUserCreatedAt());
+    }
+
     private void updateNaturalPerson(User user, UpdateRequest request, Long userId) {
         NaturalPerson naturalPerson = user.getNaturalPerson();
 
@@ -223,27 +235,25 @@ public class UserService {
     }
 
     private UserResponse toUserResponse(User user) {
-        UserResponse response = new UserResponse();
-        response.setUserId(user.getUserId());
-        response.setUserName(user.getName());
-        response.setUserEmail(user.getUserEmail());
-        response.setUserRole(user.getUserRole());
-        response.setUserStatus(user.getUserStatus());
-        response.setUserType(user.getUserType());
-        response.setUserCreatedAt(user.getUserCreatedAt());
-
-        if (user.getUserType() == UserType.PF && user.getNaturalPerson() != null) {
-            NaturalPerson naturalPerson = user.getNaturalPerson();
-            response.setCpf(naturalPerson.getCpf());
-            response.setBirthDate(naturalPerson.getBirthDate());
-            
-        } else if (user.getUserType() == UserType.PJ && user.getLegalEntity() != null) {
-            LegalEntity legalEntity = user.getLegalEntity();
-            response.setCompanyName(legalEntity.getCompanyName());
-            response.setStateRegistration(legalEntity.getStateRegistration());
+        if (user.getUserType() == UserType.PF) {
+            NaturalPersonResponse npResponse = new NaturalPersonResponse();
+            fillCommonFields(npResponse, user);
+            if (user.getNaturalPerson() != null) {
+                npResponse.setCpf(user.getNaturalPerson().getCpf());
+                npResponse.setBirthDate(user.getNaturalPerson().getBirthDate());
+            }
+            return npResponse;
+        } else if (user.getUserType() == UserType.PJ) {
+            LegalEntityResponse leResponse = new LegalEntityResponse();
+            fillCommonFields(leResponse, user);
+            if (user.getLegalEntity() != null) {
+                leResponse.setCnpj(user.getLegalEntity().getCnpj());
+                leResponse.setCompanyName(user.getLegalEntity().getCompanyName());
+                leResponse.setStateRegistration(user.getLegalEntity().getStateRegistration());
+            }
+            return leResponse;
         }
-
-        return response;
+        throw new IllegalArgumentException("Tipo de usuário desconhecido: " + user.getUserType());
 
     }
 }
