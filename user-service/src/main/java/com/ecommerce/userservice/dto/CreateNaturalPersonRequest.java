@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import org.hibernate.validator.constraints.br.CPF;
 
 import com.ecommerce.userservice.Enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -16,6 +17,7 @@ public class CreateNaturalPersonRequest extends CreateUserRequest {
     private String cpf;
 
     @NotNull(message = "Birth date is required")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate birthDate;
 
     public CreateNaturalPersonRequest() {
