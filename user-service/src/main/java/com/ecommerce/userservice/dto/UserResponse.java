@@ -1,12 +1,10 @@
 package com.ecommerce.userservice.dto;
 
-import java.time.LocalDateTime;
-
+import java.time.Instant;
 import com.ecommerce.userservice.Enums.UserRole;
 import com.ecommerce.userservice.Enums.UserStatus;
 import com.ecommerce.userservice.Enums.UserType;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -14,11 +12,6 @@ import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "userType")
-@JsonSubTypes({
-    @JsonSubTypes.Type(value = NaturalPersonResponse.class, name = "PF"),
-    @JsonSubTypes.Type(value = LegalEntityResponse.class, name = "PJ")
-})
 @Schema(description = "Representa a resposta de um usuário, incluindo informações gerais e específicas de acordo com o tipo de usuário.")
 public class UserResponse {
 
@@ -40,8 +33,9 @@ public class UserResponse {
     @Schema(description = "Tipo do usuário", example = "PF", allowableValues = {"PF", "PJ"})
     private UserType userType;
 
-    @Schema(description = "Data e hora de criação do usuário", example = "2023-10-01T12:34:56", accessMode = Schema.AccessMode.READ_ONLY)
-    private LocalDateTime userCreatedAt;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
+    @Schema(description = "Data e hora de criação do usuário", example = "01/10/2023 12:34:56", accessMode = Schema.AccessMode.READ_ONLY)
+    private Instant userCreatedAt;
 
     public Long getUserId() {
         return userId;
@@ -91,11 +85,11 @@ public class UserResponse {
         this.userType = userType;
     }
 
-    public LocalDateTime getUserCreatedAt() {
+    public Instant getUserCreatedAt() {
         return userCreatedAt;
     }
 
-    public void setUserCreatedAt(LocalDateTime userCreatedAt) {
+    public void setUserCreatedAt(Instant userCreatedAt) {
         this.userCreatedAt = userCreatedAt;
     }
 
