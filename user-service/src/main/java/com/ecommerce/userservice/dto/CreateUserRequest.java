@@ -1,22 +1,11 @@
 package com.ecommerce.userservice.dto;
 
 import com.ecommerce.userservice.Enums.UserRole;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.NAME, 
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "type"
-)
-@JsonSubTypes({
-    @JsonSubTypes.Type(value = CreateNaturalPersonRequest.class, name = "PF"),
-    @JsonSubTypes.Type(value = CreateLegalEntityRequest.class, name = "PJ")
-})
 public abstract class CreateUserRequest {
 
     @NotBlank(message = "Name is required")
