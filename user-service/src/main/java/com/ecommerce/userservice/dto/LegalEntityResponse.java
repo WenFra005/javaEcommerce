@@ -1,5 +1,9 @@
 package com.ecommerce.userservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonPropertyOrder({ "userId", "userName", "userEmail", "userStatus", "userRole", "userType", "userCreatedAt", "cnpj",
+        "companyName", "stateRegistration" })
 public class LegalEntityResponse extends UserResponse{
 
     private String cnpj;
