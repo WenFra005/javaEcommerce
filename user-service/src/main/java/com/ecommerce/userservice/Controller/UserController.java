@@ -35,12 +35,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 @RequestMapping("/users")
 @Tag(name = "User Controller", description = "Operações gerais para usuários, incluindo registro, atualização e exclusão de contas.")
-public class userController {
+public class UserController {
 
     private final UserService userService;
     private final JwtUtil jwtUtil;
 
-    public userController(UserService userService, JwtUtil jwtUtil) {
+    public UserController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
     }
