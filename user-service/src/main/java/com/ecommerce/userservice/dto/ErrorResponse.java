@@ -1,5 +1,6 @@
 package com.ecommerce.userservice.dto;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -18,9 +19,9 @@ public class ErrorResponse {
     @Schema(description = "Tipo de erro", example = "Not Found")
     private String error;
 
-    @Schema(description = "Timestamp do erro no formato UTC", example = "2023-10-01 12:34:56")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
-    private LocalDateTime timestamp;
+    @Schema(description = "Timestamp do erro no formato UTC", example = "01/10/2023 12:34:56")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
+    private Instant timestamp;
 
     @Schema(description = "Caminho da requisição que gerou o erro", example = "/natural-persons/register")
     private String path;
@@ -28,7 +29,7 @@ public class ErrorResponse {
     public ErrorResponse() {
     }
 
-    public ErrorResponse(int code, String message, String error, LocalDateTime timestamp, String path) {
+    public ErrorResponse(int code, String message, String error, Instant timestamp, String path) {
         this.code = code;
         this.message = message;
         this.error = error;
@@ -60,11 +61,11 @@ public class ErrorResponse {
         this.error = error;
     }
 
-    public LocalDateTime getTimestamp() {
+    public Instant getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
+    public void setTimestamp(Instant timestamp) {
         this.timestamp = timestamp;
     }
 
