@@ -6,12 +6,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
 import com.ecommerce.userservice.dto.ErrorResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -73,6 +73,27 @@ public class GlobalExceptionHandler {
             );
 
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception, HttpServletRequest request) {
+        Throwable rootCause = exception.getMostSpecificCause();
+
+        String message = rootCause.getMessage();
+
+        if (message != null && message.startsWith("problem: ")) {
+            message = message.substring(9);
+        }
+
+        ErrorResponse errorResponse = new ErrorResponse(
+            HttpStatus.BAD_REQUEST.value(),
+            message,
+            "Validation Error",
+            Instant.now(),
+            request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
     
     @ExceptionHandler(ValidationException.class)
