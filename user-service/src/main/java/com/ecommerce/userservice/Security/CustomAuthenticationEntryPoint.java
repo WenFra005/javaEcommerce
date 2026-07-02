@@ -1,7 +1,7 @@
 package com.ecommerce.userservice.Security;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -30,7 +30,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint{
                 HttpStatus.UNAUTHORIZED.value(),
                 authException.getMessage(),
                 "Unauthorized",
-                LocalDateTime.now(),
+                Instant.now(),
                 request.getRequestURI()
             );
             response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
