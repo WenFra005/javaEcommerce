@@ -11,6 +11,7 @@ import com.ecommerce.userservice.Enums.UserStatus;
 import com.ecommerce.userservice.Enums.UserType;
 import com.ecommerce.userservice.Exception.EmailAlreadyExistsException;
 import com.ecommerce.userservice.Exception.UserNotFoundException;
+import com.ecommerce.userservice.Exception.ValidationException;
 import com.ecommerce.userservice.Model.LegalEntity;
 import com.ecommerce.userservice.Model.NaturalPerson;
 import com.ecommerce.userservice.Model.User;
@@ -26,8 +27,6 @@ import com.ecommerce.userservice.dto.UpdateRequest;
 import com.ecommerce.userservice.dto.UserResponse;
 
 import jakarta.transaction.Transactional;
-import jakarta.validation.ValidationException;
-
 @Service
 public class UserService {
 
