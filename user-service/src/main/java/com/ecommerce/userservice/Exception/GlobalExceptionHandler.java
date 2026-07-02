@@ -1,6 +1,6 @@
 package com.ecommerce.userservice.Exception;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.stream.Collectors;
 
 
@@ -19,13 +19,27 @@ import jakarta.servlet.http.HttpServletRequest;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException1(UserNotFoundException exception, HttpServletRequest request) {
+        
+        ErrorResponse errorResponse = new ErrorResponse(
+            HttpStatus.NOT_FOUND.value(),
+            exception.getMessage(), 
+            "User not found", 
+            Instant.now(),
+             request.getRequestURI()
+            );
+    
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handleEmailAlreadyExistsException(EmailAlreadyExistsException exception, HttpServletRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(
             HttpStatus.CONFLICT.value(),
             exception.getMessage(),
             "Email already exists",
-            LocalDateTime.now(),
+            Instant.now(),
             request.getRequestURI()
         );
 
@@ -42,7 +56,7 @@ public class GlobalExceptionHandler {
             HttpStatus.BAD_REQUEST.value(),
             errorMessage,
             "Validation error",
-            LocalDateTime.now(),
+            Instant.now(),
             request.getRequestURI()
         );
         
@@ -55,7 +69,7 @@ public class GlobalExceptionHandler {
             HttpStatus.UNAUTHORIZED.value(), 
             exception.getMessage(), 
             "Unauthorized", 
-            LocalDateTime.now(), 
+            Instant.now(),
             request.getRequestURI()
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
@@ -68,7 +82,7 @@ public class GlobalExceptionHandler {
             HttpStatus.NOT_FOUND.value(),
             exception.getMessage(), 
             "User not found", 
-            LocalDateTime.now(),
+            Instant.now(),
              request.getRequestURI()
             );
 
@@ -81,7 +95,7 @@ public class GlobalExceptionHandler {
             HttpStatus.BAD_REQUEST.value(),
             exception.getMessage(),
             "Validation failed",
-            LocalDateTime.now(),
+            Instant.now(),
             request.getRequestURI()
         );
         
@@ -95,7 +109,7 @@ public class GlobalExceptionHandler {
             HttpStatus.FORBIDDEN.value(),
             exception.getMessage() != null ? exception.getMessage() : "Access denied",
             "Forbidden",
-            LocalDateTime.now(),
+            Instant.now(),
             request.getRequestURI()
         );
 
@@ -108,7 +122,7 @@ public class GlobalExceptionHandler {
             HttpStatus.INTERNAL_SERVER_ERROR.value(),
             exception.getMessage(),
             "Internal server error",
-            LocalDateTime.now(),
+            Instant.now(),
             request.getRequestURI()
         );
 
