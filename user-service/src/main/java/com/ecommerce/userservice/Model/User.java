@@ -1,7 +1,6 @@
 package com.ecommerce.userservice.Model;
 
-import java.time.LocalDateTime;
-
+import java.time.Instant;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.ecommerce.userservice.Enums.UserRole;
@@ -56,7 +55,7 @@ public class User {
 
     @Column(name = "user_created_at", updatable = false)
     @CreationTimestamp
-    private LocalDateTime userCreatedAt;
+    private Instant userCreatedAt;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = true, fetch = FetchType.LAZY)
     private NaturalPerson naturalPerson;
@@ -68,7 +67,7 @@ public class User {
     }
 
     public User(Long userId, String name, String userEmail, String userPassword,
-            UserStatus userStatus, UserRole userRole, UserType userType, LocalDateTime userCreatedAt,
+            UserStatus userStatus, UserRole userRole, UserType userType, Instant userCreatedAt,
             NaturalPerson naturalPerson, LegalEntity legalEntity) {
         this.userId = userId;
         this.name = name;
@@ -138,11 +137,11 @@ public class User {
         this.userType = userType;
     }
 
-    public LocalDateTime getUserCreatedAt() {
+    public Instant getUserCreatedAt() {
         return userCreatedAt;
     }
 
-    public void setUserCreatedAt(LocalDateTime userCreatedAt) {
+    public void setUserCreatedAt(Instant userCreatedAt) {
         this.userCreatedAt = userCreatedAt;
     }
 
