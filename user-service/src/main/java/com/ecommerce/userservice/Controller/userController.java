@@ -77,7 +77,7 @@ public class userController {
 
         String newToken = null;
         if (request.getUserEmail() != null && !request.getUserEmail().isBlank()) {
-            newToken = jwtUtil.generateToken(updated.getUserName(), updated.getUserId());
+            newToken = jwtUtil.generateToken(updated.getUserEmail(), updated.getUserId());
         }
 
         return ResponseEntity.ok(new UpdateResponse(updated, newToken));
