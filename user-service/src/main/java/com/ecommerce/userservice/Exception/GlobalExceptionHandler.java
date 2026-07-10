@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
@@ -59,6 +60,19 @@ public class GlobalExceptionHandler {
             request.getRequestURI()
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(TokenRefreshException.class)
+    public ResponseEntity<ErrorResponse> handleTokenRefreshException(TokenRefreshException exception, HttpServletRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse(
+            HttpStatus.FORBIDDEN.value(),
+            exception.getMessage(),
+            "Refresh token error",
+            Instant.now(),
+            request.getRequestURI()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    
     }
 
     @ExceptionHandler(UserNotFoundException.class)
