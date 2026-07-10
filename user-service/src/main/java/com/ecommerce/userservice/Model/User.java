@@ -63,6 +63,9 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = true, fetch = FetchType.LAZY)
     private LegalEntity legalEntity;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = true, fetch = FetchType.LAZY)
+    private RefreshToken refreshToken;
+
     public User() {
     }
 
