@@ -5,26 +5,30 @@ import java.time.Instant;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @Entity(name = "refresh_tokens")
 public class RefreshToken {
 
     @Id
     @GeneratedValue
+    @Column(name="id",nullable = false, unique = true)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name="token",nullable = false, unique = true)
     private String token;
 
-    @Column(nullable = false)
+    @Column(name="expiry_date",nullable = false)
     private Instant expiryDate;
 
-    @Column(nullable = false)
+    @Column(name="revoked",nullable = false)
     private boolean revoked;
 
-    @Column(nullable = false)
+    @OneToOne(fetch = FetchType.LAZY)
+    @Column(name="user_id",nullable = false)
     private User user;
 
     public RefreshToken() {
