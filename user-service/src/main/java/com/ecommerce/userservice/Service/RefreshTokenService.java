@@ -33,9 +33,9 @@ public class RefreshTokenService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
         
-        refreshTokenRepository.deleteByUser(user);
+        RefreshToken refreshToken = refreshTokenRepository.findByUser(user)
+                    .orElse(new RefreshToken());
 
-        RefreshToken refreshToken = new RefreshToken();
         refreshToken.setUser(user);
         refreshToken.setToken(UUID.randomUUID().toString());
         refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
