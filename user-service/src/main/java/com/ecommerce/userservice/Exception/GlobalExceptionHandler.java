@@ -3,7 +3,7 @@ package com.ecommerce.userservice.Exception;
 import java.time.Instant;
 import java.util.stream.Collectors;
 
-
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -47,6 +47,21 @@ public class GlobalExceptionHandler {
         );
         
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+    
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrity(DataIntegrityViolationException exception, HttpServletRequest request) {
+        String errorMessage = "Data integrity violation: " + exception.getMostSpecificCause().getMessage();
+
+        ErrorResponse errorResponse = new ErrorResponse(
+            HttpStatus.CONFLICT.value(),
+            errorMessage,
+            "Data integrity violation",
+            Instant.now(),
+            request.getRequestURI()
+        );
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
     
     @ExceptionHandler(AuthenticationException.class)
