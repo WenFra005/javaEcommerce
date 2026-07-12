@@ -11,6 +11,7 @@ import com.ecommerce.userservice.Service.RefreshTokenService;
 import com.ecommerce.userservice.dto.AuthResponse;
 import com.ecommerce.userservice.dto.LoginRequest;
 import com.ecommerce.userservice.dto.RefreshRequest;
+import com.ecommerce.userservice.dto.RefreshResponse;
 
 import jakarta.validation.Valid;
 
@@ -72,7 +73,7 @@ public class AuthController {
     
     
     @PostMapping("/refresh")
-    public ResponseEntity<AuthResponse> postRefresh(@RequestBody @Valid RefreshRequest request) {
+    public ResponseEntity<RefreshResponse> postRefresh(@RequestBody @Valid RefreshRequest request) {
         RefreshToken refreshToken = refreshTokenService.validadeRefreshToken(request.getRefreshToken());
 
         User user = refreshToken.getUser();
@@ -82,15 +83,12 @@ public class AuthController {
         refreshTokenService.revokeRefreshToken(request.getRefreshToken());
         RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user.getUserId());
 
-        AuthResponse authResponse = new AuthResponse(
-            newAccessToken, 
-            newRefreshToken.getToken(), 
-            "Bearer", 
-            user.getUserId(),
-            user.getUserEmail()
+        RefreshResponse refreshResponse = new RefreshResponse(
+            newAccessToken,
+            newRefreshToken.getToken()
         );
 
-        return ResponseEntity.ok(authResponse);
+        return ResponseEntity.ok(refreshResponse);
     }
     
 
