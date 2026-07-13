@@ -18,6 +18,7 @@ import com.ecommerce.userservice.Model.User;
 import com.ecommerce.userservice.Repository.LegalEntityRepository;
 import com.ecommerce.userservice.Repository.NaturalPersonRepository;
 import com.ecommerce.userservice.Repository.UserRepository;
+import com.ecommerce.userservice.dto.CreateAdminRequest;
 import com.ecommerce.userservice.dto.CreateLegalEntityRequest;
 import com.ecommerce.userservice.dto.CreateNaturalPersonRequest;
 import com.ecommerce.userservice.dto.CreateUserRequest;
@@ -41,6 +42,23 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
         this.naturalPersonRepository = naturalPersonRepository;
         this.legalEntityRepository = legalEntityRepository;
+    }
+
+    public UserResponse createAdmin(CreateAdminRequest request) {
+        if (userRepository.existsByUserEmail(request.getEmail())) {
+            throw new EmailAlreadyExistsException("Email already exists: " + request.getEmail());
+        }
+
+        User user = new User();
+        user.setName(request.getName());
+        user.setUserEmail(request.getEmail());
+        user.setUserPassword(passwordEncoder.encode(request.getPassword()));
+        user.setUserRole(UserRole.ADMIN);
+        user.setUserStatus(UserStatus.ATIVO);
+        user.setUserType(UserType.SYSTEM);
+
+        User savedUser = userRepository.save(user);
+        return toUserResponse(savedUser);
     }
 
     @Transactional
@@ -251,8 +269,12 @@ public class UserService {
                 leResponse.setStateRegistration(user.getLegalEntity().getStateRegistration());
             }
             return leResponse;
+        } else if (user.getUserType() == UserType.SYSTEM) {
+            UserResponse response = new UserResponse();
+            fillCommonFields(response, user);
+            return response;
+        } else {
+            throw new IllegalArgumentException("Tipo de usuário desconhecido: " + user.getUserType());
         }
-        throw new IllegalArgumentException("Tipo de usuário desconhecido: " + user.getUserType());
-
     }
 }
