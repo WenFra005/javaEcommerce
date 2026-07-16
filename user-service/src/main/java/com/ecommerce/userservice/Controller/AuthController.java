@@ -9,10 +9,17 @@ import com.ecommerce.userservice.Security.CustomUserDetails;
 import com.ecommerce.userservice.Security.JwtUtil;
 import com.ecommerce.userservice.Service.RefreshTokenService;
 import com.ecommerce.userservice.dto.AuthResponse;
+import com.ecommerce.userservice.dto.ErrorResponse;
 import com.ecommerce.userservice.dto.LoginRequest;
 import com.ecommerce.userservice.dto.RefreshRequest;
 import com.ecommerce.userservice.dto.RefreshResponse;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
@@ -25,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Auth Controller", description = "Endpoints de autenticação, revogação e renovação de tokens.")
 public class AuthController {
 
     
@@ -38,6 +46,12 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
+    @Operation(summary = "Autenticar usuário", description = "Valida credenciais e retorna access token JWT e refresh token.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Autenticação realizada com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Dados de autenticação inválidos", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "401", description = "Credenciais inválidas", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> postLogin(@RequestBody LoginRequest loginRequest) {
 
@@ -64,6 +78,12 @@ public class AuthController {
         return ResponseEntity.ok(authResponse);
     }
 
+    @Operation(summary = "Logout do usuário", description = "Revoga o refresh token informado, encerrando a sessão ativa.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Logout realizado com sucesso", content = @Content),
+        @ApiResponse(responseCode = "400", description = "Refresh token inválido", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "404", description = "Refresh token não encontrado", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/logout")
     public ResponseEntity<Void> postLogout(@RequestBody @Valid RefreshRequest request) {
         refreshTokenService.revokeRefreshToken(request.getRefreshToken());
@@ -72,6 +92,12 @@ public class AuthController {
     }
     
     
+    @Operation(summary = "Renovar sessão", description = "Valida o refresh token atual, emite novo access token e novo refresh token.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Tokens renovados com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RefreshResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Refresh token inválido", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "404", description = "Refresh token não encontrado", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
     @PostMapping("/refresh")
     public ResponseEntity<RefreshResponse> postRefresh(@RequestBody @Valid RefreshRequest request) {
         RefreshToken refreshToken = refreshTokenService.validadeRefreshToken(request.getRefreshToken());

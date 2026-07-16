@@ -52,6 +52,13 @@ public class UserController {
         this.jwtUtil = jwtUtil;
     }
 
+    @Operation(summary = "Obter usuário autenticado", description = "Retorna os dados do usuário associado ao token enviado na requisição.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Dados do usuário autenticado retornados com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
+        @ApiResponse(responseCode = "401", description = "Usuário não autenticado", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @SecurityRequirement(name = "******")
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getCurrentUser(Authentication authentication) {
         String email = authentication.getName();
@@ -61,6 +68,13 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Listar usuários", description = "Lista usuários de forma paginada. Acesso permitido apenas para administradores.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de usuários retornada com sucesso", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "401", description = "Usuário não autenticado", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "403", description = "Usuário autenticado sem permissão para listar usuários", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+    })
+    @SecurityRequirement(name = "******")
     @GetMapping
     public ResponseEntity<Page<UserResponse>> getListAll(@PageableDefault(size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable, Authentication authentication) {
         UserRole role = ((CustomUserDetails) authentication.getPrincipal()).getUser().getUserRole();
@@ -114,7 +128,7 @@ public class UserController {
 
     @Operation(summary = "Excluir usuário", description = "Exclui um usuário específico. Apenas o próprio usuário ou um administrador pode realizar essa operação.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Usuário excluído com sucesso", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "204", description = "Usuário excluído com sucesso", content = @Content),
         @ApiResponse(responseCode = "403", description = "Acesso negado, o usuário autenticado não tem permissão para excluir outro usuário", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "404", description = "Usuário não encontrado com o ID fornecido", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })

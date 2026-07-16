@@ -4,17 +4,22 @@ import org.hibernate.validator.constraints.br.CNPJ;
 
 import com.ecommerce.userservice.Enums.UserRole;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
+@Schema(description = "Dados para criação de usuário do tipo pessoa jurídica.")
 public class CreateLegalEntityRequest extends CreateUserRequest {
 
+    @Schema(description = "CNPJ da empresa", example = "12.345.678/0001-99")
     @CNPJ(message = "CNPJ sholuld be valid")
     @NotBlank(message = "CNPJ is required")
     private String cnpj;
 
+    @Schema(description = "Razão social da empresa", example = "Empresa Exemplo LTDA")
     @NotBlank(message = "Company name is required")
     private String companyName;
 
+    @Schema(description = "Inscrição estadual da empresa", example = "123456789")
     @NotBlank(message = "State registration is required")
     private String stateRegistration;
 
