@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
 
+
 @RestController
 @RequestMapping("/users")
 @Tag(name = "User Controller", description = "Operações gerais para usuários, incluindo registro, atualização e exclusão de contas.")
@@ -44,6 +45,16 @@ public class UserController {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getCurrentUser(Authentication authentication) {
+        String email = authentication.getName();
+        UserRole role = ((CustomUserDetails) authentication.getPrincipal()).getUser().getUserRole();
+        UserResponse response = userService.findUserByEmail(email, role);
+
+        return ResponseEntity.ok(response);
+    }
+    
 
     @Operation(summary = "Buscar usuário por ID", description = "Retorna os dados de um usuário específico. Apenas o próprio usuário ou um administrador pode acessar essas informações.")
     @ApiResponses(value = {
