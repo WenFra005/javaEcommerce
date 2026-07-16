@@ -24,12 +24,18 @@ import com.ecommerce.userservice.dto.UpdateResponse;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 
@@ -54,6 +60,18 @@ public class UserController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping
+    public ResponseEntity<Page<UserResponse>> getListAll(@PageableDefault(size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable, Authentication authentication) {
+        UserRole role = ((CustomUserDetails) authentication.getPrincipal()).getUser().getUserRole();
+        if (role != UserRole.ADMIN) {
+            throw new AccessDeniedException("Acesso negado");
+        }
+        Page<UserResponse> users = userService.listAllUsers(pageable);
+
+        return ResponseEntity.ok(users);
+    }
+    
     
 
     @Operation(summary = "Buscar usuário por ID", description = "Retorna os dados de um usuário específico. Apenas o próprio usuário ou um administrador pode acessar essas informações.")
