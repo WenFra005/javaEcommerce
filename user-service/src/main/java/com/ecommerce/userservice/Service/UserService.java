@@ -96,6 +96,13 @@ public class UserService {
         return toUserResponse(user);    
     }
 
+    public UserResponse findUserByEmail(String email, UserRole authenticatedRole) {
+        User user = userRepository.findByUserEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado para o email: " + email));
+    
+        return toUserResponse(user);
+    }
+
     @Transactional
     public UserResponse updateUser(Long id, UpdateRequest request, String authenticatedUserEmail, UserRole authenticatedUserRole) {
         User user = userRepository.findById(id)
