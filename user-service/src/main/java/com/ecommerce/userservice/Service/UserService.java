@@ -2,6 +2,8 @@ package com.ecommerce.userservice.Service;
 
 import java.util.function.Consumer;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -83,6 +85,11 @@ public class UserService {
             LegalEntity legalEntity = builderLegalEntity(request, user);
             user.setLegalEntity(legalEntity);
         });
+    }
+
+    public Page<UserResponse> listAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(this::toUserResponse);
     }
 
     public UserResponse findUserById(Long id, String authenticatedUserEmail, UserRole authenticatedUserRole) {
