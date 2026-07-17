@@ -38,7 +38,7 @@ public class AdminController {
     @Operation(summary = "Criar administrador", description = "Cria um novo usuário com perfil ADMIN. Requer autenticação de administrador.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Administrador criado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
-        @ApiResponse(responseCode = "400", description = "Dados inválidos para criação do administrador", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Payload inválido ou malformado", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "401", description = "Usuário não autenticado", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "403", description = "Usuário autenticado sem permissão de administrador", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "409", description = "Conflito de dados, como e-mail já cadastrado", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))

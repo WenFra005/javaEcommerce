@@ -27,14 +27,14 @@ public class UserResponse {
     @Schema(description = "Status do usuário", example = "ATIVO", allowableValues = {"ATIVO", "INATIVO", "SUSPENSO"})
     private UserStatus userStatus;
 
-    @Schema(description = "Função do usuário", example = "CUSTOMER", allowableValues = {"ADMIN", "VENDEDOR", "CLIENTE", "FORNECEDOR"})
+    @Schema(description = "Função do usuário", example = "CLIENTE", allowableValues = {"ADMIN", "VENDEDOR", "CLIENTE", "FORNECEDOR"})
     private UserRole userRole;
 
-    @Schema(description = "Tipo do usuário", example = "PF", allowableValues = {"PF", "PJ"})
+    @Schema(description = "Tipo do usuário", example = "PF", allowableValues = {"PF", "PJ", "SYSTEM"})
     private UserType userType;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
-    @Schema(description = "Data e hora de criação do usuário", example = "01/10/2023 12:34:56", accessMode = Schema.AccessMode.READ_ONLY)
+    @Schema(description = "Data e hora de criação do usuário", example = "2026-07-17T14:38:41Z", accessMode = Schema.AccessMode.READ_ONLY)
     private Instant userCreatedAt;
 
     public Long getUserId() {

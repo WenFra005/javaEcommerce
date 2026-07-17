@@ -91,6 +91,7 @@ public class UserController {
     @Operation(summary = "Buscar usuário por ID", description = "Retorna os dados de um usuário específico. Apenas o próprio usuário ou um administrador pode acessar essas informações.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
+        @ApiResponse(responseCode = "401", description = "Usuário não autenticado", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "403", description = "Acesso negado, o usuário autenticado não tem permissão para acessar os dados de outro usuário", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "404", description = "Usuário não encontrado com o ID fornecido", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
@@ -107,8 +108,11 @@ public class UserController {
     @Operation(summary = "Atualizar usuário", description = "Atualiza os dados de um usuário específico. Apenas o próprio usuário ou um administrador pode realizar essa operação.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UpdateResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Payload inválido, malformado ou falha de validação de dados", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "401", description = "Usuário não autenticado", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "403", description = "Acesso negado, o usuário autenticado não tem permissão para atualizar os dados de outro usuário", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-        @ApiResponse(responseCode = "404", description = "Usuário não encontrado com o ID fornecido", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+        @ApiResponse(responseCode = "404", description = "Usuário não encontrado com o ID fornecido", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "409", description = "Conflito de dados, como e-mail já cadastrado", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @SecurityRequirement(name = "Bearer Authentication")
     @PutMapping("/update/{id}")
@@ -129,6 +133,7 @@ public class UserController {
     @Operation(summary = "Excluir usuário", description = "Exclui um usuário específico. Apenas o próprio usuário ou um administrador pode realizar essa operação.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204", description = "Usuário excluído com sucesso", content = @Content),
+        @ApiResponse(responseCode = "401", description = "Usuário não autenticado", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "403", description = "Acesso negado, o usuário autenticado não tem permissão para excluir outro usuário", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "404", description = "Usuário não encontrado com o ID fornecido", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })

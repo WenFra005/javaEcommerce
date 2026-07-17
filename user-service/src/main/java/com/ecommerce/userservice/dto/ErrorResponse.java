@@ -17,7 +17,7 @@ public class ErrorResponse {
     @Schema(description = "Tipo de erro", example = "Not Found")
     private String error;
 
-    @Schema(description = "Timestamp do erro no formato UTC", example = "01/10/2023 12:34:56")
+    @Schema(description = "Timestamp do erro no formato UTC", example = "2026-07-17T14:38:41Z")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
     private Instant timestamp;
 

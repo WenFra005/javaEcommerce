@@ -49,7 +49,7 @@ public class AuthController {
     @Operation(summary = "Autenticar usuário", description = "Valida credenciais e retorna access token JWT e refresh token.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Autenticação realizada com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponse.class))),
-        @ApiResponse(responseCode = "400", description = "Dados de autenticação inválidos", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Payload inválido ou malformado", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "401", description = "Credenciais inválidas", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/login")
@@ -81,8 +81,8 @@ public class AuthController {
     @Operation(summary = "Logout do usuário", description = "Revoga o refresh token informado, encerrando a sessão ativa.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204", description = "Logout realizado com sucesso", content = @Content),
-        @ApiResponse(responseCode = "400", description = "Refresh token inválido", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-        @ApiResponse(responseCode = "404", description = "Refresh token não encontrado", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+        @ApiResponse(responseCode = "400", description = "Payload inválido (ex.: refresh token ausente)", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "403", description = "Refresh token inválido, expirado, revogado ou inexistente", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/logout")
     public ResponseEntity<Void> postLogout(@RequestBody @Valid RefreshRequest request) {
@@ -95,8 +95,8 @@ public class AuthController {
     @Operation(summary = "Renovar sessão", description = "Valida o refresh token atual, emite novo access token e novo refresh token.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Tokens renovados com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RefreshResponse.class))),
-        @ApiResponse(responseCode = "400", description = "Refresh token inválido", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-        @ApiResponse(responseCode = "404", description = "Refresh token não encontrado", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+        @ApiResponse(responseCode = "400", description = "Payload inválido (ex.: refresh token ausente)", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "403", description = "Refresh token inválido, expirado, revogado ou inexistente", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     @PostMapping("/refresh")
     public ResponseEntity<RefreshResponse> postRefresh(@RequestBody @Valid RefreshRequest request) {

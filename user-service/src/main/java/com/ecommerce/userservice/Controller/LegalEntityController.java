@@ -36,8 +36,8 @@ public class LegalEntityController {
     @Operation(summary = "Registrar Pessoa Jurídica ou Legal Entity", description = "Cria um novo usuário do tipo Pessoa Jurídica ou Legal Entity no sistema.")
     @ApiResponses( value = {
         @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
-        @ApiResponse(responseCode = "400", description = "Dados inválidos fornecidos", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-        @ApiResponse(responseCode = "409", description = "CNPJ ou email já cadastrado no sistema, conflito de dados", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Dados inválidos, payload malformado ou CNPJ já cadastrado", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+        @ApiResponse(responseCode = "409", description = "Conflito de dados, como e-mail já cadastrado", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @PostMapping("/register")
     public ResponseEntity<UserResponse> postRegister(@RequestBody @Valid CreateLegalEntityRequest request) {
