@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,7 @@ import com.ecommerce.userservice.Model.User;
 import com.ecommerce.userservice.Repository.UserRepository;
 
 @Component
+@Profile("!test") // This ensures that the seeder does not run in the test profile
 public class AdminSeeder implements CommandLineRunner {
 
     private final static Logger log = LoggerFactory.getLogger(AdminSeeder.class);
