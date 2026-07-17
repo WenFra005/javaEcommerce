@@ -42,4 +42,12 @@ public class CreateNaturalPersonRequest extends CreateUserRequest {
         return birthDate;
     }
 
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
 }
