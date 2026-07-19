@@ -16,17 +16,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.ecommerce.userservice.Security.JwtAuthFilter;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
-    private final AuthenticationEntryPoint authEntryPoint;
 
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter, AuthenticationEntryPoint authEntryPoint  ) {
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
-        this.authEntryPoint = authEntryPoint;
     }
 
     @Bean
@@ -49,10 +49,18 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .exceptionHandling(exception -> exception
-                .authenticationEntryPoint(authEntryPoint)
+                .authenticationEntryPoint(authenticationEntryPoint())
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationEntryPoint authenticationEntryPoint() {
+        return (request, response, authException) -> {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+        };
     }
 }
