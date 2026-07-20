@@ -4,10 +4,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -201,9 +203,75 @@ public class UserControllerTest {
     }
 
     @Test
-    void testDeleteUser() {
+    void testDeleteUser_OwnProfile_ShouldReturnNoContent() throws Exception {
+        Long userId = 1L;
+
+        Authentication auth = createMockAuthentication(UserRole.CLIENTE);
+
+        mockMvc.perform(delete("/users/delete/{id}", userId)
+                .with(authentication(auth)))
+                .andExpect(status().isNoContent());
+
+        verify(userService).deleteUser(eq(userId), anyString(), any(UserRole.class));
         
     }
+
+    @Test
+    void testDeleteUser_AsAdmin_ShouldReturnNoContent() throws Exception {
+        Long userId = 1L;
+
+        Authentication auth = createMockAuthentication(UserRole.ADMIN);
+
+        mockMvc.perform(delete("/users/delete/{id}", userId)
+                .with(authentication(auth)))
+                .andExpect(status().isNoContent());
+
+        verify(userService).deleteUser(eq(userId), anyString(), any(UserRole.class));
+
+    }
+
+    @Test
+    void testDeleteUser_OtherUser_ShouldReturnForbidden() throws Exception {
+        Long userId = 2L;
+
+        doThrow(new AccessDeniedException("Acesso negado"))
+                .when(userService).deleteUser(eq(userId), anyString(), any(UserRole.class));
+
+        Authentication auth = createMockAuthentication(UserRole.CLIENTE);
+
+        mockMvc.perform(delete("/users/delete/{id}", userId)
+                .with(authentication(auth)))
+                .andExpect(status().isForbidden());
+
+        verify(userService).deleteUser(eq(userId), anyString(), any(UserRole.class));
+
+    }
+
+    @Test
+    void testDeleteUser_NotFound_ShouldReturnNotFound() throws Exception {
+        Long userId = 999L;
+
+        doThrow(new UserNotFoundException("Usuário não encontrado"))
+                .when(userService).deleteUser(eq(userId), anyString(), any(UserRole.class));
+
+        Authentication auth = createMockAuthentication(UserRole.CLIENTE);
+
+        mockMvc.perform(delete("/users/delete/{id}", userId)
+                .with(authentication(auth)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.message").value("Usuário não encontrado"));
+
+        verify(userService).deleteUser(eq(userId), anyString(), any(UserRole.class));
+    }
+    
+    @Test
+    void testDeleteUser_WithoutAuth_ShouldReturnUnauthorized() throws Exception {
+        Long userId = 1L;
+
+        mockMvc.perform(delete("/users/delete/{id}", userId))
+                .andExpect(status().isUnauthorized());
+    }
+
 
     @Test
     void testGetCurrentUser_WithValidAuth_ShouldReturnProfile() throws Exception {
