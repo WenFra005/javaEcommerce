@@ -100,7 +100,7 @@ public class AuthController {
     })
     @PostMapping("/refresh")
     public ResponseEntity<RefreshResponse> postRefresh(@RequestBody @Valid RefreshRequest request) {
-        RefreshToken refreshToken = refreshTokenService.validadeRefreshToken(request.getRefreshToken());
+        RefreshToken refreshToken = refreshTokenService.validateRefreshToken(request.getRefreshToken());
 
         User user = refreshToken.getUser();
 

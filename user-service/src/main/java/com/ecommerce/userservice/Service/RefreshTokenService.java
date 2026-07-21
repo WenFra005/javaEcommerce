@@ -45,7 +45,7 @@ public class RefreshTokenService {
         return refreshTokenRepository.save(refreshToken);
     }
 
-    public RefreshToken validadeRefreshToken(String token) {
+    public RefreshToken validateRefreshToken(String token) {
         RefreshToken refreshToken = refreshTokenRepository.findByToken(token)
                 .orElseThrow(() -> new TokenRefreshException("Refresh token not found: " + token));
        
