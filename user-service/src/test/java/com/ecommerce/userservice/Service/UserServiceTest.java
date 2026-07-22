@@ -311,7 +311,6 @@ public class UserServiceTest {
         UpdateRequest request = new UpdateRequest();
         request.setName("Name Updated");
         request.setUserEmail("test.updated@email.com");
-        // TODO: set other fields as needed
         request.setCpf("90195050096");
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(mockUserPF));
