@@ -79,13 +79,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TokenRefreshException.class)
     public ResponseEntity<ErrorResponse> handleTokenRefreshException(TokenRefreshException exception, HttpServletRequest request) {
         ErrorResponse errorResponse = new ErrorResponse(
-            HttpStatus.FORBIDDEN.value(),
+            HttpStatus.UNAUTHORIZED.value(),
             exception.getMessage(),
             "Refresh token error",
             Instant.now(),
             request.getRequestURI()
         );
-        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     
     }
 
