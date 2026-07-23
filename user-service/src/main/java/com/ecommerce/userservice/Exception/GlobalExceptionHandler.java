@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException exception, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception, HttpServletRequest request) {
         String errorMessage = exception.getBindingResult().getFieldErrors().stream()
             .map(error -> error.getField() + ": " + error.getDefaultMessage())
             .collect(Collectors.joining(", "));
@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
     }
     
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorResponse> handleDataIntegrity(DataIntegrityViolationException exception, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleDataIntegrityException(DataIntegrityViolationException exception, HttpServletRequest request) {
         String errorMessage = "Data integrity violation: " + exception.getMostSpecificCause().getMessage();
 
         ErrorResponse errorResponse = new ErrorResponse(
