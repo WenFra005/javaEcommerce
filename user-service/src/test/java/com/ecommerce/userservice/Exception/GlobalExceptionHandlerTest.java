@@ -149,10 +149,10 @@ public class GlobalExceptionHandlerTest {
 
         ResponseEntity<ErrorResponse> responseEntity = handler.handleTokenRefreshException(exception, request);
 
-        assertEquals(HttpStatus.FORBIDDEN, responseEntity.getStatusCode());
+        assertEquals(HttpStatus.UNAUTHORIZED, responseEntity.getStatusCode());
         ErrorResponse body = responseEntity.getBody();
         assertNotNull(body);
-        assertEquals(403, body.getCode());
+        assertEquals(401, body.getCode());
         assertEquals("Token expirado", body.getMessage());
         assertEquals("Refresh token error", body.getError());
         assertEquals("/test/uri", body.getPath());
