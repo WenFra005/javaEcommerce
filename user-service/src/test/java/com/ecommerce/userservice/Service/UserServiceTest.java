@@ -44,10 +44,17 @@ import com.ecommerce.userservice.dto.UserResponse;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
     
-    @Mock private UserRepository userRepository;
-    @Mock private NaturalPersonRepository naturalPersonRepository;
-    @Mock private LegalEntityRepository legalEntityRepository;
-    @Mock private PasswordEncoder passwordEncoder;
+    @Mock 
+    private UserRepository userRepository;
+    
+    @Mock 
+    private NaturalPersonRepository naturalPersonRepository;
+    
+    @Mock 
+    private LegalEntityRepository legalEntityRepository;
+    
+    @Mock 
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private UserService userService;
