@@ -18,6 +18,9 @@ public class CreateAdminRequest {
     @NotBlank(message = "Password is required")
     private String password;
 
+    public CreateAdminRequest() {
+    }
+
     public CreateAdminRequest(String name, String email, String password) {
         this.name = name;
         this.email = email;
