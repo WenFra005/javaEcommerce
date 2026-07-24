@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -36,6 +38,7 @@ import com.ecommerce.userservice.Model.User;
 import com.ecommerce.userservice.Repository.LegalEntityRepository;
 import com.ecommerce.userservice.Repository.NaturalPersonRepository;
 import com.ecommerce.userservice.Repository.UserRepository;
+import com.ecommerce.userservice.dto.CreateAdminRequest;
 import com.ecommerce.userservice.dto.CreateLegalEntityRequest;
 import com.ecommerce.userservice.dto.CreateNaturalPersonRequest;
 import com.ecommerce.userservice.dto.UpdateRequest;
@@ -102,8 +105,41 @@ public class UserServiceTest {
     }
     
     @Test
-    void testCreateAdmin() {
+    void testCreateAdmin_WithValidData_ShouldSucceed() {
+        CreateAdminRequest request = new CreateAdminRequest();
+        request.setName("Admin");
+        request.setEmail("admin@email.com");
+        request.setPassword("password");
 
+        when(userRepository.existsByUserEmail(request.getEmail())).thenReturn(false);
+        when(passwordEncoder.encode(request.getPassword())).thenReturn("encoded");
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> {
+            User user = invocation.getArgument(0);
+            user.setUserId(1L);
+            return user;
+        });
+
+        UserResponse response = userService.createAdmin(request);
+
+        assertNotNull(response);
+        assertEquals("admin@email.com", response.getUserEmail());
+        assertEquals(UserRole.ADMIN, response.getUserRole());
+        assertEquals(UserType.SYSTEM, response.getUserType());
+        verify(userRepository).save(any(User.class));
+
+    }
+
+    @Test
+    void testCreateAdmin_WithDuplicateEmail_ShouldThrowException() {
+        CreateAdminRequest request = new CreateAdminRequest();
+        request.setEmail("email@example.com");
+
+        when(userRepository.existsByUserEmail(request.getEmail())).thenReturn(true);
+
+        assertThrows(EmailAlreadyExistsException.class, 
+            () -> userService.createAdmin(request));
+        
+        verify(userRepository, never()).save(any());
     }
 
     @Test
@@ -242,6 +278,20 @@ public class UserServiceTest {
     }
 
     @Test
+    void testDeleteUser_WhenUserNotFound_ShouldThrowException() {
+        Long userId = 999L;
+        String authenticatedEmail = "test@email.com";
+        UserRole authenticatedRole = UserRole.CLIENTE;
+
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, 
+            () -> userService.deleteUser(userId, authenticatedEmail, authenticatedRole)
+        );
+        verify(userRepository, never()).delete(any());
+    }
+
+    @Test
     void testFindUserById_WhenUserExistsAndIsOwnProfile_ShouldSucceed() {
         Long userId = 1L;
         String authenticatedEmail = "test@email.com";
@@ -293,6 +343,31 @@ public class UserServiceTest {
     }
 
     @Test
+    void testFindUserByEmail_WhenUserExists_ShouldSucceed() {
+        String email = "test@email.com";
+        UserRole role = UserRole.CLIENTE;
+
+        when(userRepository.findByUserEmail(email)).thenReturn(Optional.of(mockUserPF));
+
+        UserResponse response = userService.findUserByEmail(email, role);
+
+        assertNotNull(response);
+        assertEquals(email, response.getUserEmail());
+    }
+
+    @Test
+    void testFindUserByEmail_WhenUserNotFound_ShouldThrowException() {
+        String email = "notfound@email.com";
+
+        when(userRepository.findByUserEmail(email)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, 
+            () -> userService.findUserByEmail(email, UserRole.CLIENTE)
+        );
+
+    }
+
+    @Test
     void testListAllUsers_ShouldReturnAllUsers() {
         Pageable pageable = Pageable.unpaged();
         Page<User> userPage = new PageImpl<>(List.of(mockUserPF), pageable, 1);
@@ -328,7 +403,14 @@ public class UserServiceTest {
         UserResponse response = userService.updateUser(userId, request, authenticatedEmail, authenticatedRole);
 
         assertNotNull(response);
-        verify(userRepository).save(any(User.class));
+
+        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+        verify(userRepository).save(userCaptor.capture());
+        User savedUser = userCaptor.getValue();
+
+        assertEquals("Name Updated", savedUser.getName());
+        assertEquals("test.updated@email.com", savedUser.getUserEmail());
+        assertEquals("90195050096", savedUser.getNaturalPerson().getCpf());
 
     }
 
@@ -352,4 +434,77 @@ public class UserServiceTest {
         );
         
     }
+
+    @Test
+    void testUpdateUser_WithPasswordUpdate_ShouldEncodePassword() {
+        Long userId = 1L;
+
+        UpdateRequest request = new UpdateRequest();
+        request.setUserPassword("new-password");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(mockUserPF));
+        when(passwordEncoder.encode("new-password")).thenReturn("encoded-new");
+        when(userRepository.save(any(User.class))).thenReturn(mockUserPF);
+
+        userService.updateUser(userId, request, "test@email.com", UserRole.CLIENTE);
+
+        verify(passwordEncoder).encode("new-password");
+        verify(userRepository).save(argThat(user -> user.getUserPassword().equals("encoded-new")));
+
+    }
+
+    @Test
+    void testUpdateUser_WithDuplicateCpf_ShouldThrowException() {
+        Long userId = 1L;
+        String authenticatedEmail = "test@email.com";
+        UserRole authenticatedRole = UserRole.CLIENTE;
+
+        UpdateRequest request = new UpdateRequest();
+        request.setCpf("90195050096");
+
+        User otherUser = new User();
+        otherUser.setUserId(2L);
+
+        NaturalPerson otherPerson = new NaturalPerson();
+        otherPerson.setCpf("90195050096");
+        otherPerson.setUser(otherUser);
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(mockUserPF));
+        when(naturalPersonRepository.findByCpf(request.getCpf())).thenReturn(Optional.of(otherPerson));
+
+        assertThrows(ValidationException.class, 
+            () -> userService.updateUser(userId, request, authenticatedEmail, authenticatedRole)
+        );
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void testUpdateUser_WhenPFUserHasNoNaturalPerson_ShouldThrowException() {
+        Long userId = 1L;
+        mockUserPF.setNaturalPerson(null);
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(mockUserPF));
+
+        UpdateRequest request = new UpdateRequest();
+        request.setCpf("90195050096");
+
+        assertThrows(ValidationException.class, 
+            () -> userService.updateUser(userId, request, "test@email.com", UserRole.CLIENTE));
+
+    }
+
+    @Test
+    void testUpdateUser_WhenPJUserHasNoLegalEntity_ShouldThrowException() {
+        Long userId = 2L;
+        mockUserPJ.setLegalEntity(null);
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(mockUserPJ));
+
+        UpdateRequest request = new UpdateRequest();
+        request.setCnpj("65944113000190");
+
+        assertThrows(ValidationException.class, 
+            () -> userService.updateUser(userId, request, "test2@email.com", UserRole.CLIENTE));
+    }
+
 }
