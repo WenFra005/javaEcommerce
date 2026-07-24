@@ -65,6 +65,10 @@ public class UpdateRequest {
         return userPassword;
     }
 
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
     public String getCpf() {
         return cpf;
     }
