@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotBlank;
 public class CreateLegalEntityRequest extends CreateUserRequest {
 
     @Schema(description = "CNPJ da empresa", example = "12.345.678/0001-99")
-    @CNPJ(message = "CNPJ sholuld be valid")
+    @CNPJ(message = "CNPJ should be valid")
     @NotBlank(message = "CNPJ is required")
     private String cnpj;
 
