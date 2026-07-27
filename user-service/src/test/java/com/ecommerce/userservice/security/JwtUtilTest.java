@@ -12,7 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 @ExtendWith(MockitoExtension.class)
-public class JwtUtilTest {
+class JwtUtilTest {
 
     private JwtUtil jwtUtil;
 

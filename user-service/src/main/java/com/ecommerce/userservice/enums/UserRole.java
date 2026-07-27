@@ -15,7 +15,7 @@ public enum UserRole {
 
         try {
             return UserRole.valueOf(value.toUpperCase());
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException _) {
             throw new IllegalArgumentException(
                     String.format("Invalid value for 'userRole': '%s'. Allowed values: %s", value,
                             Arrays.toString(UserRole.values())));

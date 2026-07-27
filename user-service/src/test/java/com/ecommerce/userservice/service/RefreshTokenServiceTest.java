@@ -29,7 +29,7 @@ import com.ecommerce.userservice.repository.RefreshTokenRepository;
 import com.ecommerce.userservice.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class RefreshTokenServiceTest {
+class RefreshTokenServiceTest {
 
     @Mock
     private RefreshTokenRepository refreshTokenRepository;
@@ -42,8 +42,8 @@ public class RefreshTokenServiceTest {
 
     private User mockUser;
     private RefreshToken mockRefreshToken;
-    private final Long USER_ID = 1L;
-    private final String TOKEN_VALUE = "valid-token";
+    private static final Long USER_ID = 1L;
+    private static final String TOKEN_VALUE = "valid-token";
 
     @BeforeEach
     void setUp() {

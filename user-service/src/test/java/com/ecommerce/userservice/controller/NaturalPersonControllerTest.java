@@ -28,7 +28,7 @@ import com.ecommerce.userservice.service.UserService;
 @WebMvcTest(controllers = NaturalPersonController.class)
 @Import(SecurityConfig.class)
 @ActiveProfiles("test")
-public class NaturalPersonControllerTest {
+class NaturalPersonControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

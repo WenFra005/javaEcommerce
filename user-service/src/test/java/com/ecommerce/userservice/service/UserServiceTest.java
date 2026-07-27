@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,10 +44,9 @@ import com.ecommerce.userservice.model.User;
 import com.ecommerce.userservice.repository.LegalEntityRepository;
 import com.ecommerce.userservice.repository.NaturalPersonRepository;
 import com.ecommerce.userservice.repository.UserRepository;
-import com.ecommerce.userservice.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
@@ -69,6 +69,11 @@ public class UserServiceTest {
     private LegalEntity mockLegalEntity;
 
     @BeforeEach
+    void setUp() {
+        setUpPF();
+        setUpPJ();
+    }
+
     void setUpPF() {
         mockUserPF = new User();
         mockUserPF.setUserId(1L);
@@ -81,13 +86,12 @@ public class UserServiceTest {
 
         mockNaturalPerson = new NaturalPerson();
         mockNaturalPerson.setCpf("96642170342");
-        mockNaturalPerson.setBirthDate(LocalDate.of(1990, 1, 1));
+        mockNaturalPerson.setBirthDate(LocalDate.of(1990, Month.JANUARY, 1));
         mockNaturalPerson.setUser(mockUserPF);
         mockUserPF.setNaturalPerson(mockNaturalPerson);
 
     }
 
-    @BeforeEach
     void setUpPJ() {
         mockUserPJ = new User();
         mockUserPJ.setUserId(2L);
@@ -205,7 +209,7 @@ public class UserServiceTest {
         request.setUserPassword("password");
         request.setUserRole(UserRole.CLIENTE);
         request.setCpf("96642170342");
-        request.setBirthDate(LocalDate.of(1990, 1, 1));
+        request.setBirthDate(LocalDate.of(1990, Month.JANUARY, 1));
 
         when(userRepository.existsByUserEmail(request.getUserEmail())).thenReturn(false);
         when(naturalPersonRepository.existsByCpf(request.getCpf())).thenReturn(false);

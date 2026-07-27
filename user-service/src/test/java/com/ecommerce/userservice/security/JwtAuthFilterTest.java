@@ -24,7 +24,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @ExtendWith(MockitoExtension.class)
-public class JwtAuthFilterTest {
+class JwtAuthFilterTest {
 
     @Mock
     private JwtUtil jwtUtil;
@@ -47,8 +47,8 @@ public class JwtAuthFilterTest {
     @InjectMocks
     private JwtAuthFilter jwtAuthFilter;
 
-    private final String VALID_TOKEN = "valid-token";
-    private final String EMAIL = "test@email.com";
+    private static final String VALID_TOKEN = "valid-token";
+    private static final String EMAIL = "test@email.com";
 
     @AfterEach
     void tearDown() {

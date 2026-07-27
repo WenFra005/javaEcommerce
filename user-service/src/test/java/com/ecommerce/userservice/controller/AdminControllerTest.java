@@ -29,7 +29,7 @@ import com.ecommerce.userservice.service.UserService;
 @WebMvcTest(controllers = AdminController.class)
 @Import(SecurityConfig.class)
 @ActiveProfiles("test")
-public class AdminControllerTest {
+class AdminControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

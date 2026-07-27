@@ -33,7 +33,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.ecommerce.userservice.config.SecurityConfig;
-import com.ecommerce.userservice.controller.UserController;
 import com.ecommerce.userservice.dto.UpdateRequest;
 import com.ecommerce.userservice.dto.UserResponse;
 import com.ecommerce.userservice.enums.UserRole;
@@ -50,7 +49,7 @@ import com.ecommerce.userservice.service.UserService;
 @WebMvcTest(controllers = UserController.class)
 @Import(SecurityConfig.class)
 @ActiveProfiles("test")
-public class UserControllerTest {
+class UserControllerTest {
 
         @Autowired
         private MockMvc mockMvc;
