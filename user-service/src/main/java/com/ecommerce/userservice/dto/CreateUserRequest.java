@@ -1,6 +1,7 @@
 package com.ecommerce.userservice.dto;
 
-import com.ecommerce.userservice.Enums.UserRole;
+import com.ecommerce.userservice.enums.UserRole;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -62,7 +63,7 @@ public abstract class CreateUserRequest {
         this.userPassword = userPassword;
     }
 
-       public UserRole getUserRole() {
+    public UserRole getUserRole() {
         return userRole;
     }
 
