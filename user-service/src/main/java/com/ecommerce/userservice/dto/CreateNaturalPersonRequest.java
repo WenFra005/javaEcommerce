@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 import org.hibernate.validator.constraints.br.CPF;
 
-import com.ecommerce.userservice.Enums.UserRole;
+import com.ecommerce.userservice.enums.UserRole;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,7 +28,8 @@ public class CreateNaturalPersonRequest extends CreateUserRequest {
         super();
     }
 
-    public CreateNaturalPersonRequest(String name, String userEmail, String userPassword, UserRole userRole, String cpf, LocalDate birthDate) {
+    public CreateNaturalPersonRequest(String name, String userEmail, String userPassword, UserRole userRole, String cpf,
+            LocalDate birthDate) {
         super(name, userEmail, userPassword, userRole);
         this.cpf = cpf;
         this.birthDate = birthDate;

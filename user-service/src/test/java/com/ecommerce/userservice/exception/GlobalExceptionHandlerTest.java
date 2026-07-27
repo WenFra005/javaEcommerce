@@ -23,12 +23,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.ecommerce.userservice.dto.ErrorResponse;
-import com.ecommerce.userservice.exception.EmailAlreadyExistsException;
-import com.ecommerce.userservice.exception.GlobalExceptionHandler;
-import com.ecommerce.userservice.exception.TokenRefreshException;
-import com.ecommerce.userservice.exception.UserNotFoundException;
-import com.ecommerce.userservice.exception.ValidationException;
-
 import jakarta.servlet.http.HttpServletRequest;
 
 @ExtendWith(MockitoExtension.class)

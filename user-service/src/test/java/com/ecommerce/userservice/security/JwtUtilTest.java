@@ -11,8 +11,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.ecommerce.userservice.security.JwtUtil;
-
 @ExtendWith(MockitoExtension.class)
 public class JwtUtilTest {
 

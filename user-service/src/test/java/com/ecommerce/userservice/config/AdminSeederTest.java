@@ -15,11 +15,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.ecommerce.userservice.Enums.UserRole;
-import com.ecommerce.userservice.Enums.UserStatus;
-import com.ecommerce.userservice.Enums.UserType;
-import com.ecommerce.userservice.Model.User;
-import com.ecommerce.userservice.Repository.UserRepository;
+import com.ecommerce.userservice.enums.UserRole;
+import com.ecommerce.userservice.enums.UserStatus;
+import com.ecommerce.userservice.enums.UserType;
+import com.ecommerce.userservice.model.User;
+import com.ecommerce.userservice.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class AdminSeederTest {
@@ -38,7 +38,7 @@ public class AdminSeederTest {
         ReflectionTestUtils.setField(adminSeeder, "seedingEnabled", true);
         ReflectionTestUtils.setField(adminSeeder, "adminEmail", "admin@email.com");
         ReflectionTestUtils.setField(adminSeeder, "adminPassword", "admin-password");
-    
+
     }
 
     @Test
@@ -50,12 +50,10 @@ public class AdminSeederTest {
 
         adminSeeder.run();
 
-        verify(userRepository).save(argThat(user -> 
-            user.getUserEmail().equals("admin@email.com") &&
-            user.getUserRole().equals(UserRole.ADMIN) &&
-            user.getUserStatus().equals(UserStatus.ATIVO) &&
-            user.getUserType().equals(UserType.SYSTEM)
-        ));
+        verify(userRepository).save(argThat(user -> user.getUserEmail().equals("admin@email.com") &&
+                user.getUserRole().equals(UserRole.ADMIN) &&
+                user.getUserStatus().equals(UserStatus.ATIVO) &&
+                user.getUserType().equals(UserType.SYSTEM)));
 
     }
 

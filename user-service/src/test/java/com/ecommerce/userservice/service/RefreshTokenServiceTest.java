@@ -27,7 +27,6 @@ import com.ecommerce.userservice.model.RefreshToken;
 import com.ecommerce.userservice.model.User;
 import com.ecommerce.userservice.repository.RefreshTokenRepository;
 import com.ecommerce.userservice.repository.UserRepository;
-import com.ecommerce.userservice.service.RefreshTokenService;
 
 @ExtendWith(MockitoExtension.class)
 public class RefreshTokenServiceTest {

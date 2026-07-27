@@ -2,7 +2,7 @@ package com.ecommerce.userservice.dto;
 
 import org.hibernate.validator.constraints.br.CNPJ;
 
-import com.ecommerce.userservice.Enums.UserRole;
+import com.ecommerce.userservice.enums.UserRole;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -27,7 +27,8 @@ public class CreateLegalEntityRequest extends CreateUserRequest {
         super();
     }
 
-    public CreateLegalEntityRequest(String name, String userEmail, String userPassword, UserRole userRole, String cnpj, String companyName, String stateRegistration) {
+    public CreateLegalEntityRequest(String name, String userEmail, String userPassword, UserRole userRole, String cnpj,
+            String companyName, String stateRegistration) {
         super(name, userEmail, userPassword, userRole);
         this.cnpj = cnpj;
         this.companyName = companyName;
@@ -57,6 +58,5 @@ public class CreateLegalEntityRequest extends CreateUserRequest {
     public void setStateRegistration(String stateRegistration) {
         this.stateRegistration = stateRegistration;
     }
-
 
 }

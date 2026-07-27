@@ -17,7 +17,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.ecommerce.userservice.config.SecurityConfig;
-import com.ecommerce.userservice.controller.AdminController;
 import com.ecommerce.userservice.dto.CreateAdminRequest;
 import com.ecommerce.userservice.dto.UserResponse;
 import com.ecommerce.userservice.enums.UserRole;

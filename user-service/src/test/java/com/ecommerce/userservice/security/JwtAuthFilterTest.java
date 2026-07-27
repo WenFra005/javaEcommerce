@@ -17,8 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.ecommerce.userservice.security.JwtAuthFilter;
-import com.ecommerce.userservice.security.JwtUtil;
 import com.ecommerce.userservice.service.CustomUserDetailsService;
 
 import jakarta.servlet.FilterChain;

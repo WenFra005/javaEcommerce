@@ -8,11 +8,11 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.ecommerce.userservice.Enums.UserRole;
-import com.ecommerce.userservice.Enums.UserStatus;
-import com.ecommerce.userservice.Enums.UserType;
-import com.ecommerce.userservice.Model.User;
-import com.ecommerce.userservice.Repository.UserRepository;
+import com.ecommerce.userservice.enums.UserRole;
+import com.ecommerce.userservice.enums.UserStatus;
+import com.ecommerce.userservice.enums.UserType;
+import com.ecommerce.userservice.model.User;
+import com.ecommerce.userservice.repository.UserRepository;
 
 @Component
 @Profile("!test") // This ensures that the seeder does not run in the test profile
@@ -31,7 +31,6 @@ public class AdminSeeder implements CommandLineRunner {
     @Value("${admin.seeding.enabled:true}")
     private boolean seedingEnabled;
 
-    
     public AdminSeeder(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -48,7 +47,7 @@ public class AdminSeeder implements CommandLineRunner {
             log.info("ADMIN already exists. Skipping seeding.");
             return;
         }
-        
+
         if (adminEmail == null || adminPassword == null) {
             log.warn("ADMIN_EMAIL and ADMIN_PASSWORD environment variables are not set. Skipping admin creation.");
             return;
@@ -61,7 +60,7 @@ public class AdminSeeder implements CommandLineRunner {
         adminUser.setUserRole(UserRole.ADMIN);
         adminUser.setUserStatus(UserStatus.ATIVO);
         adminUser.setUserType(UserType.SYSTEM);
-        
+
         userRepository.save(adminUser);
         log.info("Admin created successfully. Email: " + adminEmail);
     }

@@ -1,9 +1,10 @@
 package com.ecommerce.userservice.dto;
 
 import java.time.Instant;
-import com.ecommerce.userservice.Enums.UserRole;
-import com.ecommerce.userservice.Enums.UserStatus;
-import com.ecommerce.userservice.Enums.UserType;
+
+import com.ecommerce.userservice.enums.UserRole;
+import com.ecommerce.userservice.enums.UserStatus;
+import com.ecommerce.userservice.enums.UserType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,17 +21,18 @@ public class UserResponse {
 
     @Schema(description = "Nome do usuário", example = "João da Silva")
     private String userName;
-    
+
     @Schema(description = "Email do usuário", example = "joao.silva@example.com")
     private String userEmail;
 
-    @Schema(description = "Status do usuário", example = "ATIVO", allowableValues = {"ATIVO", "INATIVO", "SUSPENSO"})
+    @Schema(description = "Status do usuário", example = "ATIVO", allowableValues = { "ATIVO", "INATIVO", "SUSPENSO" })
     private UserStatus userStatus;
 
-    @Schema(description = "Função do usuário", example = "CLIENTE", allowableValues = {"ADMIN", "VENDEDOR", "CLIENTE", "FORNECEDOR"})
+    @Schema(description = "Função do usuário", example = "CLIENTE", allowableValues = { "ADMIN", "VENDEDOR", "CLIENTE",
+            "FORNECEDOR" })
     private UserRole userRole;
 
-    @Schema(description = "Tipo do usuário", example = "PF", allowableValues = {"PF", "PJ", "SYSTEM"})
+    @Schema(description = "Tipo do usuário", example = "PF", allowableValues = { "PF", "PJ", "SYSTEM" })
     private UserType userType;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
