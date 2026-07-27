@@ -30,10 +30,11 @@
     <properties>
         <java.version>25</java.version>
         <testcontainers.version>1.20.2</testcontainers.version>
+        <flyway.version>13.0.0</flyway.version>
     </properties>
 
     <dependencies>
-        
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
@@ -106,7 +107,7 @@
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId>           <!-- or jjwt-gson if Gson is preferred -->
+            <artifactId>jjwt-jackson</artifactId>            <!-- or jjwt-gson if Gson is preferred -->
             <version>0.13.0</version>
             <scope>runtime</scope>
         </dependency>
