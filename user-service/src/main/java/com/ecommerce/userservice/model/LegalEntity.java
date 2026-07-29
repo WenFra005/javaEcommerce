@@ -17,12 +17,12 @@ import lombok.ToString;
 public class LegalEntity {
 
     @Id
-    @Column(name = "legal_entity_id")
+    @Column(name = "user_id")
     private Long legalEntityId;
 
     @OneToOne
     @MapsId
-    @JoinColumn(name = "legal_entity_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @CNPJ

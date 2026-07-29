@@ -19,12 +19,12 @@ import lombok.ToString;
 public class NaturalPerson {
 
     @Id
-    @Column(name = "natural_person_id")
+    @Column(name = "user_id")
     private Long naturalPersonId;
 
     @MapsId
     @OneToOne
-    @JoinColumn(name = "natural_person_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @CPF
