@@ -2,6 +2,7 @@ package com.ecommerce.userservice.service;
 
 import java.util.function.Consumer;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
@@ -34,11 +35,16 @@ import jakarta.transaction.Transactional;
 @Service
 public class UserService {
 
-    private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
-    private final NaturalPersonRepository naturalPersonRepository;
-    private final LegalEntityRepository legalEntityRepository;
+    private PasswordEncoder passwordEncoder;
+    private UserRepository userRepository;
+    private NaturalPersonRepository naturalPersonRepository;
+    private LegalEntityRepository legalEntityRepository;
 
+    public UserService() {
+
+    }
+
+    @Autowired
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
             NaturalPersonRepository naturalPersonRepository, LegalEntityRepository legalEntityRepository) {
         this.userRepository = userRepository;

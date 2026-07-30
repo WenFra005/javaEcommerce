@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,8 +27,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Tag(name = "Natural Person Controller", description = "Endpoints para gerenciar usuários do tipo Pessoa Física ou Natural")
 public class NaturalPersonController {
 
-    private final UserService userService;
+    private UserService userService;
 
+    public NaturalPersonController() {
+
+    }
+
+    @Autowired
     public NaturalPersonController(UserService userService) {
         this.userService = userService;
     }

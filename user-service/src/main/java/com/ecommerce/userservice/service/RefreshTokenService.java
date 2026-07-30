@@ -3,6 +3,7 @@ package com.ecommerce.userservice.service;
 import java.time.Instant;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +21,14 @@ public class RefreshTokenService {
     @Value("${jwt.refreshExpirationMs}")
     private Long refreshTokenDurationMs;
 
-    private final RefreshTokenRepository refreshTokenRepository;
-    private final UserRepository userRepository;
+    private RefreshTokenRepository refreshTokenRepository;
+    private UserRepository userRepository;
 
+    public RefreshTokenService() {
+
+    }
+
+    @Autowired
     public RefreshTokenService(RefreshTokenRepository refreshTokenRepository, UserRepository userRepository) {
         this.refreshTokenRepository = refreshTokenRepository;
         this.userRepository = userRepository;
