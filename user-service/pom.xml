@@ -31,6 +31,7 @@
         <java.version>25</java.version>
         <testcontainers.version>1.20.2</testcontainers.version>
         <flyway.version>13.0.0</flyway.version>
+        <sonar.organization>wenfra005</sonar.organization>
     </properties>
 
     <dependencies>
