@@ -39,12 +39,6 @@ jobs:
         working-directory: ./user-service
         run: mvn -B verify
 
-      - name: List coverage report (debug)
-        working-directory: ./user-service
-        run: |
-          ls -la target/site/jacoco/ || echo "Directory not found"
-          find . -name "jacoco.xml"
-
       - name: SonarCloud analysis
         working-directory: ./user-service
         env:
