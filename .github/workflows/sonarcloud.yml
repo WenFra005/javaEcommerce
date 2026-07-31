@@ -5,6 +5,10 @@ on:
       - dev/user-service
   pull_request:
     types: [opened, synchronize, reopened]
+  workflow_dispatch:
+permissions: 
+  pull-requests: read
+  security-events: write
 
 jobs:
   build:
@@ -40,12 +44,12 @@ jobs:
         run: mvn -B verify
 
       - name: SonarCloud analysis
-        working-directory: ./user-service
+        uses: SonarSource/sonarcloud-github-action@v2.2.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          mvn -B org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.organization=wenfra005 \
-            -Dsonar.projectKey=WenFra005_javaEcommerce \
+        with:
+          args: |
+            -Dsonar.projectKey=WenFra005_javaEcommerce
+            -Dsonar.organization=wenfra005
             -Dsonar.coverage.jacoco.xmlReportPaths=**/target/site/jacoco/jacoco.xml
+          projectBaseDir: ./user-service
