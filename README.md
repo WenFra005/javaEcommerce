@@ -17,7 +17,7 @@ O planejamento arquitetural foi baseado no modelo C4, que define contextos e con
 ### Contexto do Sistema (Nível 1)
 Diagrama mostrando as interações entre o sistema de e-commerce e os atores externos (cliente, administradores, fornecedores) e sistemas (gateway de pagamento, transportadora, API de CEP, serviço de e-mail).
 
-<img src="docs/diagrams/C4_model_diagrama-Level1-Diagrama de contexto.drawio.svg" alt="Level 1 - Diagrama de contexto">
+<img src="docs/diagrams/C4_model_diagrama-Level1-Diagrama de contexto.drawio.png" alt="Level 1 - Diagrama de contexto">
 
 ### Contêineres (Nível 2)
 Diagrama detalhando os microsserviços, banco de dados, API Gateway e message broker que compõem a plataforma.
