@@ -52,4 +52,9 @@ jobs:
             -Dsonar.projectKey=WenFra005_javaEcommerce
             -Dsonar.organization=wenfra005
             -Dsonar.coverage.jacoco.xmlReportPaths=**/target/site/jacoco/jacoco.xml
+            -Dsonar.sarif.reportPath=target/sonar-report.sarif  # ← gera o SARIF
           projectBaseDir: ./user-service
+      - name: Upload SARIF to GitHub
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: ./user-service/target/sonar-report.sarif
