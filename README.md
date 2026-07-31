@@ -23,7 +23,7 @@ Diagrama mostrando as interações entre o sistema de e-commerce e os atores ext
 Diagrama detalhando os microsserviços, banco de dados, API Gateway e message broker que compõem a plataforma.
 
 
-<img src="docs/diagrams/C4_model_diagrama-Level2-Diagrama de containers.drawio.svg" alt="Level 2 - Diagrama de containers">
+<img src="docs/diagrams/C4_model_diagrama.drawio.xml" alt="Level 2 - Diagrama de containers">
 
 
 ## Planejemaneto e Roteiro de Desenvolvimento
