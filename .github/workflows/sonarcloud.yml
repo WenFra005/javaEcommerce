@@ -44,7 +44,7 @@ jobs:
         run: mvn -B verify
 
       - name: SonarCloud analysis
-        uses: SonarSource/sonarcloud-github-action@v2.2.0
+        uses: SonarSource/sonarqube-scan-action@v8.2.1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
