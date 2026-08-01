@@ -55,6 +55,6 @@ jobs:
             -Dsonar.sarif.reportPath=target/sonar-report.sarif
           projectBaseDir: ./user-service
       - name: Upload SARIF to GitHub
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: ./user-service/target/sonar-report.sarif
