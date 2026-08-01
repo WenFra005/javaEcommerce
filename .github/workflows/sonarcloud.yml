@@ -53,12 +53,11 @@ jobs:
             -Dsonar.coverage.jacoco.xmlReportPaths=**/target/site/jacoco/jacoco.xml
             -Dsonar.sarif.reportPath=target/sonar-report.sarif
           projectBaseDir: ./user-service
+          
       - name: Debug SARIF location
         run: |
-          echo "Listing target directory:"
-          ls -la ./user-service/target/
-          echo "Searching for SARIF files:"
-          find . -name "*.sarif"
+          echo "Procurando arquivos .sarif no workspace:"
+          find . -name "*.sarif" -type f
         continue-on-error: true
         
       - name: Upload SARIF to GitHub
