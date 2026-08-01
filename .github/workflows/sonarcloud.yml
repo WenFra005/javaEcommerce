@@ -42,21 +42,24 @@ jobs:
         working-directory: ./user-service
         run: mvn -B verify
 
-      - name: SonarCloud analysis
-        working-directory: ./user-service
-        run: |
-          mvn sonar:sonar \
-            -Dsonar.projectKey=WenFra005_javaEcommerce \
-            -Dsonar.organization=wenfra005 \
-            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
-            -Dsonar.sarif.reportPath=target/sonar-report.sarif
+      - name: SonarCloud analysis (Scanner CLI)
+        uses: SonarSource/sonarqube-scan-action@v8.2.1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=WenFra005_javaEcommerce
+            -Dsonar.organization=wenfra005
+            -Dsonar.coverage.jacoco.xmlReportPaths=**/target/site/jacoco/jacoco.xml
+            -Dsonar.sarif.reportPath=target/sonar-report.sarif
+          projectBaseDir: ./user-service
           
       - name: Debug SARIF location
         run: |
           echo "Procurando arquivos .sarif no workspace:"
           find . -name "*.sarif" -type f
+          echo "Listando diretório target:"
+          ls -la ./user-service/target/
         continue-on-error: true
         
       - name: Upload SARIF to GitHub
