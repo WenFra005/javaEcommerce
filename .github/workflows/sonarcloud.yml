@@ -5,14 +5,13 @@ on:
       - dev/user-service
   pull_request:
     types: [opened, synchronize, reopened]
-  workflow_dispatch:
-permissions: 
-  pull-requests: read
-  security-events: write
-
 jobs:
   build:
     name: Build and analyze
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.3.1
