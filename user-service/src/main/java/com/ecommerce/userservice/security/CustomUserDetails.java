@@ -3,34 +3,40 @@ package com.ecommerce.userservice.security;
 import java.util.Collection;
 import java.util.List;
 
-import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.ecommerce.userservice.enums.UserRole;
 import com.ecommerce.userservice.model.User;
 
 public class CustomUserDetails implements UserDetails {
 
-    private final User user;
+    private final Long userId;
+    private final String email;
+    private final String password;
+    private final UserRole role;
 
     public CustomUserDetails(User user) {
-        this.user = user;
+        this.userId = user.getUserId();
+        this.email = user.getUserEmail();
+        this.password = user.getUserPassword();
+        this.role = user.getUserRole();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + user.getUserRole().name()));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
     @Override
-    public @Nullable String getPassword() {
-        return user.getUserPassword();
+    public String getPassword() {
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return user.getUserEmail();
+        return email;
     }
 
     @Override
@@ -55,6 +61,11 @@ public class CustomUserDetails implements UserDetails {
     }
 
     public User getUser() {
+        User user = new User();
+        user.setUserId(userId);
+        user.setUserEmail(email);
+        user.setUserPassword(password);
+        user.setUserRole(role);
         return user;
     }
 
