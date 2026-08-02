@@ -29,10 +29,10 @@ public abstract class CreateUserRequest {
     @NotNull(message = "User role is required")
     private UserRole userRole;
 
-    public CreateUserRequest() {
+    protected CreateUserRequest() {
     }
 
-    public CreateUserRequest(String name, String userEmail, String userPassword, UserRole userRole) {
+    protected CreateUserRequest(String name, String userEmail, String userPassword, UserRole userRole) {
         this.name = name;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
