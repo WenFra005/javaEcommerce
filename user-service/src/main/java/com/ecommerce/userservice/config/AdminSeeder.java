@@ -18,7 +18,7 @@ import com.ecommerce.userservice.repository.UserRepository;
 @Profile("!test") // This ensures that the seeder does not run in the test profile
 public class AdminSeeder implements CommandLineRunner {
 
-    private final static Logger log = LoggerFactory.getLogger(AdminSeeder.class);
+    private static final Logger log = LoggerFactory.getLogger(AdminSeeder.class);
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -62,7 +62,7 @@ public class AdminSeeder implements CommandLineRunner {
         adminUser.setUserType(UserType.SYSTEM);
 
         userRepository.save(adminUser);
-        log.info("Admin created successfully. Email: " + adminEmail);
+        log.info("Admin created successfully. Email: {}", adminEmail);
     }
 
 }
