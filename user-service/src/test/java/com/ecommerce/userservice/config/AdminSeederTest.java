@@ -22,7 +22,7 @@ import com.ecommerce.userservice.model.User;
 import com.ecommerce.userservice.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class AdminSeederTest {
+class AdminSeederTest {
 
     @Mock
     private UserRepository userRepository;
