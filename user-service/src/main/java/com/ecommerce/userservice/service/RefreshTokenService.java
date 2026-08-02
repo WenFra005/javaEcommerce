@@ -18,6 +18,9 @@ import com.ecommerce.userservice.repository.UserRepository;
 @Service
 public class RefreshTokenService {
 
+    private static final String USER_NOT_FOUND_MESSAGE = "User not found with id: ";
+    private static final String REFRESH_TOKEN_NOT_FOUND_MESSAGE = "Refresh token not found: ";
+
     @Value("${jwt.refreshExpirationMs}")
     private Long refreshTokenDurationMs;
 
@@ -25,7 +28,6 @@ public class RefreshTokenService {
     private UserRepository userRepository;
 
     public RefreshTokenService() {
-
     }
 
     @Autowired
@@ -36,8 +38,7 @@ public class RefreshTokenService {
 
     @Transactional
     public RefreshToken createRefreshToken(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+        User user = findUserById(userId);
 
         RefreshToken refreshToken = refreshTokenRepository.findByUser(user)
                 .orElse(new RefreshToken());
@@ -45,15 +46,13 @@ public class RefreshTokenService {
         refreshToken.setUser(user);
         refreshToken.setToken(UUID.randomUUID().toString());
         refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
-
         refreshToken.setRevoked(false);
 
         return refreshTokenRepository.save(refreshToken);
     }
 
     public RefreshToken validateRefreshToken(String token) {
-        RefreshToken refreshToken = refreshTokenRepository.findByToken(token)
-                .orElseThrow(() -> new TokenRefreshException("Refresh token not found: " + token));
+        RefreshToken refreshToken = findRefreshTokenByToken(token);
 
         if (refreshToken.isRevoked()) {
             throw new TokenRefreshException("Refresh token has been revoked: " + token);
@@ -64,29 +63,33 @@ public class RefreshTokenService {
         }
 
         return refreshToken;
-    };
+    }
 
     @Transactional
     public void revokeRefreshToken(String token) {
-        RefreshToken refreshToken = refreshTokenRepository.findByToken(token)
-                .orElseThrow(() -> new TokenRefreshException("Refresh token not found: " + token));
-
+        RefreshToken refreshToken = findRefreshTokenByToken(token);
         refreshToken.setRevoked(true);
         refreshTokenRepository.save(refreshToken);
     }
 
     @Transactional
     public void revokeAllRefreshTokensForUser(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
-
+        User user = findUserById(userId);
         refreshTokenRepository.deleteByUser(user);
     }
 
     public User getUserFromRefreshToken(String token) {
-        RefreshToken refreshToken = refreshTokenRepository.findByToken(token)
-                .orElseThrow(() -> new TokenRefreshException("Refresh token not found: " + token));
+        RefreshToken refreshToken = findRefreshTokenByToken(token);
         return refreshToken.getUser();
     }
 
+    private RefreshToken findRefreshTokenByToken(String token) {
+        return refreshTokenRepository.findByToken(token)
+                .orElseThrow(() -> new TokenRefreshException(REFRESH_TOKEN_NOT_FOUND_MESSAGE + token));
+    }
+
+    private User findUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE + userId));
+    }
 }
