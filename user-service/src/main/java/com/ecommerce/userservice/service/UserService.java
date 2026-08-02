@@ -110,7 +110,7 @@ public class UserService {
         return toUserResponse(user);
     }
 
-    public UserResponse findUserByEmail(String email, UserRole authenticatedRole) {
+    public UserResponse findUserByEmail(String email) {
         User user = userRepository.findByUserEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado para o email: " + email));
 
