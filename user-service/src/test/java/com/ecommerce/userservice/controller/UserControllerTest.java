@@ -276,7 +276,7 @@ class UserControllerTest {
         void testGetCurrentUser_WithValidAuth_ShouldReturnProfile() throws Exception {
                 UserResponse userResponse = createUserResponse();
 
-                when(userService.findUserByEmail(anyString(), any(UserRole.class)))
+                when(userService.findUserByEmail(anyString()))
                                 .thenReturn(userResponse);
 
                 Authentication clienteAuth = createMockAuthentication(UserRole.CLIENTE);

@@ -345,11 +345,9 @@ class UserServiceTest {
     @Test
     void testFindUserByEmail_WhenUserExists_ShouldSucceed() {
         String email = "test@email.com";
-        UserRole role = UserRole.CLIENTE;
-
         when(userRepository.findByUserEmail(email)).thenReturn(Optional.of(mockUserPF));
 
-        UserResponse response = userService.findUserByEmail(email, role);
+        UserResponse response = userService.findUserByEmail(email);
 
         assertNotNull(response);
         assertEquals(email, response.getUserEmail());
@@ -362,7 +360,7 @@ class UserServiceTest {
         when(userRepository.findByUserEmail(email)).thenReturn(Optional.empty());
 
         assertThrows(UserNotFoundException.class,
-                () -> userService.findUserByEmail(email, UserRole.CLIENTE));
+                () -> userService.findUserByEmail(email));
 
     }
 

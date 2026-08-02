@@ -65,8 +65,7 @@ public class UserController {
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getCurrentUser(Authentication authentication) {
         String email = authentication.getName();
-        UserRole role = ((CustomUserDetails) authentication.getPrincipal()).getUser().getUserRole();
-        UserResponse response = userService.findUserByEmail(email, role);
+        UserResponse response = userService.findUserByEmail(email);
 
         return ResponseEntity.ok(response);
     }
