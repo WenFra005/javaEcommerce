@@ -1,10 +1,15 @@
 package com.ecommerce.userservice.util;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Month;
 
 import com.ecommerce.userservice.enums.UserRole;
 import com.ecommerce.userservice.enums.UserStatus;
 import com.ecommerce.userservice.enums.UserType;
+import com.ecommerce.userservice.model.LegalEntity;
+import com.ecommerce.userservice.model.NaturalPerson;
+import com.ecommerce.userservice.model.RefreshToken;
 import com.ecommerce.userservice.model.User;
 
 public class TestDataFactory {
@@ -46,6 +51,35 @@ public class TestDataFactory {
         User user = createUser(email);
         user.setUserStatus(status);
         return user;
+    }
+
+    public static NaturalPerson createNaturalPerson(User user, String cpf) {
+        NaturalPerson np = new NaturalPerson();
+        np.setUser(user);
+        np.setCpf(cpf);
+        np.setBirthDate(LocalDate.of(1990, Month.JANUARY, 1));
+
+        return np;
+    }
+
+    public static LegalEntity createLegalEntity(User user, String cnpj, String companyName, String stateRegistration) {
+        LegalEntity le = new LegalEntity();
+        le.setUser(user);
+        le.setCnpj(cnpj);
+        le.setCompanyName(companyName);
+        le.setStateRegistration(stateRegistration);
+
+        return le;
+    }
+
+    public static RefreshToken createRefreshToken(User user, String token, Instant expiryDate) {
+        RefreshToken refreshToken = new RefreshToken();
+        refreshToken.setUser(user);
+        refreshToken.setToken(token);
+        refreshToken.setExpiryDate(expiryDate);
+        refreshToken.setRevoked(false);
+
+        return refreshToken;
     }
 
 }
