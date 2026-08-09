@@ -29,7 +29,7 @@
     </scm>
     <properties>
         <java.version>25</java.version>
-        <flyway.version>13.1.0</flyway.version>
+        <flyway.version>13.2.0</flyway.version>
         <sonar.organization>wenfra005</sonar.organization>
         <sonar.java.binaries>target/classes</sonar.java.binaries>
         <sonar.plsql.file.suffixes>-</sonar.plsql.file.suffixes>
