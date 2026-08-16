@@ -1,0 +1,46 @@
+name: Dependabot Auto-Merge and Approve
+
+on: 
+  pull_request: 
+    types: 
+      - opened
+      - synchronize
+      - reopened
+
+permissions: 
+  contents: write
+  pull-requests: write
+
+jobs:
+  dependabot:
+    name: Dependabot Auto-Approve and Merge
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+
+    steps:
+      - name: Collect metadata of the Dependabot
+        id: metadata
+        uses: dependabot/fetch-metadata@v3
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN}}"
+
+      - name: Approve Pull Request automatically
+        if: >
+          (steps.metadata.outputs.update-type == 'version-update:semver-path' || 
+          (steps.metadata.outputs.update-type == 'version-update:semver-minor' && steps.metadata.outputs.dependency-type == 'direct:development')) &&
+          contains(steps.metadata.outputs.directory, 'user-service')
+        run: gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Activate Auto-Merge
+        if: >
+          (steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
+          (steps.metadata.outputs.update-type == 'version-update:semver-minor' && steps.metadata.outputs.dependency-type == 'direct:development')) &&
+          contains(steps.metadata.outputs.directory, 'backend')
+        # O --auto espera o status de sucesso do CI (Maven) antes de mesclar
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
