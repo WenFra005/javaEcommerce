@@ -1,10 +1,9 @@
 # javaEcommerce - Projeto pessoal de E-commerce
 
 ## 🚧 Status do projeto
+>
 > ⚠️ **Este projeto está em desenvolvimento**.
-
 > Novas funcionalidades, melhorias e correções estão sendo implementados incrementalmente. Nem todos os microsserviços descritos na arquitetura estão complementamente funcionais neste momento.
-
 
 ## Sobre o Projeto
 
@@ -15,40 +14,44 @@ O planejamento arquitetural foi baseado no modelo C4, que define contextos e con
 ## Arquiterura do Sistema
 
 ### Contexto do Sistema (Nível 1)
-Diagrama mostrando as interações entre o sistema de e-commerce e os atores externos (cliente, administradores, fornecedores) e sistemas (gateway de pagamento, transportadora, API de CEP, serviço de e-mail).
 
-<img src="docs/diagrams/C4_model_diagrama-Level1-Diagrama de contexto.drawio.png" alt="Level 1 - Diagrama de contexto">
+Diagrama mostrando as interações entre o sistema de e-commerce e os atores externos (cliente, administradores, fornecedores) e sistemas (gateway de pagamento, transportadora, API de CEP, serviço de e-mail).
+[![Level 1 - Diagrama de Contexto](docs/diagrams/C4_model_diagrama-Level1-Diagrama%20de%20contexto.drawio.png)](docs/diagrams/C4_model_diagrama-Level1-Diagrama%20de%20contexto.drawio.png)
 
 ### Contêineres (Nível 2)
+
 Diagrama detalhando os microsserviços, banco de dados, API Gateway e message broker que compõem a plataforma.
 
-<a href="docs/diagrams/C4_model_diagrama-Level2-Diagrama de containers.drawio.png">
-  <img src="docs/diagrams/C4_model_diagrama-Level2-Diagrama de containers.drawio.png" width="100%" alt="Level 2 - Diagrama de containers">
-</a>
+[![Level 2 - Diagrama de containers](docs/diagrams/C4_model_diagrama-Level2-Diagrama%20de%20containers.drawio.png)](docs/diagrams/C4_model_diagrama-Level2-Diagrama%20de%20containers.drawio.png)
 
 ## Planejemaneto e Roteiro de Desenvolvimento
 
 ### Fase 1 - Fundação (🛠️ Em Desenvolvimento)
+
 - Estruturação do monorepositório
 - Implementação do Serviço de Usuários
 - Autenticação JWT com refresh token
 
 ### Fase 2 - Produtos e Catálogo (📝 Planejado)
+
 - Implementação do Serviço de Produtos
 - CRUD de produtos, categorias e estoque
 
 ### Fase 3 - Pedidos e Pagamentos (📝 Planejado)
+
 - Implementação do Serviço de Pedidos
 - Implementação do Serviços de Pagamentos
 - Integração com gateway de pagamento
 - Webhooks para atualização de status
 
 ### Fase 4 - Notificações e Comunicação (📝 Planejado)
+
 - Implementação do Serviço de Notificações
 - Integração com serviço de e-mail/SMS
 - Message Broker (RabbitMQ) para eventos assíncronos
 
 ### Fase 5 - Infraestrutura (📝 Planejado)
+
 - API Gateway (Spring Cloud Gateway)
 - Containerização com Docker
 - Orquestração com docker-compose
@@ -56,4 +59,5 @@ Diagrama detalhando os microsserviços, banco de dados, API Gateway e message br
 - Monitoramento
 
 ## Licença
+
 Este projeto está sob a licença MIT - veja o arquivo [LICENSE](LICENSE) para mais detalhes
