@@ -1,4 +1,5 @@
 # javaEcommerce - Projeto pessoal de E-commerce
+[![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=WenFra005_javaEcommerce)
 
 [![CI](https://github.com/WenFra005/javaEcommerce/actions/workflows/maven.yml/badge.svg?style=flat-square)](https://github.com/WenFra005/javaEcommerce/actions/workflows/maven.yml)
 [![Quality gate status](https://sonarcloud.io/api/project_badges/measure?project=WenFra005_javaEcommerce&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=WenFra005_javaEcommerce)
