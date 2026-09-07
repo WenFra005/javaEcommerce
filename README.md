@@ -31,6 +31,21 @@ Diagrama detalhando os microsserviços, banco de dados, API Gateway e message br
 
 ![Texto Alternativo](https://cdn.jsdelivr.net/gh/WenFra005/javaEcommerce@dev/user-service/docs/diagrams/C4_model_diagrama-Level2-Diagrama_de_containers.drawio.svg)
 
+## Tecnologias utilizadas
+
+| Camada             |  Tecnologia                                                                                                        |
+|--------------------|--------------------------------------------------------------------------------------------------------------------|
+| **Linguagem**      |![Tech](https://skillicons.vercel.app/api/svg?i=java&t=Dark)                                                        |
+| **Framework**      |![Tech](https://simpleicons.dev/icons?icons=springboot,spring&theme=dark)                                           |
+| **Segurança**      |![Tech](https://simpleicons.dev/icons?icons=springsecurity&theme=dark)                                              |
+| **Persistência**   |![Tech](https://skillicons.vercel.app/api/svg?i=hibernate&t=Dark)                                                   |
+| **Banco de Dados** |![Tech](https://skillicons.vercel.app/api/svg?i=postgresql&t=Dark)                                                  |
+| **Migrações**      |![Tech](https://simpleicons.dev/icons?icons=flyway&theme=dark)                                                      |
+| **Documentação**   |![Tech](https://simpleicons.dev/icons?icons=swagger&theme=dark)                                                     |
+| **Testes**         |![Tech](https://simpleicons.dev/icons?icons=junit5&theme=dark)                                                      |
+| **CI/CD**          |![Tech](https://skillicons.vercel.app/api/svg?i=githubactions&t=Dark)                                               |
+| **Containerização**|![Tech](https://skillicons.vercel.app/api/svg?i=docker&t=Dark)                                                      |
+
 ## Planejemaneto e Roteiro de Desenvolvimento
 
 ### Fase 1 - Fundação (🛠️ Em Desenvolvimento)
