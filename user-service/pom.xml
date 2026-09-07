@@ -30,6 +30,7 @@
     <properties>
         <java.version>25</java.version>
         <flyway.version>13.5.0</flyway.version>
+        <tomcat.version>11.0.25</tomcat.version>
         <sonar.organization>wenfra005</sonar.organization>
         <sonar.java.binaries>target/classes</sonar.java.binaries>
         <sonar.plsql.file.suffixes>-</sonar.plsql.file.suffixes>
