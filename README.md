@@ -22,13 +22,14 @@ O planejamento arquitetural foi baseado no modelo C4, que define contextos e con
 ### Contexto do Sistema (Nível 1)
 
 Diagrama mostrando as interações entre o sistema de e-commerce e os atores externos (cliente, administradores, fornecedores) e sistemas (gateway de pagamento, transportadora, API de CEP, serviço de e-mail).
-[![Level 1 - Diagrama de Contexto](docs/diagrams/C4_model_diagrama-Level1-Diagrama%20de%20contexto.drawio.png)](docs/diagrams/C4_model_diagrama-Level1-Diagrama%20de%20contexto.drawio.png)
+
+![Texto Alternativo](https://cdn.jsdelivr.net/gh/WenFra005/javaEcommerce@dev/user-service/docs/diagrams/C4_model_diagrama-Level1-Diagrama_de_contexto.drawio.svg)
 
 ### Contêineres (Nível 2)
 
 Diagrama detalhando os microsserviços, banco de dados, API Gateway e message broker que compõem a plataforma.
 
-[![Level 2 - Diagrama de containers](docs/diagrams/C4_model_diagrama-Level2-Diagrama%20de%20containers.drawio.png)](docs/diagrams/C4_model_diagrama-Level2-Diagrama%20de%20containers.drawio.png)
+![Texto Alternativo](https://cdn.jsdelivr.net/gh/WenFra005/javaEcommerce@dev/user-service/docs/diagrams/C4_model_diagrama-Level2-Diagrama_de_containers.drawio.svg)
 
 ## Planejemaneto e Roteiro de Desenvolvimento
 
