@@ -47,6 +47,7 @@ Diagrama detalhando os microsserviços, banco de dados, API Gateway e message br
 | **Containerização** | ![Tech](https://skillicons.vercel.app/api/svg?i=docker&t=Dark)                                                     |
 
 ## O que já foi implementado (Fase 1)
+
 - [x] **Serviço de usuários**
   - [x] Cadastro de Pessoa Física (PF) e Pessoa Jurídica (PJ)
   - [x] Autenticação JWT (access + refresh token com rotação)
@@ -65,7 +66,7 @@ Diagrama detalhando os microsserviços, banco de dados, API Gateway e message br
 - [x] **Infraestrutura**
   - [x] Dockerização do serviço (imagem otimizada com `jlink`)
   - [x] Docker Compose (aplicação + PostgreSQL)
-  - [x] Documentação Swagger/OpenAPI    
+  - [x] Documentação Swagger/OpenAPI
 
 ## Planejamento e Roteiro de Desenvolvimento
 
@@ -121,7 +122,9 @@ Diagrama detalhando os microsserviços, banco de dados, API Gateway e message br
    git clone https://github.com/WenFra005/javaEcommerce.git
    cd javaEcommerce/user-service
    ```
+
 2. **Configure as variáveis de ambiente** (crie um arquivo `.env` na raiz do serviço ou coloque no arquivo `launch.json` se estiver usando o VS Code):
+
    ```properties
    DB_USER=user
    DB_PASSWORD=password
@@ -138,6 +141,7 @@ Diagrama detalhando os microsserviços, banco de dados, API Gateway e message br
    ADMIN_EMAIL=admin@email.com
    ADMIN_PASSWORD=admin123
    ```
+
 3. **Suba o ambiente com Docker Compose:**
 
     ```bash
@@ -172,16 +176,18 @@ Contribuições são bem-vindas.
 1. **Abra uma issue** descrevendo o que pretende fazer (bug fix, feature, etc.).
 2. **Faça um fork** do repositório.
 3. **Crie uma branch** com um nome descritivo:
-   
+
    ```bash
    git checkout -b feat/minha-feature/seu-usuário
    ```
-5. **Siga o padrão de commits** ([Conventional Commits](https://www.conventionalcommits.org/)) ([Conventional Commits PT-BT](https://github.com/iuricode/padroes-de-commits)):
-   
+
+4. **Siga o padrão de commits** ([Conventional Commits](https://www.conventionalcommits.org/)) ([Conventional Commits PT-BT](https://github.com/iuricode/padroes-de-commits)):
+
     ```bash
     git commit -m "feat: adiciona endpoint para buscar PF por CPF"
     ```
-6. **Abra um Pull Request** seguindo o template disponível.
+
+5. **Abra um Pull Request** seguindo o template disponível.
 
 ### Diretrizes
 
@@ -193,6 +199,3 @@ Contribuições são bem-vindas.
 ## Licença
 
 Este projeto está sob a licença MIT - veja o arquivo [LICENSE](LICENSE) para mais detalhes
-
----
-*Última atualização: Setembro de 2026*
