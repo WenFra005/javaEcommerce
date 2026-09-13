@@ -3,7 +3,7 @@ name: Bug Report
 about: Reporte um comportamento inesperado no projeto
 title: "[BUG]"
 labels: bug
-assignees: WenFra005
+assignees: ''
 type: Bug
 
 ---

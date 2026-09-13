@@ -3,7 +3,7 @@ name: Improvement
 about: Sugira uma nova funcionalidade ou melhoria para o projeto
 title: "[FEATURE]"
 labels: enhancement
-assignees: WenFra005
+assignees: ''
 type: Feature
 
 ---
