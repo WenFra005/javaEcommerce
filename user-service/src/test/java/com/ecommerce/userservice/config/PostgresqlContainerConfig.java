@@ -12,7 +12,7 @@ public class PostgresqlContainerConfig {
     @ServiceConnection
     @SuppressWarnings("resource")
     public PostgreSQLContainer<?> postgreSQLContainer() {
-        return new PostgreSQLContainer<>("postgres:15-alpine")
+        return new PostgreSQLContainer<>("postgres:18-alpine")
                 .withDatabaseName("testdb")
                 .withUsername("testuser")
                 .withPassword("testpass");
