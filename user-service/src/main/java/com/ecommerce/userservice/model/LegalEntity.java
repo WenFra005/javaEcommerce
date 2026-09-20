@@ -11,20 +11,19 @@ import jakarta.persistence.OneToOne;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-@Entity(name = "legal_entities")
-@ToString(exclude = "user")
-@EqualsAndHashCode(of = "legalEntityId")
 /**
- * Representa uma pessoa jurídica no sistema.
+ * Entidade de pessoa jurídica vinculada a um {@link User}.
  *
  * <p>
- * Corresponde à entidade de pessoas jurídicas na tabela {@code legal_entities}
- * do PostgreSQL,
- * armazenando CNPJ, nome da empresa, inscrição estadual e a relação um-para-um
- * com {@link User}.
+ * Mapeia a tabela {@code legal_entities} no PostgreSQL e concentra os dados
+ * específicos de uma pessoa jurídica. O identificador é compartilhado com a
+ * entidade {@link User} para manter o vínculo um-para-um consistente no banco.
  *
  * @since 1.0
  */
+@Entity(name = "legal_entities")
+@ToString(exclude = "user")
+@EqualsAndHashCode(of = "legalEntityId")
 public class LegalEntity {
 
     @Id

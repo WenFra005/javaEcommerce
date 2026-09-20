@@ -13,19 +13,19 @@ import jakarta.persistence.OneToOne;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-@Entity(name = "natural_persons")
-@ToString(exclude = "user")
-@EqualsAndHashCode(of = "naturalPersonId")
 /**
- * Representa uma pessoa física no sistema.
+ * Entidade de pessoa física vinculada a um {@link User}.
  *
  * <p>
- * Corresponde à entidade de pessoas físicas na tabela {@code natural_persons}
- * do PostgreSQL,
- * armazenando CPF, data de nascimento e a relação um-para-um com {@link User}.
+ * Mapeia a tabela {@code natural_persons} no PostgreSQL e concentra os dados
+ * específicos de uma pessoa física. O identificador é compartilhado com a
+ * entidade {@link User} para manter o vínculo um-para-um consistente no banco.
  *
  * @since 1.0
  */
+@Entity(name = "natural_persons")
+@ToString(exclude = "user")
+@EqualsAndHashCode(of = "naturalPersonId")
 public class NaturalPerson {
 
     @Id

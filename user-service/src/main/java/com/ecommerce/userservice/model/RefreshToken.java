@@ -11,14 +11,13 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 
 /**
- * Representa um token de renovação de acesso.
+ * Entidade que persiste o token de renovação de acesso.
  *
  * <p>
- * Armazena o token JWT de longa duração gerado para manter a sessão do usuário
- * ativa sem a necessidade de renovação constante do token de acesso curto
- * prazo.
- * O token é vinculado a um {@link User} e possui data de expiração,
- * sendo marcado como revogado quando necessário.
+ * Mapeia a tabela {@code refresh_tokens} no PostgreSQL e armazena o token de
+ * longa duração usado para renovar a sessão sem exigir novo login. O vínculo
+ * com {@link User} permite localizar rapidamente o proprietário do token e
+ * invalidá-lo quando necessário.
  *
  * @since 1.0
  */

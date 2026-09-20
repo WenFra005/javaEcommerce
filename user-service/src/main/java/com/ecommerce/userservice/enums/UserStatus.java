@@ -1,15 +1,11 @@
 package com.ecommerce.userservice.enums;
 
 /**
- * Estados possíveis de um {@link User} no sistema.
+ * Estados operacionais de um {@link com.ecommerce.userservice.model.User}.
  *
  * <p>
- * Controla o ciclo de vida de um usuário:
- * <ul>
- * <li>{@code ATIVO} – conta operacional.</li>
- * <li>{@code INATIVO} – conta desativada temporariamente.</li>
- * <li>{@code SUSPENSO} – conta suspensa por violação de políticas.</li>
- * </ul>
+ * Define se a conta pode operar normalmente, foi desativada temporariamente ou
+ * está suspensa por alguma restrição administrativa.
  *
  * @since 1.0
  */
