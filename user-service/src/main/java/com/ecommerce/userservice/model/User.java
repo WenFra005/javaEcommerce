@@ -35,7 +35,7 @@ import lombok.ToString;
  * O tipo de usuário é definido por {@link UserType} e o estado operacional por
  * {@link UserStatus}.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @Entity(name = "users")
 @ToString(exclude = { "naturalPerson", "legalEntity" })

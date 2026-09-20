@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
  * de um registro. A estrutura varia conforme o tipo de usuário, mas preserva os
  * campos comuns para consumo pelos clientes da API.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @AllArgsConstructor
 @NoArgsConstructor

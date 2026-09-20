@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * O controller é responsável por iniciar o cadastro de administradores com a
  * mesma regra de domínio usada pelo serviço de usuários.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @RestController
 @RequestMapping("/admin")

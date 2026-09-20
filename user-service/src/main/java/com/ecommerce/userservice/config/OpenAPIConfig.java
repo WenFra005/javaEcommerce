@@ -20,7 +20,7 @@ import io.swagger.v3.oas.models.servers.Server;
  * Define metadados, servidor padrão e esquema de autenticação para que a
  * documentação reflita o contrato exposto pelo serviço.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @Configuration
 public class OpenAPIConfig {

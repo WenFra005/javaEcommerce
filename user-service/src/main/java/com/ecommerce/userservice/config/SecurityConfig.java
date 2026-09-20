@@ -25,7 +25,7 @@ import jakarta.servlet.http.HttpServletResponse;
  * Configura autenticação stateless, integra o filtro JWT e libera apenas os
  * endpoints públicos necessários para cadastro, autenticação e documentação.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @Configuration
 @EnableWebSecurity

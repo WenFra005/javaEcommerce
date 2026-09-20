@@ -15,7 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * apenas os dados relevantes ao caso de uso sem exigir a substituição completa
  * do cadastro.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @Schema(description = "Campos disponíveis para atualização parcial de um usuário.")
 public class UpdateRequest {

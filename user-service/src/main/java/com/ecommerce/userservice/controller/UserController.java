@@ -46,7 +46,7 @@ import org.springframework.web.bind.annotation.PutMapping;
  * administradores, atualização parcial com possível renovação de token e
  * exclusão de conta.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @RestController
 @RequestMapping("/users")

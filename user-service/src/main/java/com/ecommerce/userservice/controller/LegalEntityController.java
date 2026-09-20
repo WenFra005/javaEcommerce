@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * O controller apenas repassa o payload para o serviço de domínio, mantendo o
  * comportamento de criação específico para cadastros empresariais.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @RestController
 @RequestMapping("/legal-entities")

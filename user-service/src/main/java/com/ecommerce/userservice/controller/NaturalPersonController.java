@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  * O controller encaminha a criação para o serviço de usuários preservando a
  * regra de domínio específica para cadastro de pessoa física.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @RestController
 @RequestMapping("/natural-persons")

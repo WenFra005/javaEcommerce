@@ -23,7 +23,7 @@ import com.ecommerce.userservice.repository.UserRepository;
  * associado a um refresh token, mantendo a lógica de sessão fora dos
  * controladores.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @Service
 public class RefreshTokenService {

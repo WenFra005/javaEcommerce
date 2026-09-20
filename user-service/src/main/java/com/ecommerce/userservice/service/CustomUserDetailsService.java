@@ -17,7 +17,7 @@ import com.ecommerce.userservice.security.CustomUserDetails;
  * A implementação resolve o usuário pelo e-mail porque esse é o identificador
  * usado no fluxo de autenticação do serviço.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

@@ -19,7 +19,7 @@ import jakarta.persistence.OneToOne;
  * com {@link User} permite localizar rapidamente o proprietário do token e
  * invalidá-lo quando necessário.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @Entity(name = "refresh_tokens")
 public class RefreshToken {

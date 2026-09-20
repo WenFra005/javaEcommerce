@@ -7,7 +7,7 @@ package com.ecommerce.userservice.enums;
  * Define se a conta pode operar normalmente, foi desativada temporariamente ou
  * está suspensa por alguma restrição administrativa.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 public enum UserStatus {
     ATIVO,

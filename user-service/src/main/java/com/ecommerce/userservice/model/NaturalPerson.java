@@ -21,7 +21,7 @@ import lombok.ToString;
  * específicos de uma pessoa física. O identificador é compartilhado com a
  * entidade {@link User} para manter o vínculo um-para-um consistente no banco.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @Entity(name = "natural_persons")
 @ToString(exclude = "user")

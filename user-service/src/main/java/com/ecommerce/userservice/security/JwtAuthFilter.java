@@ -25,7 +25,7 @@ import jakarta.servlet.http.HttpServletResponse;
  * popula o {@link org.springframework.security.core.context.SecurityContext}
  * quando o token é válido.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {

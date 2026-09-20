@@ -21,7 +21,7 @@ import io.jsonwebtoken.security.Keys;
  * Encapsula as regras de assinatura, expiração e extração de claims usadas no
  * fluxo de autenticação e renovação de sessão.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @Component
 public class JwtUtil {

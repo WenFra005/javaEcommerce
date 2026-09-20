@@ -13,7 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * falha, incluindo código HTTP, mensagem, tipo do erro, instante de ocorrência
  * e caminho requisitado.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @Schema(description = "Representa a resposta de erro, incluindo código, mensagem, tipo de erro, timestamp e caminho da requisição.")
 public class ErrorResponse {

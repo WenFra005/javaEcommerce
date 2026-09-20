@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * Agrupa os tokens emitidos e os dados mínimos necessários para que o cliente
  * reconheça a sessão autenticada sem precisar buscar o usuário novamente.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @Schema(description = "Resposta de autenticação com tokens e dados básicos do usuário autenticado.")
 public class AuthResponse {

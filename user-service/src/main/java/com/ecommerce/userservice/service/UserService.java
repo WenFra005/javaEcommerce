@@ -41,7 +41,7 @@ import jakarta.transaction.Transactional;
  * aplica as regras de unicidade e autorização que não cabem na camada de
  * persistência.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @Service
 public class UserService {

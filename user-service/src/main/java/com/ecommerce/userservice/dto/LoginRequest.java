@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * O payload carrega apenas as credenciais usadas no fluxo de login; a validação
  * e a troca por tokens ocorrem na camada de serviço.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @Schema(description = "Credenciais necessárias para autenticação do usuário.")
 public class LoginRequest {

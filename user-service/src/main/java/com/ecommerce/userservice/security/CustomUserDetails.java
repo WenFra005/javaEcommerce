@@ -18,7 +18,7 @@ import com.ecommerce.userservice.model.User;
  * autorização sem expor o modelo de domínio diretamente à infraestrutura de
  * segurança.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 public class CustomUserDetails implements UserDetails {
 

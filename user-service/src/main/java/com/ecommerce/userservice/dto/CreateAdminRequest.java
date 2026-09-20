@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotBlank;
  * privilégio administrativo, normalmente usado em fluxo de bootstrap ou
  * provisão controlada.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @Schema(description = "Dados necessários para criação de um usuário administrador.")
 public class CreateAdminRequest {

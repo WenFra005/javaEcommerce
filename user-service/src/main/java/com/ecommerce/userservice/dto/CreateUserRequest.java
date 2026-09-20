@@ -15,7 +15,7 @@ import jakarta.validation.constraints.Size;
  * Reúne os campos comuns exigidos para cadastrar um usuário, deixando para as
  * subclasses a inclusão dos dados específicos de pessoa física ou jurídica.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @Schema(description = "Estrutura base para criação de usuários.")
 public abstract class CreateUserRequest {

@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * Transporta os novos tokens gerados após a validação de um refresh token
  * válido, sem expor detalhes adicionais do processo interno.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @Schema(description = "Resposta da renovação de sessão com novos tokens.")
 public class RefreshResponse {

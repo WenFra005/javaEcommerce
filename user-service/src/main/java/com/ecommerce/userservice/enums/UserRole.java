@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
  * O conjunto é usado para classificar permissões e responsabilidades dentro do
  * serviço.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 public enum UserRole {
     ADMIN, CLIENTE, VENDEDOR, FORNECEDOR;

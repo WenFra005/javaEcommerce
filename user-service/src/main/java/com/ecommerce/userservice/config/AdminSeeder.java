@@ -21,7 +21,7 @@ import com.ecommerce.userservice.repository.UserRepository;
  * O componente executa no startup da aplicação para garantir uma conta
  * administrativa mínima, com possibilidade de desativação por configuração.
  *
- * @since 1.0
+ * @since 0.1.0
  */
 @Component
 @Profile("!test") // This ensures that the seeder does not run in the test profile
