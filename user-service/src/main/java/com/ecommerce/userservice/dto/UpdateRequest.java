@@ -7,6 +7,16 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+/**
+ * Campos aceitos para atualização parcial de um usuário.
+ *
+ * <p>
+ * O mesmo payload atende perfis de pessoa física e jurídica, permitindo enviar
+ * apenas os dados relevantes ao caso de uso sem exigir a substituição completa
+ * do cadastro.
+ *
+ * @since 1.0
+ */
 @Schema(description = "Campos disponíveis para atualização parcial de um usuário.")
 public class UpdateRequest {
 
@@ -34,7 +44,8 @@ public class UpdateRequest {
     public UpdateRequest() {
     }
 
-    public UpdateRequest(String name, String userEmail, String userPassword, String cpf, LocalDate birthDate, String cnpj, String companyName, String stateRegistration) {
+    public UpdateRequest(String name, String userEmail, String userPassword, String cpf, LocalDate birthDate,
+            String cnpj, String companyName, String stateRegistration) {
         this.name = name;
         this.userEmail = userEmail;
         this.userPassword = userPassword;

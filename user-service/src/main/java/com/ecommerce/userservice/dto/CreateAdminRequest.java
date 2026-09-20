@@ -3,6 +3,16 @@ package com.ecommerce.userservice.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
+/**
+ * Dados usados para cadastrar um administrador inicial.
+ *
+ * <p>
+ * Este payload concentra os campos mínimos para a criação de um usuário com
+ * privilégio administrativo, normalmente usado em fluxo de bootstrap ou
+ * provisão controlada.
+ *
+ * @since 1.0
+ */
 @Schema(description = "Dados necessários para criação de um usuário administrador.")
 public class CreateAdminRequest {
 

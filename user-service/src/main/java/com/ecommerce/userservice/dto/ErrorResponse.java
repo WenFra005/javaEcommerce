@@ -5,6 +5,16 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+/**
+ * Representa o corpo padronizado de erro retornado pela API.
+ *
+ * <p>
+ * Mantém informações suficientes para depuração do cliente e rastreio da
+ * falha, incluindo código HTTP, mensagem, tipo do erro, instante de ocorrência
+ * e caminho requisitado.
+ *
+ * @since 1.0
+ */
 @Schema(description = "Representa a resposta de erro, incluindo código, mensagem, tipo de erro, timestamp e caminho da requisição.")
 public class ErrorResponse {
 
@@ -23,7 +33,7 @@ public class ErrorResponse {
 
     @Schema(description = "Caminho da requisição que gerou o erro", example = "/natural-persons/register")
     private String path;
-    
+
     public ErrorResponse() {
     }
 
@@ -75,5 +85,4 @@ public class ErrorResponse {
         this.path = path;
     }
 
-    
 }

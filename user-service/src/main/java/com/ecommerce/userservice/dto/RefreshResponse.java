@@ -2,6 +2,15 @@ package com.ecommerce.userservice.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+/**
+ * Resposta retornada no fluxo de renovação de sessão.
+ *
+ * <p>
+ * Transporta os novos tokens gerados após a validação de um refresh token
+ * válido, sem expor detalhes adicionais do processo interno.
+ *
+ * @since 1.0
+ */
 @Schema(description = "Resposta da renovação de sessão com novos tokens.")
 public class RefreshResponse {
 
@@ -43,7 +52,5 @@ public class RefreshResponse {
     public void setTokenType(String tokenType) {
         this.tokenType = tokenType;
     }
-
-    
 
 }

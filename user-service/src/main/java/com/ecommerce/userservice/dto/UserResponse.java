@@ -11,6 +11,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+/**
+ * Representa a visão de leitura de um usuário na API.
+ *
+ * <p>
+ * Consolida os dados públicos retornados após a criação, consulta ou
+ * atualização
+ * de um registro. A estrutura varia conforme o tipo de usuário, mas preserva os
+ * campos comuns para consumo pelos clientes da API.
+ *
+ * @since 1.0
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(description = "Representa a resposta de um usuário, incluindo informações gerais e específicas de acordo com o tipo de usuário.")

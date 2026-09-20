@@ -2,6 +2,15 @@ package com.ecommerce.userservice.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+/**
+ * Resposta emitida após autenticação bem-sucedida.
+ *
+ * <p>
+ * Agrupa os tokens emitidos e os dados mínimos necessários para que o cliente
+ * reconheça a sessão autenticada sem precisar buscar o usuário novamente.
+ *
+ * @since 1.0
+ */
 @Schema(description = "Resposta de autenticação com tokens e dados básicos do usuário autenticado.")
 public class AuthResponse {
 
@@ -15,7 +24,7 @@ public class AuthResponse {
     private Long userId;
     @Schema(description = "E-mail do usuário autenticado", example = "usuario@example.com")
     private String userEmail;
-    
+
     public AuthResponse(String accessToken, String refreshToken, String tokenType, Long userId, String userEmail) {
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
