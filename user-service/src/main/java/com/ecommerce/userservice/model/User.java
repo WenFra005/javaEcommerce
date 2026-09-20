@@ -21,28 +21,25 @@ import jakarta.validation.constraints.Email;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-@Entity(name = "users")
-@ToString(exclude = { "naturalPerson", "legalEntity" })
-@EqualsAndHashCode(of = "userEmail")
 /**
- * Representa um {@code users} no sistema.
+ * Entidade principal de usuário do serviço.
  *
  * <p>
- * Corresponde à entidade de usuários na tabela {@code users} do PostgreSQL,
- * mapeando dados básicos do usuário e a associação com pessoas físicas
- * ({@link NaturalPerson}) ou jurídicas ({@link LegalEntity}).
+ * Mapeia a tabela {@code users} no PostgreSQL e concentra os dados comuns de
+ * autenticação e perfil. A entidade também mantém o vínculo com o detalhe de
+ * pessoa física ({@link NaturalPerson}), pessoa jurídica ({@link LegalEntity})
+ * e o token de renovação ({@link RefreshToken}), permitindo que o estado do
+ * usuário seja tratado de forma centralizada.
+ *
  * <p>
- * Um usuário pode ser do tipo {@link UserType#PF} (pessoa física) ou
- * {@link UserType#PJ} (pessoa jurídica) e possui um estado de vida
- * ({@link UserStatus}) que controla sua disponibilidade operacional.
- * <p>
- * O relacionamento com as entidades dePessoa Física e Pessoa Jurídica é
- * unidirecional do lado de User, utilizando {@code cascade = CascadeType.ALL}
- * para garantir a consistência dos dados quando um usuário é criado ou
- * atualizado.
+ * O tipo de usuário é definido por {@link UserType} e o estado operacional por
+ * {@link UserStatus}.
  *
  * @since 1.0
  */
+@Entity(name = "users")
+@ToString(exclude = { "naturalPerson", "legalEntity" })
+@EqualsAndHashCode(of = "userEmail")
 public class User {
 
     @Id
