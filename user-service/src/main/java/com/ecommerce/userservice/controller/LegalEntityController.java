@@ -22,6 +22,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+/**
+ * Expõe o fluxo de cadastro de usuários do tipo pessoa jurídica.
+ *
+ * <p>
+ * O controller apenas repassa o payload para o serviço de domínio, mantendo o
+ * comportamento de criação específico para cadastros empresariais.
+ *
+ * @since 1.0
+ */
 @RestController
 @RequestMapping("/legal-entities")
 @Tag(name = "Legal Entity Controller", description = "Endpoints para gerenciar usuários do tipo Pessoa Jurídica ou Legal Entity")
@@ -38,6 +47,12 @@ public class LegalEntityController {
         this.userService = userService;
     }
 
+    /**
+     * Registra um usuário do tipo pessoa jurídica.
+     *
+     * @param request dados de cadastro da pessoa jurídica.
+     * @return o usuário recém-criado.
+     */
     @Operation(summary = "Registrar Pessoa Jurídica ou Legal Entity", description = "Cria um novo usuário do tipo Pessoa Jurídica ou Legal Entity no sistema.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),

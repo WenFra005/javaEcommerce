@@ -24,6 +24,15 @@ import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestBody;
 
+/**
+ * Exponibiliza operações restritas à administração do catálogo de usuários.
+ *
+ * <p>
+ * O controller é responsável por iniciar o cadastro de administradores com a
+ * mesma regra de domínio usada pelo serviço de usuários.
+ *
+ * @since 1.0
+ */
 @RestController
 @RequestMapping("/admin")
 @Tag(name = "Admin Controller", description = "Endpoints administrativos para criação de usuários com perfil de administrador.")
@@ -40,6 +49,12 @@ public class AdminController {
         this.userService = userService;
     }
 
+    /**
+     * Cria um novo usuário com perfil administrativo.
+     *
+     * @param request dados necessários para a criação do administrador.
+     * @return o usuário recém-criado.
+     */
     @Operation(summary = "Criar administrador", description = "Cria um novo usuário com perfil ADMIN. Requer autenticação de administrador.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Administrador criado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),

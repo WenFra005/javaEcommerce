@@ -37,6 +37,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
+/**
+ * Expõe operações autenticadas de leitura e manutenção de usuários.
+ *
+ * <p>
+ * O controller centraliza as ações que dependem do usuário autenticado,
+ * incluindo consulta do próprio cadastro, consulta paginada para
+ * administradores, atualização parcial com possível renovação de token e
+ * exclusão de conta.
+ *
+ * @since 1.0
+ */
 @RestController
 @RequestMapping("/users")
 @Tag(name = "User Controller", description = "Operações gerais para usuários, incluindo registro, atualização e exclusão de contas.")
@@ -55,6 +66,12 @@ public class UserController {
         this.jwtUtil = jwtUtil;
     }
 
+    /**
+     * Retorna o cadastro associado ao usuário autenticado.
+     *
+     * @param authentication contexto de autenticação da requisição.
+     * @return os dados públicos do usuário autenticado.
+     */
     @Operation(summary = "Obter usuário autenticado", description = "Retorna os dados do usuário associado ao token enviado na requisição.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Dados do usuário autenticado retornados com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
@@ -70,6 +87,13 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Lista os usuários acessíveis para administradores em formato paginado.
+     *
+     * @param pageable       definição de paginação e ordenação.
+     * @param authentication contexto de autenticação da requisição.
+     * @return uma página com as representações públicas dos usuários.
+     */
     @Operation(summary = "Listar usuários", description = "Lista usuários de forma paginada. Acesso permitido apenas para administradores.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de usuários retornada com sucesso", content = @Content(mediaType = "application/json")),
@@ -90,6 +114,13 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    /**
+     * Retorna os dados de um usuário específico respeitando a regra de acesso.
+     *
+     * @param id             identificador do usuário.
+     * @param authentication contexto de autenticação da requisição.
+     * @return os dados públicos do usuário localizado.
+     */
     @Operation(summary = "Buscar usuário por ID", description = "Retorna os dados de um usuário específico. Apenas o próprio usuário ou um administrador pode acessar essas informações.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Usuário encontrado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
@@ -107,6 +138,19 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Aplica atualização parcial ao usuário autenticado ou a um usuário alvo
+     * autorizado.
+     *
+     * <p>
+     * Quando o e-mail muda, a resposta inclui um novo token compatível com o
+     * endereço atualizado.
+     *
+     * @param request        dados enviados para atualização.
+     * @param id             identificador do usuário.
+     * @param authentication contexto de autenticação da requisição.
+     * @return o cadastro atualizado e, quando aplicável, um novo token.
+     */
     @Operation(summary = "Atualizar usuário", description = "Atualiza os dados de um usuário específico. Apenas o próprio usuário ou um administrador pode realizar essa operação.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Usuário atualizado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UpdateResponse.class))),
@@ -133,6 +177,13 @@ public class UserController {
         return ResponseEntity.ok(new UpdateResponse(updated, newToken));
     }
 
+    /**
+     * Remove o cadastro do usuário autenticado ou de um usuário autorizado.
+     *
+     * @param id             identificador do usuário.
+     * @param authentication contexto de autenticação da requisição.
+     * @return resposta sem conteúdo quando a remoção é concluída.
+     */
     @Operation(summary = "Excluir usuário", description = "Exclui um usuário específico. Apenas o próprio usuário ou um administrador pode realizar essa operação.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Usuário excluído com sucesso", content = @Content),

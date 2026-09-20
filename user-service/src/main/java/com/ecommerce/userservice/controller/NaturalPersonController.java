@@ -22,6 +22,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+/**
+ * Expõe o fluxo de cadastro de usuários do tipo pessoa física.
+ *
+ * <p>
+ * O controller encaminha a criação para o serviço de usuários preservando a
+ * regra de domínio específica para cadastro de pessoa física.
+ *
+ * @since 1.0
+ */
 @RestController
 @RequestMapping("/natural-persons")
 @Tag(name = "Natural Person Controller", description = "Endpoints para gerenciar usuários do tipo Pessoa Física ou Natural")
@@ -38,6 +47,12 @@ public class NaturalPersonController {
         this.userService = userService;
     }
 
+    /**
+     * Registra um usuário do tipo pessoa física.
+     *
+     * @param request dados de cadastro da pessoa física.
+     * @return o usuário recém-criado.
+     */
     @Operation(summary = "Registrar Pessoa Física ou Natural", description = "Cria um novo usuário do tipo Pessoa Física ou Natural no sistema.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponse.class))),
