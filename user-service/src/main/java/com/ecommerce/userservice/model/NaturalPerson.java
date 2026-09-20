@@ -16,6 +16,16 @@ import lombok.ToString;
 @Entity(name = "natural_persons")
 @ToString(exclude = "user")
 @EqualsAndHashCode(of = "naturalPersonId")
+/**
+ * Representa uma pessoa física no sistema.
+ *
+ * <p>
+ * Corresponde à entidade de pessoas físicas na tabela {@code natural_persons}
+ * do PostgreSQL,
+ * armazenando CPF, data de nascimento e a relação um-para-um com {@link User}.
+ *
+ * @since 1.0
+ */
 public class NaturalPerson {
 
     @Id

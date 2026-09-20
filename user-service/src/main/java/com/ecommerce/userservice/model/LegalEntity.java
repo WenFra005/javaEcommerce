@@ -14,6 +14,17 @@ import lombok.ToString;
 @Entity(name = "legal_entities")
 @ToString(exclude = "user")
 @EqualsAndHashCode(of = "legalEntityId")
+/**
+ * Representa uma pessoa jurídica no sistema.
+ *
+ * <p>
+ * Corresponde à entidade de pessoas jurídicas na tabela {@code legal_entities}
+ * do PostgreSQL,
+ * armazenando CNPJ, nome da empresa, inscrição estadual e a relação um-para-um
+ * com {@link User}.
+ *
+ * @since 1.0
+ */
 public class LegalEntity {
 
     @Id

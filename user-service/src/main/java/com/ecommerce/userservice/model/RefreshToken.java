@@ -10,6 +10,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 
+/**
+ * Representa um token de renovação de acesso.
+ *
+ * <p>
+ * Armazena o token JWT de longa duração gerado para manter a sessão do usuário
+ * ativa sem a necessidade de renovação constante do token de acesso curto
+ * prazo.
+ * O token é vinculado a um {@link User} e possui data de expiração,
+ * sendo marcado como revogado quando necessário.
+ *
+ * @since 1.0
+ */
 @Entity(name = "refresh_tokens")
 public class RefreshToken {
 
