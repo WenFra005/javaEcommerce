@@ -13,32 +13,45 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 
+/**
+ * Configura a documentação OpenAPI publicada pela aplicação.
+ *
+ * <p>
+ * Define metadados, servidor padrão e esquema de autenticação para que a
+ * documentação reflita o contrato exposto pelo serviço.
+ *
+ * @since 1.0
+ */
 @Configuration
 public class OpenAPIConfig {
 
-    @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-                .info(new Info()
-                        .title("User Service API")
-                        .version("0.1.0")
-                        .description("Microsserviço de gerencimento de usuários com autenticação JWT e suporte a diferentes tipos de usuários (Pessoa Natural e Pessoa Jurídica).")
-                        .contact(new Contact()
-                                .name("Wendell Francisco")
-                                .email("wendellfrancisco2005@hotmail.com")
-                                .url("https://github.com/WenFra005/javaEcommerce")))
-                .servers(List.of(
-                        new Server().url("http://localhost:8080").description("Servidor Local")
-                ))
-                .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
-                .components(new Components()
-                        .addSecuritySchemes("Bearer Authentication", 
-                                new SecurityScheme()
-                                        .type(SecurityScheme.Type.HTTP)
-                                        .scheme("bearer")
-                                        .bearerFormat("JWT")
-                                        .description("Token JWT obtido via /auth/login")  
-                        ));
-                        
-    }
+        /**
+         * Monta a definição principal da especificação OpenAPI.
+         *
+         * @return objeto OpenAPI com informações de serviço e segurança.
+         */
+        @Bean
+        public OpenAPI customOpenAPI() {
+                return new OpenAPI()
+                                .info(new Info()
+                                                .title("User Service API")
+                                                .version("0.1.0")
+                                                .description("Microsserviço de gerencimento de usuários com autenticação JWT e suporte a diferentes tipos de usuários (Pessoa Natural e Pessoa Jurídica).")
+                                                .contact(new Contact()
+                                                                .name("Wendell Francisco")
+                                                                .email("wendellfrancisco2005@hotmail.com")
+                                                                .url("https://github.com/WenFra005/javaEcommerce")))
+                                .servers(List.of(
+                                                new Server().url("http://localhost:8080")
+                                                                .description("Servidor Local")))
+                                .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
+                                .components(new Components()
+                                                .addSecuritySchemes("Bearer Authentication",
+                                                                new SecurityScheme()
+                                                                                .type(SecurityScheme.Type.HTTP)
+                                                                                .scheme("bearer")
+                                                                                .bearerFormat("JWT")
+                                                                                .description("Token JWT obtido via /auth/login")));
+
+        }
 }

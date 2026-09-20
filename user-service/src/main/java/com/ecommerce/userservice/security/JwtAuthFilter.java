@@ -16,6 +16,17 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+/**
+ * Intercepta requisições para montar o contexto de autenticação a partir do
+ * JWT.
+ *
+ * <p>
+ * O filtro lê o token do cabeçalho {@code Authorization}, resolve o usuário e
+ * popula o {@link org.springframework.security.core.context.SecurityContext}
+ * quando o token é válido.
+ *
+ * @since 1.0
+ */
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
@@ -27,6 +38,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
+    /**
+     * Processa a requisição corrente e, quando houver um JWT válido, autentica
+     * o usuário no contexto de segurança.
+     *
+     * @param request     requisição HTTP atual.
+     * @param response    resposta HTTP atual.
+     * @param filterChain cadeia de filtros do Spring Security.
+     * @throws ServletException quando ocorrer erro no processamento do filtro.
+     * @throws IOException      quando ocorrer erro de I/O na cadeia de filtros.
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {

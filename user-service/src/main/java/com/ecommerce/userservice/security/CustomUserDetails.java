@@ -10,6 +10,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.ecommerce.userservice.enums.UserRole;
 import com.ecommerce.userservice.model.User;
 
+/**
+ * Adapta {@link User} para o contrato exigido pelo Spring Security.
+ *
+ * <p>
+ * A implementação encapsula o estado mínimo necessário para autenticação e
+ * autorização sem expor o modelo de domínio diretamente à infraestrutura de
+ * segurança.
+ *
+ * @since 1.0
+ */
 public class CustomUserDetails implements UserDetails {
 
     private final Long userId;
@@ -60,6 +70,12 @@ public class CustomUserDetails implements UserDetails {
 
     }
 
+    /**
+     * Reconstrói uma instância enxuta de {@link User} com os dados necessários
+     * para consumo pela camada de autorização.
+     *
+     * @return usuário com os campos mínimos carregados.
+     */
     public User getUser() {
         User user = new User();
         user.setUserId(userId);
