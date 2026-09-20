@@ -10,6 +10,15 @@ import com.ecommerce.userservice.model.User;
 import com.ecommerce.userservice.repository.UserRepository;
 import com.ecommerce.userservice.security.CustomUserDetails;
 
+/**
+ * Adapta o usuário persistido para o contrato do Spring Security.
+ *
+ * <p>
+ * A implementação resolve o usuário pelo e-mail porque esse é o identificador
+ * usado no fluxo de autenticação do serviço.
+ *
+ * @since 1.0
+ */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
@@ -24,6 +33,13 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Carrega os detalhes de autenticação a partir do e-mail informado.
+     *
+     * @param email e-mail usado como nome de usuário no processo de autenticação.
+     * @return a instância de {@link CustomUserDetails} associada ao usuário.
+     * @throws UsernameNotFoundException quando o e-mail não estiver cadastrado.
+     */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByUserEmail(email)

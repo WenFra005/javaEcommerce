@@ -15,6 +15,16 @@ import com.ecommerce.userservice.model.User;
 import com.ecommerce.userservice.repository.RefreshTokenRepository;
 import com.ecommerce.userservice.repository.UserRepository;
 
+/**
+ * Gerencia o ciclo de vida dos tokens de renovação.
+ *
+ * <p>
+ * A classe concentra a criação, validação, revogação e recuperação do usuário
+ * associado a um refresh token, mantendo a lógica de sessão fora dos
+ * controladores.
+ *
+ * @since 1.0
+ */
 @Service
 public class RefreshTokenService {
 
@@ -36,6 +46,17 @@ public class RefreshTokenService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Cria ou substitui o refresh token associado a um usuário.
+     *
+     * <p>
+     * O novo token recebe um identificador aleatório e prazo de expiração
+     * definido pela configuração {@code jwt.refreshExpirationMs}.
+     *
+     * @param userId identificador do usuário dono do token.
+     * @return o refresh token persistido.
+     * @throws UserNotFoundException quando o usuário não existir.
+     */
     @Transactional
     public RefreshToken createRefreshToken(Long userId) {
         User user = findUserById(userId);
@@ -51,6 +72,14 @@ public class RefreshTokenService {
         return refreshTokenRepository.save(refreshToken);
     }
 
+    /**
+     * Valida se um refresh token ainda pode ser usado.
+     *
+     * @param token valor do token a ser validado.
+     * @return o token persistido quando estiver válido.
+     * @throws TokenRefreshException quando o token não existir, estiver revogado
+     *                               ou expirado.
+     */
     public RefreshToken validateRefreshToken(String token) {
         RefreshToken refreshToken = findRefreshTokenByToken(token);
 
@@ -65,6 +94,12 @@ public class RefreshTokenService {
         return refreshToken;
     }
 
+    /**
+     * Revoga um refresh token existente.
+     *
+     * @param token valor do token a ser revogado.
+     * @throws TokenRefreshException quando o token não existir.
+     */
     @Transactional
     public void revokeRefreshToken(String token) {
         RefreshToken refreshToken = findRefreshTokenByToken(token);
@@ -72,12 +107,25 @@ public class RefreshTokenService {
         refreshTokenRepository.save(refreshToken);
     }
 
+    /**
+     * Remove todos os refresh tokens vinculados a um usuário.
+     *
+     * @param userId identificador do usuário.
+     * @throws UserNotFoundException quando o usuário não existir.
+     */
     @Transactional
     public void revokeAllRefreshTokensForUser(Long userId) {
         User user = findUserById(userId);
         refreshTokenRepository.deleteByUser(user);
     }
 
+    /**
+     * Recupera o usuário proprietário de um refresh token.
+     *
+     * @param token valor do token.
+     * @return o usuário vinculado ao token.
+     * @throws TokenRefreshException quando o token não existir.
+     */
     public User getUserFromRefreshToken(String token) {
         RefreshToken refreshToken = findRefreshTokenByToken(token);
         return refreshToken.getUser();

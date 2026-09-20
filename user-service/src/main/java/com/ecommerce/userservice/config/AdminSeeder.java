@@ -14,6 +14,15 @@ import com.ecommerce.userservice.enums.UserType;
 import com.ecommerce.userservice.model.User;
 import com.ecommerce.userservice.repository.UserRepository;
 
+/**
+ * Inicializa um usuário administrador quando o perfil ativo permitir.
+ *
+ * <p>
+ * O componente executa no startup da aplicação para garantir uma conta
+ * administrativa mínima, com possibilidade de desativação por configuração.
+ *
+ * @since 1.0
+ */
 @Component
 @Profile("!test") // This ensures that the seeder does not run in the test profile
 public class AdminSeeder implements CommandLineRunner {
@@ -36,6 +45,16 @@ public class AdminSeeder implements CommandLineRunner {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Executa a criação condicional do administrador padrão.
+     *
+     * <p>
+     * A rotina não altera o estado quando o seeding está desabilitado, quando já
+     * existe um administrador ou quando as credenciais não foram fornecidas.
+     *
+     * @param args argumentos recebidos no startup da aplicação.
+     * @throws Exception propagada caso ocorra falha inesperada durante a execução.
+     */
     @Override
     public void run(String... args) throws Exception {
         if (!seedingEnabled) {

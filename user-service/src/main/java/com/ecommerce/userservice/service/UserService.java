@@ -32,6 +32,17 @@ import com.ecommerce.userservice.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 
+/**
+ * Coordena as operações de domínio relacionadas a usuários.
+ *
+ * <p>
+ * Centraliza a criação, consulta, atualização e exclusão de usuários, além da
+ * montagem da resposta adequada para cada tipo de cadastro. A classe também
+ * aplica as regras de unicidade e autorização que não cabem na camada de
+ * persistência.
+ *
+ * @since 1.0
+ */
 @Service
 public class UserService {
 
@@ -53,6 +64,16 @@ public class UserService {
         this.legalEntityRepository = legalEntityRepository;
     }
 
+    /**
+     * Cria um usuário administrador com status ativo e tipo técnico.
+     *
+     * <p>
+     * A operação falha quando o e-mail já está em uso.
+     *
+     * @param request dados necessários para cadastrar o administrador.
+     * @return a representação do usuário criado.
+     * @throws EmailAlreadyExistsException quando o e-mail informado já existe.
+     */
     public UserResponse createAdmin(CreateAdminRequest request) {
         if (userRepository.existsByUserEmail(request.getEmail())) {
             throw new EmailAlreadyExistsException("Email already exists: " + request.getEmail());
@@ -70,6 +91,18 @@ public class UserService {
         return toUserResponse(savedUser);
     }
 
+    /**
+     * Cria um usuário do tipo pessoa física com seus dados complementares.
+     *
+     * <p>
+     * A operação valida a unicidade do CPF antes de persistir o cadastro
+     * completo.
+     *
+     * @param request dados de cadastro do usuário e da pessoa física.
+     * @return a representação do usuário criado.
+     * @throws ValidationException         quando o CPF já estiver cadastrado.
+     * @throws EmailAlreadyExistsException quando o e-mail informado já existir.
+     */
     @Transactional
     public UserResponse createNaturalPerson(CreateNaturalPersonRequest request) {
         if (naturalPersonRepository.existsByCpf(request.getCpf())) {
@@ -82,6 +115,18 @@ public class UserService {
         });
     }
 
+    /**
+     * Cria um usuário do tipo pessoa jurídica com seus dados complementares.
+     *
+     * <p>
+     * A operação valida a unicidade do CNPJ antes de persistir o cadastro
+     * completo.
+     *
+     * @param request dados de cadastro do usuário e da pessoa jurídica.
+     * @return a representação do usuário criado.
+     * @throws ValidationException         quando o CNPJ já estiver cadastrado.
+     * @throws EmailAlreadyExistsException quando o e-mail informado já existir.
+     */
     @Transactional
     public UserResponse createLegalEntity(CreateLegalEntityRequest request) {
         if (legalEntityRepository.existsByCnpj(request.getCnpj())) {
@@ -94,11 +139,31 @@ public class UserService {
         });
     }
 
+    /**
+     * Lista usuários paginados convertendo cada registro para sua visão pública.
+     *
+     * @param pageable definição de paginação e ordenação.
+     * @return uma página com os usuários formatados para resposta.
+     */
     public Page<UserResponse> listAllUsers(Pageable pageable) {
         return userRepository.findAll(pageable)
                 .map(this::toUserResponse);
     }
 
+    /**
+     * Localiza um usuário por identificador com controle de acesso.
+     *
+     * <p>
+     * Administradores podem acessar qualquer usuário; demais perfis só acessam o
+     * próprio registro.
+     *
+     * @param id                     identificador do usuário.
+     * @param authenticatedUserEmail e-mail do usuário autenticado.
+     * @param authenticatedUserRole  perfil do usuário autenticado.
+     * @return a visão pública do usuário localizado.
+     * @throws UserNotFoundException quando o identificador não existir.
+     * @throws AccessDeniedException quando o acesso não for permitido.
+     */
     public UserResponse findUserById(Long id, String authenticatedUserEmail, UserRole authenticatedUserRole) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado para o ID: " + id));
@@ -110,6 +175,14 @@ public class UserService {
         return toUserResponse(user);
     }
 
+    /**
+     * Localiza um usuário pelo e-mail informado.
+     *
+     * @param email e-mail usado na busca.
+     * @return a visão pública do usuário localizado.
+     * @throws UserNotFoundException quando não houver usuário com o e-mail
+     *                               informado.
+     */
     public UserResponse findUserByEmail(String email) {
         User user = userRepository.findByUserEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado para o email: " + email));
@@ -117,6 +190,26 @@ public class UserService {
         return toUserResponse(user);
     }
 
+    /**
+     * Atualiza os dados permitidos de um usuário já cadastrado.
+     *
+     * <p>
+     * A operação respeita o perfil autenticado, valida unicidade de e-mail, CPF
+     * e CNPJ quando aplicável e sincroniza os dados específicos do tipo de
+     * usuário.
+     *
+     * @param id                     identificador do usuário.
+     * @param request                dados parciais para atualização.
+     * @param authenticatedUserEmail e-mail do usuário autenticado.
+     * @param authenticatedUserRole  perfil do usuário autenticado.
+     * @return a visão pública do usuário atualizado.
+     * @throws UserNotFoundException       quando o usuário não for encontrado.
+     * @throws AccessDeniedException       quando o acesso não for permitido.
+     * @throws ValidationException         quando dados específicos do tipo
+     *                                     estiverem ausentes ou em conflito.
+     * @throws EmailAlreadyExistsException quando o novo e-mail já estiver em uso
+     *                                     por outro usuário.
+     */
     @Transactional
     public UserResponse updateUser(Long id, UpdateRequest request, String authenticatedUserEmail,
             UserRole authenticatedUserRole) {
@@ -151,6 +244,19 @@ public class UserService {
 
     }
 
+    /**
+     * Remove um usuário do cadastro.
+     *
+     * <p>
+     * Administradores podem remover qualquer usuário; demais perfis só podem
+     * remover a própria conta.
+     *
+     * @param id                     identificador do usuário.
+     * @param authenticatedUserEmail e-mail do usuário autenticado.
+     * @param authenticatedUserRole  perfil do usuário autenticado.
+     * @throws UserNotFoundException quando o usuário não for encontrado.
+     * @throws AccessDeniedException quando o acesso não for permitido.
+     */
     @Transactional
     public void deleteUser(Long id, String authenticatedUserEmail, UserRole authenticatedUserRole) {
         User user = userRepository.findById(id)
