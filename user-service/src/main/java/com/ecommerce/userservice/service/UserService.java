@@ -73,14 +73,8 @@ public class UserService {
             throw new EmailAlreadyExistsException("Email already exists: " + request.getEmail());
         }
 
-        User user = new User();
-        user.setName(request.getName());
-        user.setUserEmail(request.getEmail());
-        user.setUserPassword(passwordEncoder.encode(request.getPassword()));
-        user.setUserRole(UserRole.ADMIN);
-        user.setUserStatus(UserStatus.ATIVO);
-        user.setUserType(UserType.SYSTEM);
-
+        User user = createBaseUser(request.getName(), request.getEmail(), request.getPassword(), UserRole.ADMIN,
+                UserType.SYSTEM);
         User savedUser = userRepository.save(user);
         return toUserResponse(savedUser);
     }
@@ -159,13 +153,9 @@ public class UserService {
      * @throws AccessDeniedException quando o acesso não for permitido.
      */
     public UserResponse findUserById(Long id, String authenticatedUserEmail, UserRole authenticatedUserRole) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado para o ID: " + id));
-
-        if (authenticatedUserRole != UserRole.ADMIN && !user.getUserEmail().equals(authenticatedUserEmail)) {
-            throw new AccessDeniedException("Usuário não autorizado para acessar este usuário");
-        }
-
+        User user = findUserByIdOrThrow(id);
+        ensureAuthorizedAccess(user, authenticatedUserEmail, authenticatedUserRole,
+                "Usuário não autorizado para acessar este usuário");
         return toUserResponse(user);
     }
 
@@ -207,12 +197,10 @@ public class UserService {
     @Transactional
     public UserResponse updateUser(Long id, UpdateRequest request, String authenticatedUserEmail,
             UserRole authenticatedUserRole) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado para atualização: " + id));
+        User user = findUserByIdOrThrow(id, "Usuário não encontrado para atualização: " + id);
 
-        if (authenticatedUserRole != UserRole.ADMIN && !user.getUserEmail().equals(authenticatedUserEmail)) {
-            throw new AccessDeniedException("Usuário não autorizado para atualizar este usuário");
-        }
+        ensureAuthorizedAccess(user, authenticatedUserEmail, authenticatedUserRole,
+                "Usuário não autorizado para atualizar este usuário");
 
         if (request.getName() != null && !request.getName().isBlank()) {
             user.setName(request.getName());
@@ -253,12 +241,10 @@ public class UserService {
      */
     @Transactional
     public void deleteUser(Long id, String authenticatedUserEmail, UserRole authenticatedUserRole) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("Usuário não econtrado"));
+        User user = findUserByIdOrThrow(id, "Usuário não econtrado");
 
-        if (authenticatedUserRole != UserRole.ADMIN && !user.getUserEmail().equals(authenticatedUserEmail)) {
-            throw new AccessDeniedException("Você não tem permissão para deletar este usuário");
-        }
+        ensureAuthorizedAccess(user, authenticatedUserEmail, authenticatedUserRole,
+                "Você não tem permissão para deletar este usuário");
         userRepository.delete(user);
     }
 
@@ -269,19 +255,41 @@ public class UserService {
         return toUserResponse(savedUser);
     }
 
+    private User createBaseUser(String name, String email, String password, UserRole role, UserType type) {
+        User user = new User();
+        user.setName(name);
+        user.setUserEmail(email);
+        user.setUserPassword(passwordEncoder.encode(password));
+        user.setUserRole(role);
+        user.setUserStatus(UserStatus.ATIVO);
+        user.setUserType(type);
+        return user;
+    }
+
     private User builderUserFromCommonFilds(CreateUserRequest request, UserType type) {
         if (userRepository.existsByUserEmail(request.getUserEmail())) {
             throw new EmailAlreadyExistsException("Email already exists: " + request.getUserEmail());
         }
-        User user = new User();
-        user.setName(request.getName());
-        user.setUserEmail(request.getUserEmail());
-        user.setUserPassword(passwordEncoder.encode(request.getUserPassword()));
-        user.setUserStatus(UserStatus.ATIVO);
-        user.setUserRole(request.getUserRole());
-        user.setUserType(type);
 
-        return user;
+        return createBaseUser(request.getName(), request.getUserEmail(), request.getUserPassword(),
+                request.getUserRole(), type);
+    }
+
+    private User findUserByIdOrThrow(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Usuário não encontrado para o ID: " + id));
+    }
+
+    private User findUserByIdOrThrow(Long id, String message) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(message));
+    }
+
+    private void ensureAuthorizedAccess(User user, String authenticatedUserEmail, UserRole authenticatedUserRole,
+            String message) {
+        if (authenticatedUserRole != UserRole.ADMIN && !user.getUserEmail().equals(authenticatedUserEmail)) {
+            throw new AccessDeniedException(message);
+        }
     }
 
     private NaturalPerson builderNaturalPerson(CreateNaturalPersonRequest request, User user) {
