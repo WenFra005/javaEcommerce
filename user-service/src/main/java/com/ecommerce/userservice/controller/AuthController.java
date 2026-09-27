@@ -22,7 +22,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,15 +34,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Tag(name = "Auth Controller", description = "Endpoints de autenticação, revogação e renovação de tokens.")
 public class AuthController {
 
-        private AuthenticationManager authenticationManager;
-        private RefreshTokenService refreshTokenService;
-        private JwtUtil jwtUtil;
+        private final AuthenticationManager authenticationManager;
+        private final RefreshTokenService refreshTokenService;
+        private final JwtUtil jwtUtil;
 
-        public AuthController() {
-
-        }
-
-        @Autowired
         public AuthController(AuthenticationManager authenticationManager, RefreshTokenService refreshTokenService,
                         JwtUtil jwtUtil) {
                 this.authenticationManager = authenticationManager;

@@ -1,6 +1,5 @@
 package com.ecommerce.userservice.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,13 +37,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Tag(name = "Admin Controller", description = "Endpoints administrativos para criação de usuários com perfil de administrador.")
 public class AdminController {
 
-    private UserService userService;
+    private final UserService userService;
 
-    public AdminController() {
-
-    }
-
-    @Autowired
     public AdminController(UserService userService) {
         this.userService = userService;
     }

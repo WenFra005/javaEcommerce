@@ -24,7 +24,6 @@ import com.ecommerce.userservice.dto.UpdateResponse;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -53,14 +52,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 @Tag(name = "User Controller", description = "Operações gerais para usuários, incluindo registro, atualização e exclusão de contas.")
 public class UserController {
 
-    private UserService userService;
-    private JwtUtil jwtUtil;
+    private final UserService userService;
+    private final JwtUtil jwtUtil;
 
-    public UserController() {
-
-    }
-
-    @Autowired
     public UserController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
