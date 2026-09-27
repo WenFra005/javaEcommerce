@@ -40,7 +40,7 @@ class SecurityConfigTest {
     }
 
     @Test
-    void authenticationManager_ShouldDelegateToConfiguration() throws Exception {
+    void authenticationManager_ShouldDelegateToConfiguration() {
         SecurityConfig config = new SecurityConfig(jwtAuthFilter);
         AuthenticationManager expectedManager = mock(AuthenticationManager.class);
 
@@ -61,7 +61,6 @@ class SecurityConfigTest {
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
-        when(request.getRequestURI()).thenReturn("/private/resource");
 
         entryPoint.commence(request, response, new BadCredentialsException("invalid"));
 
