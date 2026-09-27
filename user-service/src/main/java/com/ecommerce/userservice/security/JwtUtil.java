@@ -104,7 +104,7 @@ public class JwtUtil {
      * @return instante em que o token expira.
      */
     public Instant extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration).toInstant();
+        return extractClaim(token, claims -> claims.getExpiration().toInstant());
     }
 
     /**
