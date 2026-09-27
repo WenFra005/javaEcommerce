@@ -19,6 +19,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Email;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
@@ -40,6 +42,8 @@ import lombok.ToString;
 @Entity(name = "users")
 @ToString(exclude = { "naturalPerson", "legalEntity" })
 @EqualsAndHashCode(of = "userEmail")
+@Getter
+@Setter
 public class User {
 
     @Id
@@ -100,83 +104,11 @@ public class User {
         this.legalEntity = legalEntity;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
-
-    public String getUserPassword() {
-        return userPassword;
-    }
-
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
-    }
-
-    public UserStatus getUserStatus() {
-        return userStatus;
-    }
-
-    public void setUserStatus(UserStatus userStatus) {
-        this.userStatus = userStatus;
-    }
-
-    public UserRole getUserRole() {
-        return userRole;
-    }
-
-    public void setUserRole(UserRole userRole) {
-        this.userRole = userRole;
-    }
-
-    public UserType getUserType() {
-        return userType;
-    }
-
-    public void setUserType(UserType userType) {
-        this.userType = userType;
-    }
-
-    public Instant getUserCreatedAt() {
-        return userCreatedAt;
-    }
-
-    public void setUserCreatedAt(Instant userCreatedAt) {
-        this.userCreatedAt = userCreatedAt;
-    }
-
-    public NaturalPerson getNaturalPerson() {
-        return naturalPerson;
-    }
-
     public void setNaturalPerson(NaturalPerson naturalPerson) {
         this.naturalPerson = naturalPerson;
         if (naturalPerson != null && naturalPerson.getUser() != this) {
             naturalPerson.setUser(this);
         }
-    }
-
-    public LegalEntity getLegalEntity() {
-        return legalEntity;
     }
 
     public void setLegalEntity(LegalEntity legalEntity) {

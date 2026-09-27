@@ -10,8 +10,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 @Schema(description = "Dados para criação de usuário do tipo pessoa física.")
+@Getter
+@Setter
 public class CreateNaturalPersonRequest extends CreateUserRequest {
 
     @Schema(description = "CPF do usuário", example = "123.456.789-09")
@@ -32,22 +36,6 @@ public class CreateNaturalPersonRequest extends CreateUserRequest {
             LocalDate birthDate) {
         super(name, userEmail, userPassword, userRole);
         this.cpf = cpf;
-        this.birthDate = birthDate;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 

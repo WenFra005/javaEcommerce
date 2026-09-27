@@ -3,11 +3,15 @@ package com.ecommerce.userservice.dto;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
 
 @JsonPropertyOrder({ "userId", "userName", "userEmail", "userStatus", "userRole", "userType", "userCreatedAt", "cnpj",
         "companyName", "stateRegistration" })
 @Schema(description = "Resposta de usuário do tipo pessoa jurídica com dados específicos da empresa.")
-public class LegalEntityResponse extends UserResponse{
+@Getter
+@Setter
+public class LegalEntityResponse extends UserResponse {
 
     @Schema(description = "CNPJ da empresa", example = "12.345.678/0001-99")
     private String cnpj;
@@ -24,30 +28,6 @@ public class LegalEntityResponse extends UserResponse{
     public LegalEntityResponse(String cnpj, String companyName, String stateRegistration) {
         this.cnpj = cnpj;
         this.companyName = companyName;
-        this.stateRegistration = stateRegistration;
-    }
-
-    public String getCnpj() {
-        return cnpj;
-    }
-
-    public void setCnpj(String cnpj) {
-        this.cnpj = cnpj;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public String getStateRegistration() {
-        return stateRegistration;
-    }
-
-    public void setStateRegistration(String stateRegistration) {
         this.stateRegistration = stateRegistration;
     }
 

@@ -11,6 +11,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
@@ -26,6 +28,8 @@ import lombok.ToString;
 @Entity(name = "natural_persons")
 @ToString(exclude = "user")
 @EqualsAndHashCode(of = "naturalPersonId")
+@Getter
+@Setter
 public class NaturalPerson {
 
     @Id
@@ -51,38 +55,6 @@ public class NaturalPerson {
         this.naturalPersonId = naturalPersonId;
         this.user = user;
         this.cpf = cpf;
-        this.birthDate = birthDate;
-    }
-
-    public Long getNaturalPersonId() {
-        return naturalPersonId;
-    }
-
-    public void setNaturalPersonId(Long naturalPersonId) {
-        this.naturalPersonId = naturalPersonId;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 

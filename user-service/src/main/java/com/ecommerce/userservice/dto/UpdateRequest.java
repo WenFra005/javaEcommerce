@@ -6,6 +6,8 @@ import org.hibernate.validator.constraints.br.CNPJ;
 import org.hibernate.validator.constraints.br.CPF;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Campos aceitos para atualização parcial de um usuário.
@@ -18,6 +20,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * @since 0.1.0
  */
 @Schema(description = "Campos disponíveis para atualização parcial de um usuário.")
+@Getter
+@Setter
 public class UpdateRequest {
 
     @Schema(description = "Novo nome do usuário", example = "João da Silva Atualizado")
@@ -53,70 +57,6 @@ public class UpdateRequest {
         this.birthDate = birthDate;
         this.cnpj = cnpj;
         this.companyName = companyName;
-        this.stateRegistration = stateRegistration;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
-
-    public String getUserPassword() {
-        return userPassword;
-    }
-
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public LocalDate getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public String getCnpj() {
-        return cnpj;
-    }
-
-    public void setCnpj(String cnpj) {
-        this.cnpj = cnpj;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public String getStateRegistration() {
-        return stateRegistration;
-    }
-
-    public void setStateRegistration(String stateRegistration) {
         this.stateRegistration = stateRegistration;
     }
 

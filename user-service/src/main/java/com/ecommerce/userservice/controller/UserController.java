@@ -99,7 +99,7 @@ public class UserController {
     public ResponseEntity<Page<UserResponse>> getListAll(
             @PageableDefault(size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable,
             Authentication authentication) {
-        UserRole role = ((CustomUserDetails) authentication.getPrincipal()).getUser().getUserRole();
+        UserRole role = getAuthenticatedRole(authentication);
         if (role != UserRole.ADMIN) {
             throw new AccessDeniedException("Acesso negado");
         }
@@ -125,8 +125,8 @@ public class UserController {
     @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUser(@PathVariable Long id, Authentication authentication) {
-        String email = authentication.getName();
-        UserRole role = ((CustomUserDetails) authentication.getPrincipal()).getUser().getUserRole();
+        String email = getAuthenticatedEmail(authentication);
+        UserRole role = getAuthenticatedRole(authentication);
         UserResponse response = userService.findUserById(id, email, role);
 
         return ResponseEntity.ok(response);
@@ -159,8 +159,8 @@ public class UserController {
     public ResponseEntity<UpdateResponse> putUser(@Valid @RequestBody UpdateRequest request, @PathVariable Long id,
             Authentication authentication) {
 
-        String email = authentication.getName();
-        UserRole role = ((CustomUserDetails) authentication.getPrincipal()).getUser().getUserRole();
+        String email = getAuthenticatedEmail(authentication);
+        UserRole role = getAuthenticatedRole(authentication);
         UserResponse updated = userService.updateUser(id, request, email, role);
 
         String newToken = null;
@@ -188,10 +188,18 @@ public class UserController {
     @SecurityRequirement(name = "Bearer Authentication")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id, Authentication authentication) {
-        String email = authentication.getName();
-        UserRole role = ((CustomUserDetails) authentication.getPrincipal()).getUser().getUserRole();
+        String email = getAuthenticatedEmail(authentication);
+        UserRole role = getAuthenticatedRole(authentication);
         userService.deleteUser(id, email, role);
 
         return ResponseEntity.noContent().build();
+    }
+
+    private String getAuthenticatedEmail(Authentication authentication) {
+        return authentication.getName();
+    }
+
+    private UserRole getAuthenticatedRole(Authentication authentication) {
+        return ((CustomUserDetails) authentication.getPrincipal()).getUser().getUserRole();
     }
 }
