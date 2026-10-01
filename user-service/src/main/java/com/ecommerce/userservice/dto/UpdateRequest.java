@@ -1,0 +1,63 @@
+package com.ecommerce.userservice.dto;
+
+import java.time.LocalDate;
+
+import org.hibernate.validator.constraints.br.CNPJ;
+import org.hibernate.validator.constraints.br.CPF;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
+import lombok.Setter;
+
+/**
+ * Campos aceitos para atualização parcial de um usuário.
+ *
+ * <p>
+ * O mesmo payload atende perfis de pessoa física e jurídica, permitindo enviar
+ * apenas os dados relevantes ao caso de uso sem exigir a substituição completa
+ * do cadastro.
+ *
+ * @since 0.1.0
+ */
+@Schema(description = "Campos disponíveis para atualização parcial de um usuário.")
+@Getter
+@Setter
+public class UpdateRequest {
+
+    @Schema(description = "Novo nome do usuário", example = "João da Silva Atualizado")
+    private String name;
+    @Schema(description = "Novo e-mail do usuário", example = "joao.atualizado@example.com")
+    private String userEmail;
+    @Schema(description = "Nova senha do usuário", example = "novaSenha@123")
+    private String userPassword;
+
+    @Schema(description = "CPF do usuário para atualização de dados de pessoa física", example = "123.456.789-09")
+    @CPF(message = "CPF should be valid")
+    private String cpf;
+    @Schema(description = "Data de nascimento para atualização de dados de pessoa física", example = "1990-12-31")
+    private LocalDate birthDate;
+
+    @Schema(description = "CNPJ da empresa para atualização de dados de pessoa jurídica", example = "12.345.678/0001-99")
+    @CNPJ(message = "CNPJ should be valid")
+    private String cnpj;
+    @Schema(description = "Razão social da empresa", example = "Empresa Exemplo Atualizada LTDA")
+    private String companyName;
+    @Schema(description = "Inscrição estadual da empresa", example = "987654321")
+    private String stateRegistration;
+
+    public UpdateRequest() {
+    }
+
+    public UpdateRequest(String name, String userEmail, String userPassword, String cpf, LocalDate birthDate,
+            String cnpj, String companyName, String stateRegistration) {
+        this.name = name;
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
+        this.cpf = cpf;
+        this.birthDate = birthDate;
+        this.cnpj = cnpj;
+        this.companyName = companyName;
+        this.stateRegistration = stateRegistration;
+    }
+
+}

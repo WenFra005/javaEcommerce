@@ -1,0 +1,62 @@
+services:
+  # ============================================
+  # Bando de dados PostgreSQL
+  # ============================================
+  db:
+    image: postgres:15-alpine
+    container_name: user-service-db-container
+    environment:
+      POSTGRES_DB: ${NAME_DB}
+      POSTGRES_USER: ${USER_DB}
+      POSTGRES_PASSWORD: ${PASSWORD_DB}
+      POSTGRES_INITDB_ARGS: "--data-checksums"
+      TZ: "UTC"
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${USER_DB} -d ${NAME_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================================
+  # Serviço de Usuário (Spring Boot)
+  # ============================================
+  app:
+    image: user-service:latest
+    container_name: user-service-app
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${NAME_DB}
+      SPRING_DATASOURCE_USERNAME: ${USER_DB}
+      SPRING_DATASOURCE_PASSWORD: ${PASSWORD_DB}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: none
+      SPRING_FLYWAY_ENABLED: true
+      SPRING_JPA_SHOW_SQL: true
+
+      SPRING_JWT_SECRET: ${JWT_SECRET}
+      SPRING_JWT_EXPIRATION_MS: ${JWT_EXPIRATION_MS:-3600000}
+      SPRING_JWT_REFRESH_EXPIRATION_MS: ${JWT_REFRESH_EXPIRATION_MS:-86400000}
+
+      SPRING_ADMIN_EMAIL: ${ADMIN_EMAIL}
+      SPRING_ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+    ports:
+      - "${APP_PORT}:8080"
+    restart: unless-stopped
+    volumes:
+      - logs_data:/app/logs
+volumes:
+  postgres_data:
+    driver: local
+  logs_data:
+    driver: local  
+
+      
