@@ -39,7 +39,7 @@ public class RefreshToken {
     private boolean revoked;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "refresh_token_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public RefreshToken() {

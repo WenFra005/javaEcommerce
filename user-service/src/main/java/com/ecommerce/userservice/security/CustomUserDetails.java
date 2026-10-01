@@ -8,6 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.ecommerce.userservice.enums.UserRole;
+import com.ecommerce.userservice.enums.UserStatus;
 import com.ecommerce.userservice.model.User;
 
 /**
@@ -26,12 +27,14 @@ public class CustomUserDetails implements UserDetails {
     private final String email;
     private final String password;
     private final UserRole role;
+    private final UserStatus status;
 
     public CustomUserDetails(User user) {
         this.userId = user.getUserId();
         this.email = user.getUserEmail();
         this.password = user.getUserPassword();
         this.role = user.getUserRole();
+        this.status = user.getUserStatus();
     }
 
     @Override
@@ -66,7 +69,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return UserStatus.ATIVO.equals(status);
 
     }
 
@@ -82,6 +85,7 @@ public class CustomUserDetails implements UserDetails {
         user.setUserEmail(email);
         user.setUserPassword(password);
         user.setUserRole(role);
+        user.setUserStatus(status);
         return user;
     }
 
