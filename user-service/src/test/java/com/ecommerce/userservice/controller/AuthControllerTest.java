@@ -22,6 +22,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.ecommerce.userservice.config.SecurityConfig;
+import com.ecommerce.userservice.enums.UserStatus;
 import com.ecommerce.userservice.exception.TokenRefreshException;
 import com.ecommerce.userservice.model.RefreshToken;
 import com.ecommerce.userservice.model.User;
@@ -55,6 +56,7 @@ class AuthControllerTest {
         User mockUser = new User();
         mockUser.setUserId(1L);
         mockUser.setUserEmail("test@email.com");
+        mockUser.setUserStatus(UserStatus.ATIVO);
         CustomUserDetails userDetails = new CustomUserDetails(mockUser);
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null);
@@ -186,5 +188,31 @@ class AuthControllerTest {
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.message")
                         .value("Refresh token inválido, expirado, revogado ou inexistente"));
+    }
+
+    @Test
+    void testPostRefresh_WithInactiveUser_ShouldReturnUnauthorized() throws Exception {
+        User mockUser = new User();
+        mockUser.setUserId(1L);
+        mockUser.setUserEmail("test@email.com");
+        mockUser.setUserStatus(UserStatus.INATIVO);
+
+        RefreshToken mockRefreshToken = new RefreshToken();
+        mockRefreshToken.setToken("old-refresh-token");
+        mockRefreshToken.setUser(mockUser);
+
+        when(refreshTokenService.validateRefreshToken("old-refresh-token")).thenReturn(mockRefreshToken);
+
+        String refreshRequest = """
+                {
+                    "refreshToken": "old-refresh-token"
+                }
+                """;
+
+        mockMvc.perform(post("/auth/refresh")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(refreshRequest))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value("Usuário inativo ou suspenso."));
     }
 }

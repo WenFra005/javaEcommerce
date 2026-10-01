@@ -61,6 +61,10 @@ class JwtAuthFilterTest {
         when(jwtUtil.extractEmail(VALID_TOKEN)).thenReturn(EMAIL);
         when(userDetailsService.loadUserByUsername(EMAIL)).thenReturn(userDetails);
         when(userDetails.getUsername()).thenReturn(EMAIL);
+        when(userDetails.isEnabled()).thenReturn(true);
+        when(userDetails.isAccountNonLocked()).thenReturn(true);
+        when(userDetails.isAccountNonExpired()).thenReturn(true);
+        when(userDetails.isCredentialsNonExpired()).thenReturn(true);
         when(jwtUtil.validateToken(VALID_TOKEN, EMAIL)).thenReturn(true);
 
         jwtAuthFilter.doFilterInternal(request, response, filterChain);
@@ -135,6 +139,21 @@ class JwtAuthFilterTest {
 
         verify(filterChain).doFilter(request, response);
         verify(jwtUtil, never()).validateToken(anyString(), anyString());
+    }
+
+    @Test
+    void testDoFilterInternal_WhenUserDisabled_ShouldNotAuthenticate() throws Exception {
+        when(request.getHeader("Authorization")).thenReturn("Bearer " + VALID_TOKEN);
+        when(jwtUtil.extractEmail(VALID_TOKEN)).thenReturn(EMAIL);
+        when(userDetailsService.loadUserByUsername(EMAIL)).thenReturn(userDetails);
+        when(userDetails.getUsername()).thenReturn(EMAIL);
+        when(userDetails.isEnabled()).thenReturn(false);
+        when(jwtUtil.validateToken(VALID_TOKEN, EMAIL)).thenReturn(true);
+
+        jwtAuthFilter.doFilterInternal(request, response, filterChain);
+
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
+        verify(filterChain).doFilter(request, response);
     }
 
 }

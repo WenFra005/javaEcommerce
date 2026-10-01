@@ -8,6 +8,7 @@ import com.ecommerce.userservice.dto.ErrorResponse;
 import com.ecommerce.userservice.dto.LoginRequest;
 import com.ecommerce.userservice.dto.RefreshRequest;
 import com.ecommerce.userservice.dto.RefreshResponse;
+import com.ecommerce.userservice.enums.UserStatus;
 import com.ecommerce.userservice.model.RefreshToken;
 import com.ecommerce.userservice.model.User;
 import com.ecommerce.userservice.security.CustomUserDetails;
@@ -24,6 +25,7 @@ import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -101,6 +103,9 @@ public class AuthController {
                 RefreshToken refreshToken = refreshTokenService.validateRefreshToken(request.getRefreshToken());
 
                 User user = refreshToken.getUser();
+                if (!UserStatus.ATIVO.equals(user.getUserStatus())) {
+                        throw new DisabledException("Usuário inativo ou suspenso.");
+                }
 
                 String newAccessToken = jwtUtil.generateToken(user.getUserEmail(), user.getUserId());
 
