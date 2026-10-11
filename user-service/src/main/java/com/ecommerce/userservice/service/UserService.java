@@ -93,6 +93,7 @@ public class UserService {
      */
     @Transactional
     public UserResponse createNaturalPerson(CreateNaturalPersonRequest request) {
+        validatePublicRole(request.getUserRole());
         if (naturalPersonRepository.existsByCpf(request.getCpf())) {
             throw new ValidationException("CPF already exists: " + request.getCpf());
         }
@@ -117,6 +118,7 @@ public class UserService {
      */
     @Transactional
     public UserResponse createLegalEntity(CreateLegalEntityRequest request) {
+        validatePublicRole(request.getUserRole());
         if (legalEntityRepository.existsByCnpj(request.getCnpj())) {
             throw new ValidationException("CNPJ already exists: " + request.getCnpj());
         }
@@ -404,6 +406,13 @@ public class UserService {
             return response;
         } else {
             throw new IllegalArgumentException("Tipo de usuário desconhecido: " + user.getUserType());
+        }
+
+    }
+
+    private void validatePublicRole(UserRole role) {
+        if (role == UserRole.ADMIN) {
+            throw new ValidationException("ADMIN role is not allowed for public registration");
         }
     }
 }

@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.br.CPF;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
+import jakarta.validation.constraints.Email;
 
 /**
  * Campos aceitos para atualização parcial de um usuário.
@@ -27,6 +28,7 @@ public class UpdateRequest {
     @Schema(description = "Novo nome do usuário", example = "João da Silva Atualizado")
     private String name;
     @Schema(description = "Novo e-mail do usuário", example = "joao.atualizado@example.com")
+    @Email(message = "Email should be valid")
     private String userEmail;
     @Schema(description = "Nova senha do usuário", example = "novaSenha@123")
     private String userPassword;

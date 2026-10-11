@@ -2,6 +2,7 @@ package com.ecommerce.userservice.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Email;
 
 /**
  * Dados usados para cadastrar um administrador inicial.
@@ -22,6 +23,7 @@ public class CreateAdminRequest {
 
     @Schema(description = "E-mail do administrador", example = "admin@example.com")
     @NotBlank(message = "Email is required")
+    @Email(message = "Email should be valid")
     private String email;
 
     @Schema(description = "Senha do administrador", example = "admin@12345")
