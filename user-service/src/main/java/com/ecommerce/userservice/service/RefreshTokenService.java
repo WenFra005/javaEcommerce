@@ -83,15 +83,20 @@ public class RefreshTokenService {
     public RefreshToken validateRefreshToken(String token) {
         RefreshToken refreshToken = findRefreshTokenByToken(token);
 
-        if (refreshToken.isRevoked()) {
-            throw new TokenRefreshException("Refresh token has been revoked: " + token);
-        }
-
-        if (refreshToken.getExpiryDate().isBefore(Instant.now())) {
-            throw new TokenRefreshException("Refresh token has expired: " + token);
-        }
-
+        validateTokenState(refreshToken, token);
         return refreshToken;
+    }
+
+    @Transactional
+    public RefreshToken rotateRefreshToken(String token) {
+        RefreshToken refreshToken = refreshTokenRepository.findByTokenForUpdate(token)
+                .orElseThrow(() -> new TokenRefreshException(REFRESH_TOKEN_NOT_FOUND_MESSAGE + token));
+        validateTokenState(refreshToken, token);
+
+        refreshToken.setToken(UUID.randomUUID().toString());
+        refreshToken.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
+        refreshToken.setRevoked(false);
+        return refreshTokenRepository.save(refreshToken);
     }
 
     /**
@@ -134,6 +139,15 @@ public class RefreshTokenService {
     private RefreshToken findRefreshTokenByToken(String token) {
         return refreshTokenRepository.findByToken(token)
                 .orElseThrow(() -> new TokenRefreshException(REFRESH_TOKEN_NOT_FOUND_MESSAGE + token));
+    }
+
+    private void validateTokenState(RefreshToken refreshToken, String token) {
+        if (refreshToken.isRevoked()) {
+            throw new TokenRefreshException("Refresh token has been revoked: " + token);
+        }
+        if (refreshToken.getExpiryDate().isBefore(Instant.now())) {
+            throw new TokenRefreshException("Refresh token has expired: " + token);
+        }
     }
 
     private User findUserById(Long userId) {

@@ -72,7 +72,7 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "Usuário não autenticado", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @SecurityRequirement(name = "******")
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getCurrentUser(Authentication authentication) {
         String email = authentication.getName();
@@ -94,7 +94,7 @@ public class UserController {
             @ApiResponse(responseCode = "401", description = "Usuário não autenticado", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "403", description = "Usuário autenticado sem permissão para listar usuários", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @SecurityRequirement(name = "******")
+    @SecurityRequirement(name = "Bearer Authentication")
     @GetMapping
     public ResponseEntity<Page<UserResponse>> getListAll(
             @PageableDefault(size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable,
@@ -164,7 +164,8 @@ public class UserController {
         UserResponse updated = userService.updateUser(id, request, email, role);
 
         String newToken = null;
-        if (request.getUserEmail() != null && !request.getUserEmail().isBlank()) {
+        if (id.equals(((CustomUserDetails) authentication.getPrincipal()).getUser().getUserId())
+                && request.getUserEmail() != null && !request.getUserEmail().isBlank()) {
             newToken = jwtUtil.generateToken(updated.getUserEmail(), updated.getUserId());
         }
 

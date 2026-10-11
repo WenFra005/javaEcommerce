@@ -81,7 +81,7 @@ public class AuthController {
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "204", description = "Logout realizado com sucesso", content = @Content),
                         @ApiResponse(responseCode = "400", description = "Payload inválido (ex.: refresh token ausente)", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-                        @ApiResponse(responseCode = "403", description = "Refresh token inválido, expirado, revogado ou inexistente", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+                        @ApiResponse(responseCode = "401", description = "Refresh token inválido, expirado, revogado ou inexistente", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
         })
         @PostMapping("/logout")
         public ResponseEntity<Void> postLogout(@RequestBody @Valid RefreshRequest request) {
@@ -94,22 +94,19 @@ public class AuthController {
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Tokens renovados com sucesso", content = @Content(mediaType = "application/json", schema = @Schema(implementation = RefreshResponse.class))),
                         @ApiResponse(responseCode = "400", description = "Payload inválido (ex.: refresh token ausente)", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-                        @ApiResponse(responseCode = "403", description = "Refresh token inválido, expirado, revogado ou inexistente", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+                        @ApiResponse(responseCode = "401", description = "Refresh token inválido, expirado, revogado ou inexistente", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
         })
         @PostMapping("/refresh")
         public ResponseEntity<RefreshResponse> postRefresh(@RequestBody @Valid RefreshRequest request) {
-                RefreshToken refreshToken = refreshTokenService.validateRefreshToken(request.getRefreshToken());
+                RefreshToken refreshToken = refreshTokenService.rotateRefreshToken(request.getRefreshToken());
 
                 User user = refreshToken.getUser();
 
                 String newAccessToken = jwtUtil.generateToken(user.getUserEmail(), user.getUserId());
 
-                refreshTokenService.revokeRefreshToken(request.getRefreshToken());
-                RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user.getUserId());
-
                 RefreshResponse refreshResponse = new RefreshResponse(
                                 newAccessToken,
-                                newRefreshToken.getToken());
+                                refreshToken.getToken());
 
                 return ResponseEntity.ok(refreshResponse);
         }

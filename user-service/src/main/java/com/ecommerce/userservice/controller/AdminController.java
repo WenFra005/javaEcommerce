@@ -57,7 +57,7 @@ public class AdminController {
             @ApiResponse(responseCode = "403", description = "Usuário autenticado sem permissão de administrador", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "409", description = "Conflito de dados, como e-mail já cadastrado", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    @SecurityRequirement(name = "******")
+    @SecurityRequirement(name = "Bearer Authentication")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<UserResponse> postCreateAdmin(@RequestBody @Valid CreateAdminRequest request) {
