@@ -120,17 +120,18 @@ Diagrama detalhando os microsserviços, banco de dados, API Gateway e message br
 
    ```bash
    git clone https://github.com/WenFra005/javaEcommerce.git
-   cd javaEcommerce/user-service
+   cd javaEcommerce
    ```
 
-2. **Configure as variáveis de ambiente** (crie um arquivo `.env` na raiz do serviço ou coloque no arquivo `launch.json` se estiver usando o VS Code):
+2. **Configure as variáveis de ambiente** (crie um arquivo `.env` na raiz do projeto ou coloque no arquivo `launch.json` se estiver usando o VS Code):
 
    ```properties
-   DB_USER=user
-   DB_PASSWORD=password
+   USER_DB=user
+   PASSWORD_DB=password
    NAME_DB=ecommerce
    DB_PORT=5433
    APP_PORT=8080
+   SPRING_JPA_SHOW_SQL=false
 
    # JWT
    JWT_SECRET=minhaChaveSuperSecreta1234567890
@@ -145,7 +146,7 @@ Diagrama detalhando os microsserviços, banco de dados, API Gateway e message br
 3. **Suba o ambiente com Docker Compose:**
 
     ```bash
-    docker-compose up -d
+    docker compose up -d
     ```
 
 4. **Acesse a documentação Swagger:**
