@@ -83,6 +83,7 @@ public class JwtUtil {
      * @param token token JWT.
      * @return e-mail embutido no token.
      */
+    @SuppressWarnings("null")
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
