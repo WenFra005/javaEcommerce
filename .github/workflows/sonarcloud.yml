@@ -2,7 +2,7 @@ name: SonarQube
 on:
   push:
     branches:
-      - dev/user-service
+      - feat/user-service
   pull_request:
     types: [opened, synchronize, reopened]
 
@@ -41,13 +41,13 @@ jobs:
 
       - name: Run tests and generate coverage
         working-directory: ./user-service
-        run: mvn -B verify
+        run: ./mvnw -B verify
       
       - name: Analyze with Maven
         working-directory: ./user-service
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: >
-          mvn -B sonar:sonar
+          ./mvnw -B sonar:sonar
           -Dsonar.projectKey=WenFra005_javaEcommerce
           -Dsonar.organization=wenfra005
