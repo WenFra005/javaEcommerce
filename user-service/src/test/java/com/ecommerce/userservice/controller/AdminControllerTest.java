@@ -1,11 +1,13 @@
 package com.ecommerce.userservice.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -22,12 +24,16 @@ import com.ecommerce.userservice.dto.UserResponse;
 import com.ecommerce.userservice.enums.UserRole;
 import com.ecommerce.userservice.enums.UserType;
 import com.ecommerce.userservice.exception.EmailAlreadyExistsException;
-import com.ecommerce.userservice.security.JwtUtil;
+import com.ecommerce.userservice.security.CustomAuthenticationEntryPoint;
 import com.ecommerce.userservice.service.CustomUserDetailsService;
+import com.ecommerce.userservice.security.JwtAuthFilter;
+import com.ecommerce.userservice.security.JwtUtil;
 import com.ecommerce.userservice.service.UserService;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @WebMvcTest(controllers = AdminController.class)
-@Import(SecurityConfig.class)
+@Import({ SecurityConfig.class, JwtAuthFilter.class })
 @ActiveProfiles("test")
 class AdminControllerTest {
 
@@ -42,6 +48,18 @@ class AdminControllerTest {
 
     @MockitoBean
     private JwtUtil jwtUtil;
+
+    @MockitoBean
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
+    @BeforeEach
+    void stubAuthenticationEntryPoint() throws Exception {
+        doAnswer(invocation -> {
+            HttpServletResponse response = invocation.getArgument(1);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return null;
+        }).when(customAuthenticationEntryPoint).commence(any(), any(), any());
+    }
 
     @Test
     @WithMockUser(roles = "ADMIN")

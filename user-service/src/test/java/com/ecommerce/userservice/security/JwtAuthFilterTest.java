@@ -60,6 +60,7 @@ class JwtAuthFilterTest {
         when(request.getHeader("Authorization")).thenReturn("Bearer " + VALID_TOKEN);
         when(jwtUtil.extractEmail(VALID_TOKEN)).thenReturn(EMAIL);
         when(userDetailsService.loadUserByUsername(EMAIL)).thenReturn(userDetails);
+        when(userDetails.isEnabled()).thenReturn(true);
         when(userDetails.getUsername()).thenReturn(EMAIL);
         when(jwtUtil.validateToken(VALID_TOKEN, EMAIL)).thenReturn(true);
 
@@ -89,6 +90,7 @@ class JwtAuthFilterTest {
         when(request.getHeader("Authorization")).thenReturn("Bearer " + VALID_TOKEN);
         when(jwtUtil.extractEmail(VALID_TOKEN)).thenReturn(EMAIL);
         when(userDetailsService.loadUserByUsername(EMAIL)).thenReturn(userDetails);
+        when(userDetails.isEnabled()).thenReturn(true);
         when(userDetails.getUsername()).thenReturn(EMAIL);
         when(jwtUtil.validateToken(VALID_TOKEN, EMAIL)).thenReturn(false);
 

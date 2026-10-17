@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -17,6 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
@@ -43,11 +45,15 @@ import com.ecommerce.userservice.exception.ValidationException;
 import com.ecommerce.userservice.model.User;
 import com.ecommerce.userservice.security.CustomUserDetails;
 import com.ecommerce.userservice.security.JwtUtil;
+import com.ecommerce.userservice.security.CustomAuthenticationEntryPoint;
+import com.ecommerce.userservice.security.JwtAuthFilter;
 import com.ecommerce.userservice.service.CustomUserDetailsService;
 import com.ecommerce.userservice.service.UserService;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @WebMvcTest(controllers = UserController.class)
-@Import(SecurityConfig.class)
+@Import({ SecurityConfig.class, JwtAuthFilter.class })
 @ActiveProfiles("test")
 class UserControllerTest {
 
@@ -63,6 +69,18 @@ class UserControllerTest {
         @MockitoBean
         private CustomUserDetailsService customUserDetailsService;
 
+        @MockitoBean
+        private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
+        @BeforeEach
+        void stubAuthenticationEntryPoint() throws Exception {
+                doAnswer(invocation -> {
+                        HttpServletResponse response = invocation.getArgument(1);
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        return null;
+                }).when(customAuthenticationEntryPoint).commence(any(), any(), any());
+        }
+
         private UserResponse createUserResponse() {
                 UserResponse userResponse = new UserResponse();
                 userResponse.setUserId(1L);
@@ -74,8 +92,12 @@ class UserControllerTest {
         }
 
         private Authentication createMockAuthentication(UserRole role) {
+                return createMockAuthentication(role, 1L);
+        }
+
+        private Authentication createMockAuthentication(UserRole role, Long userId) {
                 User mockUser = new User();
-                mockUser.setUserId(1L);
+                mockUser.setUserId(userId);
                 mockUser.setUserEmail("test@email.com");
                 mockUser.setUserRole(role);
 
@@ -337,7 +359,7 @@ class UserControllerTest {
                 when(jwtUtil.generateToken(anyString(), anyLong()))
                                 .thenReturn("new-token");
 
-                Authentication auth = createMockAuthentication(UserRole.ADMIN);
+                Authentication auth = createMockAuthentication(UserRole.ADMIN, userId);
 
                 String requestJson = """
                                 {

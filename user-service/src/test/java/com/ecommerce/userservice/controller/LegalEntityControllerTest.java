@@ -22,11 +22,13 @@ import com.ecommerce.userservice.enums.UserType;
 import com.ecommerce.userservice.exception.EmailAlreadyExistsException;
 import com.ecommerce.userservice.exception.ValidationException;
 import com.ecommerce.userservice.security.JwtUtil;
+import com.ecommerce.userservice.security.CustomAuthenticationEntryPoint;
+import com.ecommerce.userservice.security.JwtAuthFilter;
 import com.ecommerce.userservice.service.CustomUserDetailsService;
 import com.ecommerce.userservice.service.UserService;
 
 @WebMvcTest(controllers = LegalEntityController.class)
-@Import(SecurityConfig.class)
+@Import({ SecurityConfig.class, JwtAuthFilter.class })
 @ActiveProfiles("test")
 class LegalEntityControllerTest {
 
@@ -41,6 +43,9 @@ class LegalEntityControllerTest {
 
     @MockitoBean
     private JwtUtil jwtUtil;
+
+    @MockitoBean
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Test
     void testPostRegister_WithValidData_ShouldReturnCreated() throws Exception {
