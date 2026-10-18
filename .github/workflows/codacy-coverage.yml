@@ -1,0 +1,30 @@
+name: Codacy coverage
+
+on: 
+  push: 
+    branches:
+      - "dev"
+      - "main"
+    paths: 
+      - 'user-service/**'
+  pull_request:
+    branches:
+      - "dev" 
+      - "main"
+    paths:
+      - 'user-service/**'
+
+jobs:
+  coverage_report:
+    name: Test & Report Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@7
+
+      - name: Upload coverage to Codacy
+        uses: codacy/codacy-coverage-reporter-action@v1.3.0
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: "**/target/site/jacoco/jacoco.xml" # Ajuste o caminho conforme seu monorepo
+          language: Java
