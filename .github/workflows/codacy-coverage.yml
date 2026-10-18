@@ -34,6 +34,7 @@ jobs:
           cache: maven
 
       - name: Build and run tests with coverage
+        working-directory: user-service
         run: |
           ./mvnw clean test jacoco:report
           reports=$(find . -type f -path '*/target/site/jacoco/jacoco.xml' -print)
@@ -51,3 +52,4 @@ jobs:
           coverage-reports: "**/target/site/jacoco/jacoco.xml" # Ajuste o caminho conforme seu monorepo
           language: Java
           
+
