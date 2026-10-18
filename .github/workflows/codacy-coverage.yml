@@ -14,6 +14,9 @@ on:
     paths:
       - 'user-service/**'
 
+permissions:
+  contents: read
+
 jobs:
   coverage_report:
     name: Test & Report Coverage
