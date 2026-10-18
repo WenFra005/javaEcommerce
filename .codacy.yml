@@ -1,5 +1,6 @@
----
 # Configuração do Codacy para monorepo de microsserviços Java Spring
+include_paths:
+  - "user-service/**"
 exclude_paths:
   # Artefatos de build (Maven, Gradle)
   - "**/target/**"
@@ -22,5 +23,7 @@ exclude_paths:
   # Configurações de IDE e sistema
   - "**/.idea/**"
   - "**/.vscode/**"
+  - "**/.gitignore"
+  - "**/README.md"
   - "**/.gitignore"
   - "**/README.md"
