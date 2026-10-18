@@ -1,0 +1,87 @@
+package com.ecommerce.userservice.config;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+
+import com.ecommerce.userservice.enums.UserRole;
+import com.ecommerce.userservice.enums.UserStatus;
+import com.ecommerce.userservice.enums.UserType;
+import com.ecommerce.userservice.model.User;
+import com.ecommerce.userservice.repository.UserRepository;
+
+/**
+ * Inicializa um usuário administrador quando o perfil ativo permitir.
+ *
+ * <p>
+ * O componente executa no startup da aplicação para garantir uma conta
+ * administrativa mínima, com possibilidade de desativação por configuração.
+ *
+ * @since 0.1.0
+ */
+@Component
+@Profile("!test") // This ensures that the seeder does not run in the test profile
+public class AdminSeeder implements CommandLineRunner {
+
+    private static final Logger log = LoggerFactory.getLogger(AdminSeeder.class);
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    @Value("${admin.email}")
+    private String adminEmail;
+
+    @Value("${admin.password}")
+    private String adminPassword;
+
+    @Value("${admin.seeding.enabled:true}")
+    private boolean seedingEnabled;
+
+    public AdminSeeder(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    /**
+     * Executa a criação condicional do administrador padrão.
+     *
+     * <p>
+     * A rotina não altera o estado quando o seeding está desabilitado, quando já
+     * existe um administrador ou quando as credenciais não foram fornecidas.
+     *
+     * @param args argumentos recebidos no startup da aplicação.
+     * @throws Exception propagada caso ocorra falha inesperada durante a execução.
+     */
+    @Override
+    public void run(String... args) throws Exception {
+        if (!seedingEnabled) {
+            log.info("Admin seeding is disabled. Set 'admin.seeding.enabled=true' to enable");
+            return;
+        }
+
+        if (userRepository.existsByUserRole(UserRole.ADMIN)) {
+            log.info("ADMIN already exists. Skipping seeding.");
+            return;
+        }
+
+        if (adminEmail == null || adminPassword == null) {
+            log.warn("ADMIN_EMAIL and ADMIN_PASSWORD environment variables are not set. Skipping admin creation.");
+            return;
+        }
+
+        User adminUser = new User();
+        adminUser.setName("Administrador");
+        adminUser.setUserEmail(adminEmail);
+        adminUser.setUserPassword(passwordEncoder.encode(adminPassword));
+        adminUser.setUserRole(UserRole.ADMIN);
+        adminUser.setUserStatus(UserStatus.ATIVO);
+        adminUser.setUserType(UserType.SYSTEM);
+
+        userRepository.save(adminUser);
+        log.info("Admin created successfully. Email: {}", adminEmail);
+    }
+
+}
