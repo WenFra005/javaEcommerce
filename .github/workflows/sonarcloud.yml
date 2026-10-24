@@ -2,8 +2,16 @@ name: SonarQube
 on:
   push:
     branches:
-      - feat/user-service
+      - dev
+      - main
+    paths:
+      - 'user-service/**'
   pull_request:
+    branches:
+      - dev
+      - main
+    paths:
+      - 'user-service/**'
     types: [opened, synchronize, reopened]
 
 permissions:
