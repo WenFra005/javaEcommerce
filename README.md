@@ -1,7 +1,5 @@
 # javaEcommerce - Projeto pessoal de E-commerce
 
-[![SonarQube Cloud](https://sonarcloud.io/images/project_badges/sonarcloud-light.svg)](https://sonarcloud.io/summary/new_code?id=WenFra005_javaEcommerce)
-
 [![CI](https://github.com/WenFra005/javaEcommerce/actions/workflows/maven.yml/badge.svg?style=flat-square)](https://github.com/WenFra005/javaEcommerce/actions/workflows/maven.yml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/2068ac436fd84e63ae32419224919d4a)](https://app.codacy.com/gh/WenFra005/javaEcommerce/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/2068ac436fd84e63ae32419224919d4a)](https://app.codacy.com/gh/WenFra005/javaEcommerce/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
@@ -23,13 +21,13 @@ O planejamento arquitetural foi baseado no modelo C4, que define contextos e con
 
 Diagrama mostrando as interações entre o sistema de e-commerce e os atores externos (cliente, administradores, fornecedores) e sistemas (gateway de pagamento, transportadora, API de CEP, serviço de e-mail).
 
-![Diagrama de Contexto do Sistema (Nível 1)](https://cdn.jsdelivr.net/gh/WenFra005/javaEcommerce@dev/user-service/docs/diagrams/C4_model_diagrama-Level1-Diagrama_de_contexto.drawio.svg)
+![Diagrama de Contexto do Sistema (Nível 1)](https://cdn.jsdelivr.net/gh/WenFra005/javaEcommerce@dev/docs/diagrams/C4_model_diagrama-Level1-Diagrama_de_contexto.drawio.svg)
 
 ### Contêineres (Nível 2)
 
 Diagrama detalhando os microsserviços, banco de dados, API Gateway e message broker que compõem a plataforma.
 
-![Diagrama de Contêineres (Nível 2)](https://cdn.jsdelivr.net/gh/WenFra005/javaEcommerce@dev/user-service/docs/diagrams/C4_model_diagrama-Level2-Diagrama_de_containers.drawio.svg)
+![Diagrama de Contêineres (Nível 2)](https://cdn.jsdelivr.net/gh/WenFra005/javaEcommerce@dev/docs/diagrams/C4_model_diagrama-Level2-Diagrama_de_containers.drawio.svg)
 
 ## Tecnologias utilizadas
 
@@ -193,7 +191,7 @@ Contribuições são bem-vindas.
 ### Diretrizes
 
 - ✅ Testes devem passar (`mvn clean verify`).
-- ✅ Quality Gate do SonarCloud deve estar verde.
+- ✅ Quality Gate do Codacy deve estar verde.
 - ✅ Código deve seguir as boas práticas do projeto.
 - ✅ Documentação deve ser atualizada quando necessário.
   
