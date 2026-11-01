@@ -29,7 +29,7 @@
     </scm>
     <properties>
         <java.version>25</java.version>
-        <flyway.version>13.8.0</flyway.version>
+        <flyway.version>13.11.1</flyway.version>
         <tomcat.version>11.0.25</tomcat.version>
         <sonar.organization>wenfra005</sonar.organization>
         <sonar.java.binaries>target/classes</sonar.java.binaries>
@@ -100,7 +100,7 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>3.1.1</version>
+            <version>3.2.0</version>
         </dependency>
 
         <dependency>
@@ -180,7 +180,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.15</version>
+                <version>0.8.16</version>
                 <executions>
                     <execution>
                         <goals>
