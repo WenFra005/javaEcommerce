@@ -56,10 +56,10 @@ Diagrama detalhando os microsserviços, banco de dados, API Gateway e message br
 - [x] **Testes**
   - [x] Testes unitários e de integração (repositórios, serviços, controllers)
   - [x] Testcontainers com PostgreSQL real
-  - [x] Cobertura de testes monitorada no SonarCloud
+  - [x] Cobertura de testes monitorada no Codacy
 - [x] **CI/CD**
   - [x] GitHub Actions (build, testes, análise)
-  - [x] SonarCloud (qualidade de código)
+  - [x] Codacy (qualidade de código)
   - [x] CodeQL (segurança)
 - [x] **Infraestrutura**
   - [x] Dockerização do serviço (imagem otimizada com `jlink`)
@@ -75,7 +75,7 @@ Diagrama detalhando os microsserviços, banco de dados, API Gateway e message br
 - [x] Autenticação JWT com refresh token
 - [x] Testes automatizados
 - [x] Dockerização
-- [x] CI/CD com SonarCloud e CodeQL
+- [x] CI/CD com Codacy e CodeQL
 
 ### Fase 2 - Produtos e Catálogo (📝 Planejado)
 
