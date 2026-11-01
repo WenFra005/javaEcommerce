@@ -7,5 +7,5 @@ Closes #
 
 ## Checklist
 - [ ] Testes passam localmente (`mvn clean verify`)
-- [ ] Quality Gate do SonarCloud está verde
+- [ ] Análise de qualidade do Codacy está verde
 - [ ] Documentação atualizada (se necessário)
