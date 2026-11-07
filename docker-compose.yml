@@ -3,7 +3,7 @@ services:
   # Bando de dados PostgreSQL
   # ============================================
   db:
-    image: postgres:15-alpine
+    image: postgres:18-alpine
     container_name: user-service-db-container
     environment:
       POSTGRES_DB: ${NAME_DB}
@@ -26,7 +26,7 @@ services:
   # Serviço de Usuário (Spring Boot)
   # ============================================
   app:
-    image: user-service:latest
+    image: wenfra005/javaecommerce:user-service-dev
     container_name: user-service-app
     build:
       context: ./user-service
