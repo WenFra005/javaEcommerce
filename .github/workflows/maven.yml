@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   build:
-
+    name: Build and test
     runs-on: ubuntu-latest
 
     steps:
@@ -28,7 +28,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
         
-    - name: Build with Maven]
+    - name: Build with Maven
       working-directory: user-service
       run: ./mvnw -B verify
 
