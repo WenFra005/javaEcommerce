@@ -5,7 +5,7 @@ RUN mvn dependency:go-offline -q
 COPY src ./src
 RUN mvn clean package -DskipTests -q
 
-FROM amazoncorretto:25-alpine-jdk AS jre-builder
+FROM amazoncorretto:26-alpine-jdk AS jre-builder
 WORKDIR /app
 RUN apk add --no-cache binutils
 COPY --from=build /app/target/user-service-0.1.0.jar /app.jar
