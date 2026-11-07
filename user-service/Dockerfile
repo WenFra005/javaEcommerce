@@ -9,7 +9,7 @@ FROM amazoncorretto:25-alpine-jdk AS jre-builder
 WORKDIR /app
 RUN apk add --no-cache binutils
 COPY --from=build /app/target/user-service-0.1.0.jar /app.jar
-RUN jlink --add-modules java.base,java.logging,java.management,java.sql,java.scripting,java.xml,java.prefs,java.naming,java.net.http,java.desktop,java.security.jgss,java.instrument,java.compiler,jdk.crypto.ec \
+RUN jlink --add-modules java.base,java.logging,java.management,java.sql,java.scripting,java.xml,java.prefs,java.naming,java.net.http,java.desktop,java.security.jgss,java.instrument,java.compiler,jdk.crypto.ec,jdk.unsupported \
     --strip-debug \
     --compress=2 \
     --no-header-files \
