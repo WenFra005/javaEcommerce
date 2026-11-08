@@ -1,0 +1,105 @@
+name: Prepare release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Versão sem o prefixo v (ex.: 0.1.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: prepare-release
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    name: Prepare release pull request
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate version
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::A versão deve seguir o formato SemVer X.Y.Z, sem o prefixo v."
+            exit 1
+          fi
+
+      - name: Checkout main history
+        uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Check release references
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          branch="release/${VERSION}"
+          tag="v${VERSION}"
+
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+            echo "::error::A branch ${branch} já existe no remoto."
+            exit 1
+          fi
+
+          if git rev-parse --verify "refs/tags/${tag}" >/dev/null 2>&1 || \
+             git ls-remote --exit-code --tags origin "refs/tags/${tag}" >/dev/null 2>&1; then
+            echo "::error::A tag ${tag} já existe."
+            exit 1
+          fi
+
+      - name: Create release branch
+        env:
+          VERSION: ${{ inputs.version }}
+        run: git switch -c "release/${VERSION}"
+
+      - name: Generate changelog
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --tag v${{ inputs.version }}
+        env:
+          OUTPUT: CHANGELOG.md
+          GITHUB_REPO: ${{ github.repository }}
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Commit changelog
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+
+          if git diff --cached --quiet; then
+            echo "::error::O git-cliff não gerou alterações no CHANGELOG.md."
+            exit 1
+          fi
+
+          git commit -m "docs: preparar changelog da versão ${VERSION}"
+
+      - name: Push release branch
+        env:
+          VERSION: ${{ inputs.version }}
+        run: git push --set-upstream origin "release/${VERSION}"
+
+      - name: Create pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          gh pr create \
+            --base main \
+            --head "release/${VERSION}" \
+            --title "docs: preparar changelog da versão ${VERSION}" \
+            --body "## Resumo
+          Prepara o CHANGELOG.md para a versão v${VERSION}.
+
+          Após a aprovação e o merge desta PR, crie a tag \`v${VERSION}\` para iniciar o workflow de produção."
