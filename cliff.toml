@@ -2,7 +2,7 @@
 header = """
 # Registro de Alterações
 
-Todas as mudanças notáveis neste serviço serão documentadas neste arquivo.
+Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 """
 
 body = """{% if version %}## {{ version | trim_start_matches(pat="v") }} - {{ timestamp | date(format="%d/%m/%Y") }}{% else %}## Não Lançado{% endif %}
@@ -29,7 +29,6 @@ sort_commits = "newest"
 tag_pattern = "v[0-9]*"
 
 commit_parsers = [
-    { sha = "e22c43b547901c821c1f20f70899eb074a82dc00", group = "Funcionalidades" },
     { message = "^feat", group = "Funcionalidades" },
     { message = "^fix", group = "Correções" },
     { message = "^docs", group = "Documentação" },
