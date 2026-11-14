@@ -5,10 +5,10 @@ RUN mvn dependency:go-offline -q
 COPY src ./src
 RUN mvn clean package -DskipTests -q
 
-FROM amazoncorretto:26-alpine-jdk AS jre-builder
+FROM amazoncorretto:25-alpine-jdk AS jre-builder
 WORKDIR /app
 RUN apk add --no-cache binutils
-COPY --from=build /app/target/user-service-0.1.0.jar /app.jar
+COPY --from=build /app/target/user-service.jar /app.jar
 RUN jlink --add-modules java.base,java.logging,java.management,java.sql,java.scripting,java.xml,java.prefs,java.naming,java.net.http,java.desktop,java.security.jgss,java.instrument,java.compiler,jdk.crypto.ec,jdk.unsupported \
     --strip-debug \
     --compress=2 \
@@ -20,7 +20,7 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 ENV JAVA_HOME=/opt/jre
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
 COPY --from=jre-builder --chown=appuser:appgroup /custom-jre /opt/jre
-COPY --from=build --chown=appuser:appgroup /app/target/user-service-0.1.0.jar /app.jar
+COPY --from=build --chown=appuser:appgroup /app/target/user-service.jar /app.jar
 USER appuser
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app.jar"]
