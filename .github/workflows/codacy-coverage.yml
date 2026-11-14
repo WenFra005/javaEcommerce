@@ -5,20 +5,19 @@ on:
     branches:
       - "dev"
       - "main"
-    paths: 
-      - "user-service/src/**"
-      - "user-service/pom.xml"
-      - "user-service/mvnw"
-      - "user-service/.mvn/**"
+    paths:
+      - "user-service/**"
+      - ".codacy.yml"
+      - ".github/workflows/codacy-coverage.yml"
   pull_request:
     branches:
       - "dev" 
       - "main"
     paths:
-      - "user-service/src/**"
-      - "user-service/pom.xml"
-      - "user-service/mvnw"
-      - "user-service/.mvn/**"
+      - "user-service/**"
+      - ".codacy.yml"
+      - ".github/workflows/codacy-coverage.yml"
+  workflow_dispatch:
 permissions:
   contents: read
 
@@ -41,20 +40,19 @@ jobs:
       - name: Build and run tests with coverage
         working-directory: user-service
         run: |
-          ./mvnw clean test jacoco:report
-          reports=$(find . -type f -path '*/target/site/jacoco/jacoco.xml' -print)
-          if [ -z "$reports" ]; then
+          ./mvnw -B clean test jacoco:report
+          report="target/site/jacoco/jacoco.xml"
+          if [ ! -s "$report" ]; then
             echo "JaCoCo XML report was not generated."
             exit 1
           fi
-          echo "JaCoCo report(s) found:"
-          echo "$reports"
+          echo "JaCoCo report found: user-service/$report"
 
       - name: Upload coverage to Codacy
         uses: codacy/codacy-coverage-reporter-action@v1.3.0
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: "**/target/site/jacoco/jacoco.xml" # Ajuste o caminho conforme seu monorepo
+          coverage-reports: "user-service/target/site/jacoco/jacoco.xml"
           language: Java
+          force-coverage-parser: jacoco
           
-
