@@ -117,7 +117,21 @@ class AuthControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(loginRequest))
                 .andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.message").value("Invalid credentials"));
+                .andExpect(jsonPath("$.message").value("Invalid credentials or token"));
+    }
+
+    @Test
+    void testPostLogin_WithInvalidPayload_ShouldReturnBadRequest() throws Exception {
+        mockMvc.perform(post("/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                        {
+                            "email": "",
+                            "password": ""
+                        }
+                        """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Validation error"));
     }
 
     @Test
@@ -198,7 +212,7 @@ class AuthControllerTest {
                 .content(refreshRequest))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.message")
-                        .value("Refresh token inválido, expirado, revogado ou inexistente"));
+                        .value("Refresh token is invalid, expired, revoked or not found"));
     }
 
 }

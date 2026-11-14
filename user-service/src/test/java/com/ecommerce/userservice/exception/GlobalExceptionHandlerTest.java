@@ -58,15 +58,13 @@ class GlobalExceptionHandlerTest {
     @Test
     void testHandleAuthenticationException() {
         AuthenticationException exception = mock(AuthenticationException.class);
-        when(exception.getMessage()).thenReturn("Credenciais inválidas ou token expirado");
-
         ResponseEntity<ErrorResponse> responseEntity = handler.handleAuthenticationException(exception, request);
 
         assertEquals(HttpStatus.UNAUTHORIZED, responseEntity.getStatusCode());
         ErrorResponse body = responseEntity.getBody();
         assertNotNull(body);
         assertEquals(401, body.getCode());
-        assertEquals("Credenciais inválidas ou token expirado", body.getMessage());
+        assertEquals("Invalid credentials or token", body.getMessage());
         assertEquals("Unauthorized", body.getError());
         assertEquals("/test/uri", body.getPath());
         assertNotNull(body.getTimestamp());
@@ -83,7 +81,7 @@ class GlobalExceptionHandlerTest {
         ErrorResponse body = responseEntity.getBody();
         assertNotNull(body);
         assertEquals(409, body.getCode());
-        assertEquals("Data integrity violation: Violação de integridade de dados", body.getMessage());
+        assertEquals("The request conflicts with existing data", body.getMessage());
         assertEquals("Data integrity violation", body.getError());
         assertEquals("/test/uri", body.getPath());
         assertNotNull(body.getTimestamp());
@@ -117,7 +115,7 @@ class GlobalExceptionHandlerTest {
         ErrorResponse body = responseEntity.getBody();
         assertNotNull(body);
         assertEquals(500, body.getCode());
-        assertEquals("Erro genérico", body.getMessage());
+        assertEquals("An unexpected error occurred", body.getMessage());
         assertEquals("Internal server error", body.getError());
         assertEquals("/test/uri", body.getPath());
         assertNotNull(body.getTimestamp());
@@ -128,8 +126,6 @@ class GlobalExceptionHandlerTest {
     void testHandleHttpMessageNotReadableException() {
         HttpMessageNotReadableException exception = mock(HttpMessageNotReadableException.class);
 
-        Throwable rootCause = new Throwable("Formato de data inválido");
-        doReturn(rootCause).when(exception).getMostSpecificCause();
         ResponseEntity<ErrorResponse> responseEntity = handler.handleHttpMessageNotReadableException(exception,
                 request);
 
@@ -137,7 +133,7 @@ class GlobalExceptionHandlerTest {
         ErrorResponse body = responseEntity.getBody();
         assertNotNull(body);
         assertEquals(400, body.getCode());
-        assertEquals("Formato de data inválido", body.getMessage());
+        assertEquals("Request body is invalid", body.getMessage());
         assertEquals("Validation Error", body.getError());
         assertEquals("/test/uri", body.getPath());
         assertNotNull(body.getTimestamp());
@@ -154,7 +150,7 @@ class GlobalExceptionHandlerTest {
         ErrorResponse body = responseEntity.getBody();
         assertNotNull(body);
         assertEquals(401, body.getCode());
-        assertEquals("Token expirado", body.getMessage());
+        assertEquals("Refresh token is invalid, expired, revoked or not found", body.getMessage());
         assertEquals("Refresh token error", body.getError());
         assertEquals("/test/uri", body.getPath());
         assertNotNull(body.getTimestamp());

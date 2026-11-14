@@ -1,6 +1,8 @@
 package com.ecommerce.userservice.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 /**
  * Dados mínimos necessários para autenticar um usuário na API.
@@ -15,8 +17,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public class LoginRequest {
 
     @Schema(description = "E-mail do usuário", example = "usuario@example.com")
+    @Email(message = "Email should be valid")
+    @NotBlank(message = "Email is required")
     private String email;
     @Schema(description = "Senha do usuário", example = "senha@123")
+    @NotBlank(message = "Password is required")
     private String password;
 
     public String getEmail() {

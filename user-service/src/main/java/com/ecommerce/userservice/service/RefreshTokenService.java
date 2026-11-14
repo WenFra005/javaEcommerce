@@ -29,7 +29,7 @@ import com.ecommerce.userservice.repository.UserRepository;
 public class RefreshTokenService {
 
     private static final String USER_NOT_FOUND_MESSAGE = "User not found with id: ";
-    private static final String REFRESH_TOKEN_NOT_FOUND_MESSAGE = "Refresh token not found: ";
+    private static final String REFRESH_TOKEN_NOT_FOUND_MESSAGE = "Refresh token is invalid, expired, revoked or not found";
 
     @Value("${jwt.refreshExpirationMs}")
     private Long refreshTokenDurationMs;
@@ -143,10 +143,10 @@ public class RefreshTokenService {
 
     private void validateTokenState(RefreshToken refreshToken, String token) {
         if (refreshToken.isRevoked()) {
-            throw new TokenRefreshException("Refresh token has been revoked: " + token);
+            throw new TokenRefreshException("Refresh token is invalid, expired, revoked or not found");
         }
         if (refreshToken.getExpiryDate().isBefore(Instant.now())) {
-            throw new TokenRefreshException("Refresh token has expired: " + token);
+            throw new TokenRefreshException("Refresh token is invalid, expired, revoked or not found");
         }
     }
 
