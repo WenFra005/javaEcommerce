@@ -156,13 +156,14 @@ Diagrama detalhando os microsserviços, banco de dados, API Gateway e message br
 
 ```bash
 # Executar todos os testes
-mvn clean verify
+cd user-service
+./mvnw clean verify
 
 # Executar apenas testes unitários
-mvn test
+./mvnw test
 
 # Gerar relatório de cobertura (JaCoCo)
-mvn clean verify
+./mvnw clean test jacoco:report
 # Abra target/site/jacoco/index.html
 ```
 
