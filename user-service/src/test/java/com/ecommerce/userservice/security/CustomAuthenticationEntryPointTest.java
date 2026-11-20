@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 class CustomAuthenticationEntryPointTest {
 
     @Test
-    void commence_ShouldWriteUnauthorizedJsonResponse() throws Exception {
+    void commenceShouldWriteUnauthorizedJsonResponse() throws Exception {
         CustomAuthenticationEntryPoint entryPoint = new CustomAuthenticationEntryPoint();
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);

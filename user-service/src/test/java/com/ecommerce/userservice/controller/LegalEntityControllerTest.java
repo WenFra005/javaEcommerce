@@ -1,5 +1,6 @@
 package com.ecommerce.userservice.controller;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -48,7 +49,8 @@ class LegalEntityControllerTest {
     private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Test
-    void testPostRegister_WithValidData_ShouldReturnCreated() throws Exception {
+    void testPostRegisterWithValidDataShouldReturnCreated() throws Exception {
+        assertNotNull(mockMvc);
         UserResponse response = new UserResponse();
         response.setUserId(1L);
         response.setUserEmail("company@email.com");
@@ -78,7 +80,8 @@ class LegalEntityControllerTest {
     }
 
     @Test
-    void testPostRegister_WithInvalidData_ShouldReturnBadRequest() throws Exception {
+    void testPostRegisterWithInvalidDataShouldReturnBadRequest() throws Exception {
+        assertNotNull(mockMvc);
         String requestBody = """
                     {
                         "name": "test user",
@@ -101,7 +104,8 @@ class LegalEntityControllerTest {
     }
 
     @Test
-    void testPostRegister_WithInvalidCnpj_ShouldReturnBadRequest() throws Exception {
+    void testPostRegisterWithInvalidCnpjShouldReturnBadRequest() throws Exception {
+        assertNotNull(mockMvc);
         String requestBody = """
                     {
                         "name": "test user",
@@ -124,7 +128,8 @@ class LegalEntityControllerTest {
     }
 
     @Test
-    void testPostRegister_WithExistingCNPJ_ShouldReturnBadRequest() throws Exception {
+    void testPostRegisterWithExistingCNPJShouldReturnBadRequest() throws Exception {
+        assertNotNull(mockMvc);
         when(userService.createLegalEntity(any(CreateLegalEntityRequest.class)))
                 .thenThrow(new ValidationException("CNPJ already exists"));
 
@@ -149,7 +154,8 @@ class LegalEntityControllerTest {
     }
 
     @Test
-    void testPostRegister_WithExistingEmail_ShouldReturnConflict() throws Exception {
+    void testPostRegisterWithExistingEmailShouldReturnConflict() throws Exception {
+        assertNotNull(mockMvc);
         when(userService.createLegalEntity(any(CreateLegalEntityRequest.class)))
                 .thenThrow(new EmailAlreadyExistsException("Email already exists"));
 
@@ -174,7 +180,8 @@ class LegalEntityControllerTest {
     }
 
     @Test
-    void testPostRegister_WithMissingFields_ShouldReturnBadRequest() throws Exception {
+    void testPostRegisterWithMissingFieldsShouldReturnBadRequest() throws Exception {
+        assertNotNull(mockMvc);
         String requestBody = """
                 {
                     "name": "",

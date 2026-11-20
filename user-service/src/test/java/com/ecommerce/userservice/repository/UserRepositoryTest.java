@@ -44,7 +44,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    void testExistsByUserEmail_WhenUserDoesNotExist() {
+    void testExistsByUserEmailWhenUserDoesNotExist() {
         boolean exists = userRepository.existsByUserEmail("nonexistent@email.com");
 
         assertThat(exists).isFalse();

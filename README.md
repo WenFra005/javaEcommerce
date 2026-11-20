@@ -132,14 +132,18 @@ Diagrama detalhando os microsserviços, banco de dados, API Gateway e message br
    SPRING_JPA_SHOW_SQL=false
 
    # JWT
-   JWT_SECRET=minhaChaveSuperSecreta1234567890
+   # Use uma chave aleatória com pelo menos 32 bytes em ambientes reais.
+   JWT_SECRET=<gere-uma-chave-secreta-forte>
    JWT_EXPIRATION_MS=900000
    JWT_REFRESH_EXPIRATION_MS=604800000
 
    # Admin
    ADMIN_EMAIL=admin@email.com
-   ADMIN_PASSWORD=admin123
+   ADMIN_PASSWORD=<defina-uma-senha-forte>
    ```
+
+   Os valores acima são apenas placeholders. Nunca use credenciais de exemplo
+   em ambientes de produção nem versiona arquivos `.env`.
 
 3. **Suba o ambiente com Docker Compose:**
 

@@ -10,7 +10,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 class OpenAPIConfigTest {
 
     @Test
-    void customOpenAPI_ShouldContainServiceMetadataAndSecurityScheme() {
+    void customOpenAPIShouldContainServiceMetadataAndSecurityScheme() {
         OpenAPIConfig config = new OpenAPIConfig();
 
         OpenAPI openAPI = config.customOpenAPI();

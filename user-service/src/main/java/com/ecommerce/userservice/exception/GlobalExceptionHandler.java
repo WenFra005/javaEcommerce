@@ -7,6 +7,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,6 +20,8 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+        private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
         private ErrorResponse buildErrorResponse(HttpStatus status, String message, String error,
                         HttpServletRequest request) {
@@ -60,11 +64,11 @@ public class GlobalExceptionHandler {
         @ExceptionHandler(DataIntegrityViolationException.class)
         public ResponseEntity<ErrorResponse> handleDataIntegrityException(DataIntegrityViolationException exception,
                         HttpServletRequest request) {
-                String errorMessage = "Data integrity violation: " + exception.getMostSpecificCause().getMessage();
+                log.warn("Data integrity violation on {}", request.getRequestURI(), exception);
 
                 ErrorResponse errorResponse = buildErrorResponse(
                                 HttpStatus.CONFLICT,
-                                errorMessage,
+                                "The request conflicts with existing data",
                                 "Data integrity violation",
                                 request);
 
@@ -76,7 +80,7 @@ public class GlobalExceptionHandler {
                         HttpServletRequest request) {
                 ErrorResponse errorResponse = buildErrorResponse(
                                 HttpStatus.UNAUTHORIZED,
-                                exception.getMessage(),
+                                "Invalid credentials or token",
                                 "Unauthorized",
                                 request);
                 return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
@@ -87,7 +91,7 @@ public class GlobalExceptionHandler {
                         HttpServletRequest request) {
                 ErrorResponse errorResponse = buildErrorResponse(
                                 HttpStatus.UNAUTHORIZED,
-                                exception.getMessage(),
+                                "Refresh token is invalid, expired, revoked or not found",
                                 "Refresh token error",
                                 request);
                 return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
@@ -110,17 +114,9 @@ public class GlobalExceptionHandler {
         @ExceptionHandler(HttpMessageNotReadableException.class)
         public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(
                         HttpMessageNotReadableException exception, HttpServletRequest request) {
-                Throwable rootCause = exception.getMostSpecificCause();
-
-                String message = rootCause.getMessage();
-
-                if (message != null && message.startsWith("problem: ")) {
-                        message = message.substring(9);
-                }
-
                 ErrorResponse errorResponse = buildErrorResponse(
                                 HttpStatus.BAD_REQUEST,
-                                message,
+                                "Request body is invalid",
                                 "Validation Error",
                                 request);
 
@@ -154,9 +150,10 @@ public class GlobalExceptionHandler {
 
         @ExceptionHandler(Exception.class)
         public ResponseEntity<ErrorResponse> handleGenericException(Exception exception, HttpServletRequest request) {
+                log.error("Unhandled exception on {}", request.getRequestURI(), exception);
                 ErrorResponse errorResponse = buildErrorResponse(
                                 HttpStatus.INTERNAL_SERVER_ERROR,
-                                exception.getMessage(),
+                                "An unexpected error occurred",
                                 "Internal server error",
                                 request);
 

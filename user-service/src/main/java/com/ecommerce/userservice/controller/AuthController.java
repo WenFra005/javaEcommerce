@@ -52,7 +52,7 @@ public class AuthController {
                         @ApiResponse(responseCode = "401", description = "Credenciais inválidas", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
         })
         @PostMapping("/login")
-        public ResponseEntity<AuthResponse> postLogin(@RequestBody LoginRequest loginRequest) {
+        public ResponseEntity<AuthResponse> postLogin(@RequestBody @Valid LoginRequest loginRequest) {
 
                 Authentication authentication = authenticationManager.authenticate(
                                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),

@@ -1,5 +1,6 @@
 package com.ecommerce.userservice.controller;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -51,7 +52,8 @@ class NaturalPersonControllerTest {
     private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Test
-    void testPostRegister_WithValidData_SHouldReturnCreated() throws Exception {
+    void testPostRegisterWithValidDataShouldReturnCreated() throws Exception {
+        assertNotNull(mockMvc);
         UserResponse mockResponse = new UserResponse();
         mockResponse.setUserId(1L);
         mockResponse.setUserName("Test User");
@@ -81,7 +83,8 @@ class NaturalPersonControllerTest {
     }
 
     @Test
-    void testPostRegister_WithInvalidCpf_ShouldReturnBadRequest() throws Exception {
+    void testPostRegisterWithInvalidCpfShouldReturnBadRequest() throws Exception {
+        assertNotNull(mockMvc);
         String requestBody = """
                 {
                     "name": "Test User",
@@ -102,7 +105,8 @@ class NaturalPersonControllerTest {
     }
 
     @Test
-    void testPostRegister_WithDuplicateEmail_ShouldReturnBadRequest() throws Exception {
+    void testPostRegisterWithDuplicateEmailShouldReturnBadRequest() throws Exception {
+        assertNotNull(mockMvc);
         when(userService.createNaturalPerson(any(CreateNaturalPersonRequest.class)))
                 .thenThrow(new EmailAlreadyExistsException("Email já cadastrado"));
 
@@ -126,7 +130,8 @@ class NaturalPersonControllerTest {
     }
 
     @Test
-    void testPostRegister_WithMissingFields_ShouldReturnBadRequest() throws Exception {
+    void testPostRegisterWithMissingFieldsShouldReturnBadRequest() throws Exception {
+        assertNotNull(mockMvc);
         String requestBody = """
                 {
                     "name": "",

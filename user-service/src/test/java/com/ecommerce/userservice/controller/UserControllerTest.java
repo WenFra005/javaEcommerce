@@ -1,5 +1,6 @@
 package com.ecommerce.userservice.controller;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -109,7 +110,8 @@ class UserControllerTest {
         }
 
         @Test
-        void testGetAllUsers_AsAdmin_ShouldReturnAllUsers() throws Exception {
+        void testGetAllUsersAsAdminShouldReturnAllUsers() throws Exception {
+            assertNotNull(mockMvc);
                 Page<UserResponse> page = new PageImpl<>(List.of(createUserResponse()));
                 when(userService.listAllUsers(any(Pageable.class))).thenReturn(page);
 
@@ -127,7 +129,8 @@ class UserControllerTest {
         }
 
         @Test
-        void testGetAllUsers_AsCliente_ShouldReturnForbidden() throws Exception {
+        void testGetAllUsersAsClienteShouldReturnForbidden() throws Exception {
+            assertNotNull(mockMvc);
                 Authentication clienteAuth = createMockAuthentication(UserRole.CLIENTE);
 
                 mockMvc.perform(get("/users")
@@ -138,7 +141,8 @@ class UserControllerTest {
         }
 
         @Test
-        void testGetAllUsers_WithoutAuth_ShouldReturnUnauthorized() throws Exception {
+        void testGetAllUsersWithoutAuthShouldReturnUnauthorized() throws Exception {
+            assertNotNull(mockMvc);
                 mockMvc.perform(get("/users"))
                                 .andExpect(status().isUnauthorized());
 
@@ -146,7 +150,8 @@ class UserControllerTest {
         }
 
         @Test
-        void testGetUser_OwnProfile_ShouldReturnUser() throws Exception {
+        void testGetUserOwnProfileShouldReturnUser() throws Exception {
+        assertNotNull(mockMvc);
                 Long userId = 1L;
                 UserResponse userResponse = createUserResponse();
 
@@ -164,7 +169,8 @@ class UserControllerTest {
         }
 
         @Test
-        void testGetUser_AsAdmin_ShouldReturnUser() throws Exception {
+        void testGetUserAsAdminShouldReturnUser() throws Exception {
+        assertNotNull(mockMvc);
                 Long userId = 2L;
                 UserResponse userResponse = createUserResponse();
 
@@ -181,7 +187,8 @@ class UserControllerTest {
         }
 
         @Test
-        void testGetUser_OtherUser_ShouldReturnForbidden() throws Exception {
+        void testGetUserOtherUserShouldReturnForbidden() throws Exception {
+        assertNotNull(mockMvc);
                 Long userId = 2L;
 
                 when(userService.findUserById(eq(userId), anyString(), any(UserRole.class)))
@@ -198,7 +205,8 @@ class UserControllerTest {
         }
 
         @Test
-        void testGetUser_NotFound_ShouldReturnNotFound() throws Exception {
+        void testGetUserNotFoundShouldReturnNotFound() throws Exception {
+        assertNotNull(mockMvc);
                 Long userId = 999L;
 
                 when(userService.findUserById(eq(userId), anyString(), any(UserRole.class)))
@@ -215,7 +223,8 @@ class UserControllerTest {
         }
 
         @Test
-        void testGetUser_InvalidToken_ShouldReturnUnauthorized() throws Exception {
+        void testGetUserInvalidTokenShouldReturnUnauthorized() throws Exception {
+        assertNotNull(mockMvc);
                 Long userId = 1L;
 
                 mockMvc.perform(get("/users/{id}", userId))
@@ -225,7 +234,8 @@ class UserControllerTest {
         }
 
         @Test
-        void testDeleteUser_OwnProfile_ShouldReturnNoContent() throws Exception {
+        void testDeleteUserOwnProfileShouldReturnNoContent() throws Exception {
+        assertNotNull(mockMvc);
                 Long userId = 1L;
 
                 Authentication auth = createMockAuthentication(UserRole.CLIENTE);
@@ -239,7 +249,8 @@ class UserControllerTest {
         }
 
         @Test
-        void testDeleteUser_AsAdmin_ShouldReturnNoContent() throws Exception {
+        void testDeleteUserAsAdminShouldReturnNoContent() throws Exception {
+        assertNotNull(mockMvc);
                 Long userId = 1L;
 
                 Authentication auth = createMockAuthentication(UserRole.ADMIN);
@@ -253,7 +264,8 @@ class UserControllerTest {
         }
 
         @Test
-        void testDeleteUser_OtherUser_ShouldReturnForbidden() throws Exception {
+        void testDeleteUserOtherUserShouldReturnForbidden() throws Exception {
+        assertNotNull(mockMvc);
                 Long userId = 2L;
 
                 doThrow(new AccessDeniedException("Acesso negado"))
@@ -270,7 +282,8 @@ class UserControllerTest {
         }
 
         @Test
-        void testDeleteUser_NotFound_ShouldReturnNotFound() throws Exception {
+        void testDeleteUserNotFoundShouldReturnNotFound() throws Exception {
+        assertNotNull(mockMvc);
                 Long userId = 999L;
 
                 doThrow(new UserNotFoundException("Usuário não encontrado"))
@@ -287,7 +300,8 @@ class UserControllerTest {
         }
 
         @Test
-        void testDeleteUser_WithoutAuth_ShouldReturnUnauthorized() throws Exception {
+        void testDeleteUserWithoutAuthShouldReturnUnauthorized() throws Exception {
+        assertNotNull(mockMvc);
                 Long userId = 1L;
 
                 mockMvc.perform(delete("/users/delete/{id}", userId))
@@ -295,7 +309,8 @@ class UserControllerTest {
         }
 
         @Test
-        void testGetCurrentUser_WithValidAuth_ShouldReturnProfile() throws Exception {
+        void testGetCurrentUserWithValidAuthShouldReturnProfile() throws Exception {
+            assertNotNull(mockMvc);
                 UserResponse userResponse = createUserResponse();
 
                 when(userService.findUserByEmail(anyString()))
@@ -310,13 +325,15 @@ class UserControllerTest {
         }
 
         @Test
-        void testGetCurrentUser_WithoutAuth_ShouldReturnUnauthorized() throws Exception {
+        void testGetCurrentUserWithoutAuthShouldReturnUnauthorized() throws Exception {
+            assertNotNull(mockMvc);
                 mockMvc.perform(get("/users/me"))
                                 .andExpect(status().isUnauthorized());
         }
 
         @Test
-        void testPutUser_OwnProfile_ShouldReturnUpdatedProfileWithToken() throws Exception {
+        void testPutUserOwnProfileShouldReturnUpdatedProfileWithToken() throws Exception {
+        assertNotNull(mockMvc);
                 Long userId = 1L;
                 UserResponse updatedUserResponse = createUserResponse();
                 updatedUserResponse.setUserEmail("updated@email.com");
@@ -349,7 +366,8 @@ class UserControllerTest {
         }
 
         @Test
-        void testPutUser_AsAdmin_ShouldReturnSucced() throws Exception {
+        void testPutUserAsAdminShouldReturnSuccess() throws Exception {
+        assertNotNull(mockMvc);
                 Long userId = 2L;
                 UserResponse updatedUserResponse = createUserResponse();
                 updatedUserResponse.setUserEmail("updated@email.com");
@@ -381,7 +399,8 @@ class UserControllerTest {
         }
 
         @Test
-        void testPutUser_OtherUser_ShouldReturnForbidden() throws Exception {
+        void testPutUserOtherUserShouldReturnForbidden() throws Exception {
+        assertNotNull(mockMvc);
                 Long userId = 2L;
 
                 when(userService.updateUser(eq(userId), any(UpdateRequest.class), anyString(), any(UserRole.class)))
@@ -406,7 +425,8 @@ class UserControllerTest {
         }
 
         @Test
-        void testPutUser_DuplicateEmail_ShouldReturnConflict() throws Exception {
+        void testPutUserDuplicateEmailShouldReturnConflict() throws Exception {
+        assertNotNull(mockMvc);
                 Long userId = 1L;
 
                 when(userService.updateUser(eq(userId), any(UpdateRequest.class), anyString(), any(UserRole.class)))
@@ -431,7 +451,8 @@ class UserControllerTest {
         }
 
         @Test
-        void testPutUser_InvalidCpf_ShouldReturnBadRequest() throws Exception {
+        void testPutUserInvalidCpfShouldReturnBadRequest() throws Exception {
+        assertNotNull(mockMvc);
                 Long userId = 1L;
 
                 when(userService.updateUser(eq(userId), any(UpdateRequest.class), anyString(), any(UserRole.class)))
@@ -454,7 +475,8 @@ class UserControllerTest {
         }
 
         @Test
-        void testPutUser_NotFound_ShouldReturnNotFound() throws Exception {
+        void testPutUserNotFoundShouldReturnNotFound() throws Exception {
+        assertNotNull(mockMvc);
                 Long userId = 999L;
 
                 when(userService.updateUser(eq(userId), any(UpdateRequest.class), anyString(), any(UserRole.class)))
@@ -479,7 +501,8 @@ class UserControllerTest {
         }
 
         @Test
-        void testPutUser_WithoutAuth_ShouldReturnUnauthorized() throws Exception {
+        void testPutUserWithoutAuthShouldReturnUnauthorized() throws Exception {
+        assertNotNull(mockMvc);
                 Long userId = 1L;
 
                 String requestJson = """

@@ -56,7 +56,7 @@ class JwtAuthFilterTest {
     }
 
     @Test
-    void testDoFilterInternal_WhenValidToken_ShouldAuthenticate() throws Exception {
+    void testDoFilterInternalWhenValidTokenShouldAuthenticate() throws Exception {
         when(request.getHeader("Authorization")).thenReturn("Bearer " + VALID_TOKEN);
         when(jwtUtil.extractEmail(VALID_TOKEN)).thenReturn(EMAIL);
         when(userDetailsService.loadUserByUsername(EMAIL)).thenReturn(userDetails);
@@ -74,7 +74,7 @@ class JwtAuthFilterTest {
     }
 
     @Test
-    void testDoFilterInternal_WhenNoToken_ShouldNotAuthenticate() throws Exception {
+    void testDoFilterInternalWhenNoTokenShouldNotAuthenticate() throws Exception {
         when(request.getHeader("Authorization")).thenReturn(null);
 
         jwtAuthFilter.doFilterInternal(request, response, filterChain);
@@ -86,7 +86,7 @@ class JwtAuthFilterTest {
     }
 
     @Test
-    void testDoFilterInternal_WhenTokenIsExpired_ShouldNotAuthenticate() throws Exception {
+    void testDoFilterInternalWhenTokenIsExpiredShouldNotAuthenticate() throws Exception {
         when(request.getHeader("Authorization")).thenReturn("Bearer " + VALID_TOKEN);
         when(jwtUtil.extractEmail(VALID_TOKEN)).thenReturn(EMAIL);
         when(userDetailsService.loadUserByUsername(EMAIL)).thenReturn(userDetails);
@@ -103,7 +103,7 @@ class JwtAuthFilterTest {
     }
 
     @Test
-    void testDoFilterInternal_WhenTokenIsInvalid_ShouldNotAuthenticate() throws Exception {
+    void testDoFilterInternalWhenTokenIsInvalidShouldNotAuthenticate() throws Exception {
         String invalidToken = "invalid-token";
 
         when(request.getHeader("Authorization")).thenReturn("Bearer " + invalidToken);
@@ -118,16 +118,17 @@ class JwtAuthFilterTest {
     }
 
     @Test
-    void testDoFilterInternal_WhenTokenIsInexisting_ShouldContinueFilterChain() throws Exception {
+    void testDoFilterInternalWhenTokenIsInexistingShouldContinueFilterChain() throws Exception {
         when(request.getHeader("Authorization")).thenReturn(null);
 
         jwtAuthFilter.doFilterInternal(request, response, filterChain);
 
+        assertNotNull(filterChain);
         verify(filterChain).doFilter(request, response);
     }
 
     @Test
-    void doFilterInternal_WhenGracefully_ShouldHandleException() throws Exception {
+    void doFilterInternalWhenGracefullyShouldHandleException() throws Exception {
         when(request.getHeader("Authorization")).thenReturn("Bearer " + VALID_TOKEN);
         when(jwtUtil.extractEmail(VALID_TOKEN)).thenThrow(new IllegalArgumentException("Unexpected error occurred"));
 

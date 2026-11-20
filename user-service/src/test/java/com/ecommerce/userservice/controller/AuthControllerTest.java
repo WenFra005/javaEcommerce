@@ -1,5 +1,6 @@
 package com.ecommerce.userservice.controller;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
@@ -69,7 +70,7 @@ class AuthControllerTest {
     }
 
     @Test
-    void testPostLogin_WithValidCredentials_ShouldReturnTokens() throws Exception {
+    void testPostLoginWithValidCredentialsShouldReturnTokens() throws Exception {
         User mockUser = new User();
         mockUser.setUserId(1L);
         mockUser.setUserEmail("test@email.com");
@@ -91,18 +92,18 @@ class AuthControllerTest {
                 }
                 """;
 
-        mockMvc.perform(post("/auth/login")
+        assertNotNull(mockMvc.perform(post("/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(loginRequest))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accessToken").value("access-token"))
                 .andExpect(jsonPath("$.refreshToken").value("refresh-token"))
-                .andExpect(jsonPath("$.userEmail").value("test@email.com"));
-
+                .andExpect(jsonPath("$.userEmail").value("test@email.com"))
+                .andReturn());
     }
 
     @Test
-    void testPostLogin_WithInvalidCredentials_ShouldReturnUnauthorized() throws Exception {
+    void testPostLoginWithInvalidCredentialsShouldReturnUnauthorized() throws Exception {
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenThrow(new BadCredentialsException("Invalid credentials"));
 
@@ -113,15 +114,31 @@ class AuthControllerTest {
                 }
                 """;
 
-        mockMvc.perform(post("/auth/login")
+        assertNotNull(mockMvc.perform(post("/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(loginRequest))
                 .andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.message").value("Invalid credentials"));
+                .andExpect(jsonPath("$.message").value("Invalid credentials or token"))
+                .andReturn());
     }
 
     @Test
-    void testPostLogout_WithValidToken_ShouldReturnNoContent() throws Exception {
+    void testPostLoginWithInvalidPayloadShouldReturnBadRequest() throws Exception {
+        assertNotNull(mockMvc.perform(post("/auth/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                        {
+                            "email": "",
+                            "password": ""
+                        }
+                        """))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Validation error"))
+                .andReturn());
+    }
+
+    @Test
+    void testPostLogoutWithValidTokenShouldReturnNoContent() throws Exception {
         doNothing().when(refreshTokenService).revokeRefreshToken("valid-refresh-token");
 
         String logoutRequest = """
@@ -130,15 +147,15 @@ class AuthControllerTest {
                 }
                 """;
 
-        mockMvc.perform(post("/auth/logout")
+        assertNotNull(mockMvc.perform(post("/auth/logout")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(logoutRequest))
-                .andExpect(status().isNoContent());
-
+                .andExpect(status().isNoContent())
+                .andReturn());
     }
 
     @Test
-    void testPostLogout_WithInvalidToken_ShouldReturnUnauthorized() throws Exception {
+    void testPostLogoutWithInvalidTokenShouldReturnUnauthorized() throws Exception {
         doThrow(new TokenRefreshException("Refresh token invalid"))
                 .when(refreshTokenService).revokeRefreshToken("invalid-refresh-token");
 
@@ -148,14 +165,15 @@ class AuthControllerTest {
                 }
                 """;
 
-        mockMvc.perform(post("/auth/logout")
+        assertNotNull(mockMvc.perform(post("/auth/logout")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(logoutRequest))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized())
+                .andReturn());
     }
 
     @Test
-    void testPostRefresh_WithValidToken_ShouldReturnNewAccessToken() throws Exception {
+    void testPostRefreshWithValidTokenShouldReturnNewAccessToken() throws Exception {
         User mockUser = new User();
         mockUser.setUserId(1L);
         mockUser.setUserEmail("test@email.com");
@@ -172,17 +190,17 @@ class AuthControllerTest {
                 }
                 """;
 
-        mockMvc.perform(post("/auth/refresh")
+        assertNotNull(mockMvc.perform(post("/auth/refresh")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(refreshRequest))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accessToken").value("new-access-token"))
-                .andExpect(jsonPath("$.refreshToken").value("new-refresh-token"));
-
+                .andExpect(jsonPath("$.refreshToken").value("new-refresh-token"))
+                .andReturn());
     }
 
     @Test
-    void testPostRefresh_WithInvalidToken_ShouldReturnForbidden() throws Exception {
+    void testPostRefreshWithInvalidTokenShouldReturnForbidden() throws Exception {
         when(refreshTokenService.rotateRefreshToken("invalid-refresh-token"))
                 .thenThrow(new TokenRefreshException(
                         "Refresh token inválido, expirado, revogado ou inexistente"));
@@ -193,12 +211,12 @@ class AuthControllerTest {
                 }
                 """;
 
-        mockMvc.perform(post("/auth/refresh")
+        assertNotNull(mockMvc.perform(post("/auth/refresh")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(refreshRequest))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.message")
-                        .value("Refresh token inválido, expirado, revogado ou inexistente"));
+                        .value("Refresh token is invalid, expired, revoked or not found"))
+                .andReturn());
     }
-
 }

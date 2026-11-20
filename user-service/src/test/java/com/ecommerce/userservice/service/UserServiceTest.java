@@ -1,5 +1,6 @@
 package com.ecommerce.userservice.service;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -17,6 +18,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -110,7 +112,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testCreateAdmin_WithValidData_ShouldSucceed() {
+    void testCreateAdminWithValidDataShouldSucceed() {
         CreateAdminRequest request = new CreateAdminRequest();
         request.setName("Admin");
         request.setEmail("admin@email.com");
@@ -135,7 +137,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testCreateAdmin_WithDuplicateEmail_ShouldThrowException() {
+    void testCreateAdminWithDuplicateEmailShouldThrowException() {
         CreateAdminRequest request = new CreateAdminRequest();
         request.setEmail("email@example.com");
 
@@ -148,7 +150,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testCreateLegalEntity_WithValidData_ShouldSucceed() {
+    void testCreateLegalEntityWithValidDataShouldSucceed() {
         CreateLegalEntityRequest request = new CreateLegalEntityRequest();
 
         request.setName("Test User PJ");
@@ -175,7 +177,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testCreateLegalEntity_WithDuplicateCnpj_ShouldThrowException() {
+    void testCreateLegalEntityWithDuplicateCnpjShouldThrowException() {
         CreateLegalEntityRequest request = new CreateLegalEntityRequest();
 
         request.setCnpj("65944113000190");
@@ -188,7 +190,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testCreateLegalEntity_WithDuplicateEmail_ShouldThrowException() {
+    void testCreateLegalEntityWithDuplicateEmailShouldThrowException() {
         CreateLegalEntityRequest request = new CreateLegalEntityRequest();
 
         request.setUserEmail("test@email.com");
@@ -201,7 +203,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testCreateNaturalPerson_WithValidData_ShoundSucceed() {
+    void testCreateNaturalPersonWithValidDataShoundSucceed() {
         CreateNaturalPersonRequest request = new CreateNaturalPersonRequest();
 
         request.setName("Test User PF");
@@ -225,7 +227,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testCreateNatural_PersonWithDuplicateCpf_ShouldTrownException() {
+    void testCreateNaturalPersonWithDuplicateCpfShouldTrownException() {
         CreateNaturalPersonRequest request = new CreateNaturalPersonRequest();
 
         request.setUserEmail("test@email.com");
@@ -240,7 +242,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testCreateNaturalPerson_WithDuplicateEmail_ShouldThrowException() {
+    void testCreateNaturalPersonWithDuplicateEmailShouldThrowException() {
         CreateNaturalPersonRequest request = new CreateNaturalPersonRequest();
 
         request.setUserEmail("test@email.com");
@@ -253,21 +255,21 @@ class UserServiceTest {
     }
 
     @Test
-    void testDeleteUser_WhenOwnProfile_ShouldSucceed() {
+    void testDeleteUserWhenOwnProfileShouldSucceed() {
         Long userId = 1L;
         String authenticatedEmail = "test@email.com";
         UserRole authenticatedRole = UserRole.CLIENTE;
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(mockUserPF));
 
-        userService.deleteUser(userId, authenticatedEmail, authenticatedRole);
+        assertDoesNotThrow((Executable) () -> userService.deleteUser(userId, authenticatedEmail, authenticatedRole));
 
         verify(userRepository).delete(mockUserPF);
 
     }
 
     @Test
-    void testDeleteUser_WhenNotOwnProfile_ShouldThrowException() {
+    void testDeleteUserWhenNotOwnProfileShouldThrowException() {
         Long userId = 1L;
         String authenticatedEmail = "other@email.com";
         UserRole authenticatedRole = UserRole.CLIENTE;
@@ -281,7 +283,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testDeleteUser_WhenUserNotFound_ShouldThrowException() {
+    void testDeleteUserWhenUserNotFoundShouldThrowException() {
         Long userId = 999L;
         String authenticatedEmail = "test@email.com";
         UserRole authenticatedRole = UserRole.CLIENTE;
@@ -294,7 +296,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testFindUserById_WhenUserExistsAndIsOwnProfile_ShouldSucceed() {
+    void testFindUserByIdWhenUserExistsAndIsOwnProfileShouldSucceed() {
         Long userId = 1L;
         String authenticatedEmail = "test@email.com";
         UserRole authenticatedRole = UserRole.CLIENTE;
@@ -308,7 +310,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testFindUserById_WhenUserExistsButIsNotOwnProfile_ShouldThrowException() {
+    void testFindUserByIdWhenUserExistsButIsNotOwnProfileShouldThrowException() {
         Long userId = 1L;
         String authenticatedEmail = "other@email.com";
         UserRole authenticatedRole = UserRole.CLIENTE;
@@ -320,7 +322,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testFindUserById_WhenUserAdminAccess_ShouldSucceed() {
+    void testFindUserByIdWhenUserAdminAccessShouldSucceed() {
         Long userId = 1L;
         String authenticatedEmail = "admin@email.com";
         UserRole authenticatedRole = UserRole.ADMIN;
@@ -333,7 +335,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testFindUserById_WhenUserNotFound_ShouldThrowException() {
+    void testFindUserByIdWhenUserNotFoundShouldThrowException() {
         Long userId = 999L;
 
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
@@ -343,7 +345,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testFindUserByEmail_WhenUserExists_ShouldSucceed() {
+    void testFindUserByEmailWhenUserExistsShouldSucceed() {
         String email = "test@email.com";
         when(userRepository.findByUserEmail(email)).thenReturn(Optional.of(mockUserPF));
 
@@ -354,7 +356,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testFindUserByEmail_WhenUserNotFound_ShouldThrowException() {
+    void testFindUserByEmailWhenUserNotFoundShouldThrowException() {
         String email = "notfound@email.com";
 
         when(userRepository.findByUserEmail(email)).thenReturn(Optional.empty());
@@ -365,7 +367,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testListAllUsers_ShouldReturnAllUsers() {
+    void testListAllUsersShouldReturnAllUsers() {
         Pageable pageable = Pageable.unpaged();
         Page<User> userPage = new PageImpl<>(List.of(mockUserPF), pageable, 1);
 
@@ -382,7 +384,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testUpdateUser_WithValidData_ShouldSucceed() {
+    void testUpdateUserWithValidDataShouldSucceed() {
         Long userId = 1L;
         String authenticatedEmail = "test@email.com";
         UserRole authenticatedRole = UserRole.CLIENTE;
@@ -412,7 +414,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testUpdateUser_WithDuplicateEmail_ShouldThrowException() {
+    void testUpdateUserWithDuplicateEmailShouldThrowException() {
         Long userId = 1L;
         String authenticatedEmail = "test@email.com";
         UserRole authenticatedRole = UserRole.CLIENTE;
@@ -432,7 +434,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testUpdateUser_WithPasswordUpdate_ShouldEncodePassword() {
+    void testUpdateUserWithPasswordUpdateShouldEncodePassword() {
         Long userId = 1L;
 
         UpdateRequest request = new UpdateRequest();
@@ -442,7 +444,7 @@ class UserServiceTest {
         when(passwordEncoder.encode("new-password")).thenReturn("encoded-new");
         when(userRepository.save(any(User.class))).thenReturn(mockUserPF);
 
-        userService.updateUser(userId, request, "test@email.com", UserRole.CLIENTE);
+        assertDoesNotThrow((Executable) () -> userService.updateUser(userId, request, "test@email.com", UserRole.CLIENTE));
 
         verify(passwordEncoder).encode("new-password");
         verify(userRepository).save(argThat(user -> user.getUserPassword().equals("encoded-new")));
@@ -450,7 +452,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testUpdateUser_WithDuplicateCpf_ShouldThrowException() {
+    void testUpdateUserWithDuplicateCpfShouldThrowException() {
         Long userId = 1L;
         String authenticatedEmail = "test@email.com";
         UserRole authenticatedRole = UserRole.CLIENTE;
@@ -474,7 +476,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testUpdateUser_WhenPFUserHasNoNaturalPerson_ShouldThrowException() {
+    void testUpdateUserWhenPFUserHasNoNaturalPersonShouldThrowException() {
         Long userId = 1L;
         mockUserPF.setNaturalPerson(null);
 
@@ -489,7 +491,7 @@ class UserServiceTest {
     }
 
     @Test
-    void testUpdateUser_WhenPJUserHasNoLegalEntity_ShouldThrowException() {
+    void testUpdateUserWhenPJUserHasNoLegalEntityShouldThrowException() {
         Long userId = 2L;
         mockUserPJ.setLegalEntity(null);
 
