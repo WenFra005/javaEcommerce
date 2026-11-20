@@ -1,5 +1,6 @@
 package com.ecommerce.userservice.service;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -16,6 +17,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -61,7 +63,7 @@ class RefreshTokenServiceTest {
     }
 
     @Test
-    void testCreateRefreshToken_WhenUserExists_ShouldCreateNewToken() {
+    void testCreateRefreshTokenWhenUserExistsShouldCreateNewToken() {
         when(userRepository.findById(USER_ID)).thenReturn(Optional.of(mockUser));
         when(refreshTokenRepository.findByUser(mockUser)).thenReturn(Optional.of(mockRefreshToken));
         when(refreshTokenRepository.save(any(RefreshToken.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -78,7 +80,7 @@ class RefreshTokenServiceTest {
     }
 
     @Test
-    void testCreateRefreshToken_WhenUserNotFound_ShouldThrowUserNotFoundException() {
+    void testCreateRefreshTokenWhenUserNotFoundShouldThrowUserNotFoundException() {
         Long invalidUserId = 999L;
         when(userRepository.findById(invalidUserId)).thenReturn(Optional.empty());
 
@@ -89,7 +91,7 @@ class RefreshTokenServiceTest {
     }
 
     @Test
-    void testGetUserFromRefreshToken_WhenTokenExists_ShouldReturnUser() {
+    void testGetUserFromRefreshTokenWhenTokenExistsShouldReturnUser() {
         when(refreshTokenRepository.findByToken(TOKEN_VALUE)).thenReturn(Optional.of(mockRefreshToken));
 
         User user = refreshTokenService.getUserFromRefreshToken(TOKEN_VALUE);
@@ -99,7 +101,7 @@ class RefreshTokenServiceTest {
     }
 
     @Test
-    void testGetUserFromRefreshToken_WhenTokenNotFound_ShouldThrowRefreshTokenException() {
+    void testGetUserFromRefreshTokenWhenTokenNotFoundShouldThrowRefreshTokenException() {
         String invalidToken = "invalid-token";
 
         when(refreshTokenRepository.findByToken(invalidToken)).thenReturn(Optional.empty());
@@ -110,17 +112,17 @@ class RefreshTokenServiceTest {
     }
 
     @Test
-    void testRevokeAllRefreshTokensForUser_WhenUserExists_ShouldRevokeAllTokens() {
+    void testRevokeAllRefreshTokensForUserWhenUserExistsShouldRevokeAllTokens() {
 
         when(userRepository.findById(USER_ID)).thenReturn(Optional.of(mockUser));
 
-        refreshTokenService.revokeAllRefreshTokensForUser(USER_ID);
+        assertDoesNotThrow((Executable) () -> refreshTokenService.revokeAllRefreshTokensForUser(USER_ID));
         verify(refreshTokenRepository).deleteByUser(mockUser);
 
     }
 
     @Test
-    void testRevokeAllRefreshTokensForUser_WhenUserNotFound_ShouldThrowUserNotFoundException() {
+    void testRevokeAllRefreshTokensForUserWhenUserNotFoundShouldThrowUserNotFoundException() {
         Long invalidUserId = 999L;
         when(userRepository.findById(invalidUserId)).thenReturn(Optional.empty());
 
@@ -130,7 +132,7 @@ class RefreshTokenServiceTest {
     }
 
     @Test
-    void testRevokeRefreshToken_WhenTokenExists_ShouldRevokeToken() {
+    void testRevokeRefreshTokenWhenTokenExistsShouldRevokeToken() {
         when(refreshTokenRepository.findByToken(TOKEN_VALUE)).thenReturn(Optional.of(mockRefreshToken));
         when(refreshTokenRepository.save(any(RefreshToken.class))).thenReturn(mockRefreshToken);
 
@@ -142,7 +144,7 @@ class RefreshTokenServiceTest {
     }
 
     @Test
-    void testRevokeRefreshToken_WhenTokenNotFound_ShouldThrowRefreshTokenException() {
+    void testRevokeRefreshTokenWhenTokenNotFoundShouldThrowRefreshTokenException() {
         String invalidToken = "invalid-token";
 
         when(refreshTokenRepository.findByToken(invalidToken)).thenReturn(Optional.empty());
@@ -152,7 +154,7 @@ class RefreshTokenServiceTest {
     }
 
     @Test
-    void testValidateRefreshToken_WhenTokenIsValid_ShouldReturnToken() {
+    void testValidateRefreshTokenWhenTokenIsValidShouldReturnToken() {
         when(refreshTokenRepository.findByToken(TOKEN_VALUE)).thenReturn(Optional.of(mockRefreshToken));
 
         RefreshToken validToken = refreshTokenService.validateRefreshToken(TOKEN_VALUE);
@@ -162,7 +164,7 @@ class RefreshTokenServiceTest {
     }
 
     @Test
-    void testValidadeRefreshToken_WhenTokenIsRevoked_ShouldThrowRefreshTokenException() {
+    void testValidateRefreshTokenWhenTokenIsRevokedShouldThrowRefreshTokenException() {
         mockRefreshToken.setRevoked(true);
 
         when(refreshTokenRepository.findByToken(TOKEN_VALUE)).thenReturn(Optional.of(mockRefreshToken));
@@ -172,7 +174,7 @@ class RefreshTokenServiceTest {
     }
 
     @Test
-    void testValidateRefreshToken_WhenTokenIsExpired_ShouldThrowRefreshTokenException() {
+    void testValidateRefreshTokenWhenTokenIsExpiredShouldThrowRefreshTokenException() {
         mockRefreshToken.setExpiryDate(Instant.now().minusSeconds(1));
 
         when(refreshTokenRepository.findByToken(TOKEN_VALUE)).thenReturn(Optional.of(mockRefreshToken));
@@ -182,7 +184,7 @@ class RefreshTokenServiceTest {
     }
 
     @Test
-    void testValidateRefreshToken_WhenTokenNotFound_ShouldThrowRefreshTokenException() {
+    void testValidateRefreshTokenWhenTokenNotFoundShouldThrowRefreshTokenException() {
         String invalidToken = "invalid-token";
 
         when(refreshTokenRepository.findByToken(invalidToken)).thenReturn(Optional.empty());

@@ -29,7 +29,7 @@ class SecurityConfigTest {
     private AuthenticationConfiguration authenticationConfiguration;
 
     @Test
-    void passwordEncoder_ShouldCreateBCryptEncoder() {
+    void passwordEncoderShouldCreateBCryptEncoder() {
         SecurityConfig config = new SecurityConfig(jwtAuthFilter, authenticationEntryPoint);
 
         PasswordEncoder encoder = config.passwordEncoder();
@@ -38,7 +38,7 @@ class SecurityConfigTest {
     }
 
     @Test
-    void authenticationManager_ShouldDelegateToConfiguration() {
+    void authenticationManagerShouldDelegateToConfiguration() {
         SecurityConfig config = new SecurityConfig(jwtAuthFilter, authenticationEntryPoint);
         AuthenticationManager expectedManager = mock(AuthenticationManager.class);
 

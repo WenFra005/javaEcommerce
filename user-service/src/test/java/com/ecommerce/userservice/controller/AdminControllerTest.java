@@ -1,5 +1,6 @@
 package com.ecommerce.userservice.controller;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
@@ -63,7 +64,8 @@ class AdminControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void testPostCreateAdmin_AsAdmin_ShouldReturnCreated() throws Exception {
+    void testPostCreateAdminAsAdminShouldReturnCreated() throws Exception {
+        assertNotNull(mockMvc);
         UserResponse response = new UserResponse();
         response.setUserId(1L);
         response.setUserEmail("admin@email.com");
@@ -90,7 +92,8 @@ class AdminControllerTest {
 
     @Test
     @WithMockUser(roles = "CLIENTE")
-    void testPostCreateAdmin_AsCliente_ShouldReturnForbiden() throws Exception {
+    void testPostCreateAdminAsClienteShouldReturnForbidden() throws Exception {
+        assertNotNull(mockMvc);
         String requestBody = """
                 {
                     "name": "Admin",
@@ -105,7 +108,8 @@ class AdminControllerTest {
     }
 
     @Test
-    void testPostCreateAdmin_WithoutAuth_ShouldReturnUnauthorized() throws Exception {
+    void testPostCreateAdminWithoutAuthShouldReturnUnauthorized() throws Exception {
+        assertNotNull(mockMvc);
         String requestBody = """
                 {
                     "name": "Admin",
@@ -121,7 +125,8 @@ class AdminControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void testPostCreateAdmin_WithDuplicateEmail_ShouldReturnConflict() throws Exception {
+    void testPostCreateAdminWithDuplicateEmailShouldReturnConflict() throws Exception {
+        assertNotNull(mockMvc);
         when(userService.createAdmin(any(CreateAdminRequest.class)))
                 .thenThrow(new EmailAlreadyExistsException("Email already exists"));
 
@@ -142,7 +147,8 @@ class AdminControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void testPostCreateAdmin_WithMissingFields_ShouldReturnBadRequest() throws Exception {
+    void testPostCreateAdminWithMissingFieldsShouldReturnBadRequest() throws Exception {
+        assertNotNull(mockMvc);
         String requestBody = """
                 {
                     "name": "",
